@@ -2,7 +2,7 @@
 
 set -e
 
-function tools_menu_ui() {
+function tools_menu_ui_k1() {
   top_line
   title '[ TOOLS MENU ]' "${yellow}"
   inner_line
@@ -36,9 +36,9 @@ function tools_menu_ui() {
   bottom_line
 }
 
-function tools_menu() {
+function tools_menu_k1() {
   clear
-  tools_menu_ui
+  tools_menu_ui_k1
   local tools_menu_opt
   while true; do
     read -p " ${white}Type your choice and validate with Enter: ${yellow}" tools_menu_opt
@@ -47,62 +47,62 @@ function tools_menu() {
         if [ -f "$INITD_FOLDER"/disabled.S55klipper_service ]; then
           error_msg "Updating Klipper configuration files is already prevented!"
         else
-          run "prevent_updating_klipper_files" "tools_menu_ui"
+          run "prevent_updating_klipper_files" "tools_menu_ui_k1"
         fi;;
       2)
         if [ ! -f "$INITD_FOLDER"/disabled.S55klipper_service ]; then
           error_msg "Updating Klipper configuration files is already allowed!"
         else
-          run "allow_updating_klipper_files" "tools_menu_ui"
+          run "allow_updating_klipper_files" "tools_menu_ui_k1"
         fi;;
       3)
         if [ -f "$KLIPPER_KLIPPY_FOLDER"/gcode.py ]; then
-          run "printing_gcode_from_folder" "tools_menu_ui"
+          run "printing_gcode_from_folder" "tools_menu_ui_k1"
         fi;;
       4)
         if grep -q "^\[webcam Camera\]$" "$MOONRAKER_CFG"; then
           error_msg "Camera settings are alredy enabled in Moonraker!"
         else
-          run "enable_camera_settings" "tools_menu_ui"
+          run "enable_camera_settings" "tools_menu_ui_k1"
         fi;;
       5)
         if grep -q "^#\[webcam Camera\]" "$MOONRAKER_CFG"; then
           error_msg "Camera settings are alredy disabled in Moonraker!"
         else
-          run "disable_camera_settings" "tools_menu_ui"
+          run "disable_camera_settings" "tools_menu_ui_k1"
         fi;;
       6)
         if [ ! -d "$NGINX_FOLDER" ]; then
           error_msg "Nginx is not installed!"
         else
-          run "restart_nginx_action" "tools_menu_ui"
+          run "restart_nginx_action" "tools_menu_ui_k1"
         fi;;
       7)
         if [ ! -d "$MOONRAKER_FOLDER" ]; then
           error_msg "Moonraker is not installed!"
         else
-          run "restart_moonraker_action" "tools_menu_ui"
+          run "restart_moonraker_action" "tools_menu_ui_k1"
         fi;;
       8)
         if [ ! -f "$INITD_FOLDER"/S55klipper_service ]; then
           error_msg "Klipper service is not present!"
         else
-          run "restart_klipper_action" "tools_menu_ui"
+          run "restart_klipper_action" "tools_menu_ui_k1"
         fi;;
       9)
         if [ ! -f "$ENTWARE_FILE" ]; then
           error_msg "Entware is not installed!"
         else
-          run "update_entware_packages" "tools_menu_ui"
+          run "update_entware_packages" "tools_menu_ui_k1"
         fi;;
       10)
-        run "clear_cache" "tools_menu_ui";;
+        run "clear_cache" "tools_menu_ui_k1";;
       11)
-        run "clear_logs" "tools_menu_ui";;
+        run "clear_logs" "tools_menu_ui_k1";;
       12)
-        run "restore_previous_firmware" "tools_menu_ui";;
+        run "restore_previous_firmware" "tools_menu_ui_k1";;
       13)
-        run "reset_factory_settings" "tools_menu_ui";;
+        run "reset_factory_settings" "tools_menu_ui_k1";;
       B|b)
         clear; main_menu; break;;
       Q|q)
@@ -111,5 +111,5 @@ function tools_menu() {
          error_msg "Please select a correct choice!";;
     esac
   done
-  tools_menu
+  tools_menu_k1
 }
