@@ -20,6 +20,8 @@ Currently the CFS firmware has an instruction to perform a purge as part of the 
 As a result KAMP is *somewhat working* on the CFS firmware, however, it should be noted that if filament is not pre-loaded to the extruder before starting a print no filament will be extruded during the purge line process or fallback Creality purge.  
 I expect there will be a fix for this but I am by no means any kind of expert when it comes to code/scripts and the modifications found in this repository are purely based off comparing the helper script data to the new CFS upgrade kit firmware data, if you are aware of an effective and simple way to fix this please do feel free to let me know.  
 
+In the meantime I would advise enabling skirt/skirt loops in your slicer to purge and prime the nozzle before the print starts.
+
 ---
 
 ## Known Issues / Workarounds for K1 Series CFS Firmware
