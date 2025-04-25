@@ -80,6 +80,7 @@ git config --global --add safe.directory /usr/data/moonraker/moonraker
 The following modules have been tested on a K1 and seem to be working ok for me but as always use as your own risk.
 - Moonraker and Nginx
 - Fluidd
+- Klipper Gcode Shell Command
 - KAMP (Modification has been made to START_PRINT gcode as found in the new CFS kit firmware.)
 - Save Z Offset Macros
 
