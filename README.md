@@ -8,14 +8,14 @@
 ## About
 
 This script is a fork of Guilouz awesome Creality Helper Script with modifications to accomodate new code as found in the new K1 series CFS Upgrade Kit firmware (v2.3.5.33).  
-This script is intended for use on Creality **K1 Series** printers with **CFS Upgrade Kit Firmware** and allows to add more features.
+This script is intended for use on Creality **K1 Series** printers with **CFS Upgrade Kit Firmware** and my modifcations are mainly for the START_PRINT macro routine.
 
 Some modules currently untested so use at your own risk.  
 If you encounter errors please uninstall any modules you installed and factory reset your printer as per the original Guilouz Helper Script Wiki.
 
 **If you don't know what you're doing, I don't recommend using this helper script.**
 
-Currently the CFS firmware has an instuction to perform a purge as part of the START_PRINT routine but when using a CFS filament is often not loaded before the purge process.  
+Currently the CFS firmware has an instruction to perform a purge as part of the START_PRINT routine but when using a CFS filament is often not loaded before the purge process.  
 
 As a result KAMP is *somewhat working* on the CFS firmware, however, it should be noted that if filament is not pre-loaded to the extruder before starting a print no filament will be extruded during the purge line process or fallback Creality purge.  
 I expect there will be a fix for this but I am by no means any kind of expert when it comes to code/scripts and the modifications found in this repository are purely based off comparing the helper script data to the new CFS upgrade kit firmware data, if you are aware of an effective and simple way to fix this please do feel free to let me know.  
