@@ -24,6 +24,17 @@ In the meantime I would advise enabling skirt/skirt loops in your slicer to purg
 
 ---
 
+### Currently tested modules  
+The following modules have been tested on a K1 and seem to be working ok for me but as always use as your own risk.
+- Moonraker and Nginx  
+- Fluidd  
+- Klipper Gcode Shell Command  
+- KAMP (Modification has been made to `START_PRINT` gcode as found in the new CFS kit firmware.)
+  (Purge routine split from `START_PRINT` macro to prevent the printer trying to purge prior to loading filament. Purge can be called by adding `ADAPT_PURGE_MOD` to the end of Slicer start gcode.)  
+- Save Z Offset Macros  
+
+---
+
 ## Known Issues / Workarounds for K1 Series CFS Firmware
 
 ### Git is Broken  
@@ -73,17 +84,6 @@ To prevent seeing an error about the repository when installing Moonraker run th
 ```
 git config --global --add safe.directory /usr/data/moonraker/moonraker
 ```
-
----
-
-### Currently tested modules  
-The following modules have been tested on a K1 and seem to be working ok for me but as always use as your own risk.
-- Moonraker and Nginx  
-- Fluidd  
-- Klipper Gcode Shell Command  
-- KAMP (Modification has been made to `START_PRINT` gcode as found in the new CFS kit firmware.)
-  (Purge routine split from `START_PRINT` macro to prevent the printer trying to purge prior to loading filament. Purge can be called by adding `ADAPT_PURGE_MOD` to the end of Slicer start gcode.)  
-- Save Z Offset Macros  
 
 ---
 
