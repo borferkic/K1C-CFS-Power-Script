@@ -57,17 +57,23 @@ opkg install git-http
 opkg install git  # (Optional, if git is missing)
 ```
 
+5. Patch newly installed Git to the usr/bin folder:
+```
+mv /usr/bin/git /usr/bin/git.bak
+ln -s /opt/bin/git /usr/bin/git
+```
+
 Git will now be installed and the Helper Script can be Git cloned to your printer as per the Helper Script Wiki.
 
 > [!NOTE]
 > The following commands will install this forked version with modifications.  
 > If you wish to use Guilouz original Helper Script then use the instructions [here](https://guilouz.github.io/Creality-Helper-Script-Wiki/helper-script/helper-script-installation/)
 
-5. Clone the script:
+6. Clone the script:
 ```
 git clone --depth 1 https://github.com/Nik-oli/Creality-Helper-Script-K1-CFS.git /usr/data/helper-script
 ```
-6. Run the script:
+7. Run the script:
 ```
 sh /usr/data/helper-script/helper.sh
 ```
