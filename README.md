@@ -1,3 +1,21 @@
+<!--
+METADATOS DEL DOCUMENTO
+Nombre: `README.md`
+Fecha de creación: `2026-09-10`
+Descripción: Presentación pública e instrucciones del script para la Creality K1C con CFS.
+Proyecto: `CFS Power Script`
+Última modificación: `2026-09-12`
+-->
+
+<!--
+METADATOS DEL DOCUMENTO
+Nombre: `README.md`
+Fecha de creación: `2026-09-10`
+Descripción: Presentación pública e instrucciones del script para la Creality K1C con CFS.
+Proyecto: `CFS Power Script`
+Última modificación: `2026-09-12`
+-->
+
 # CFS Power Script for K1 Series with CFS Upgrade Kit Firmware
 
 > [!WARNING]
