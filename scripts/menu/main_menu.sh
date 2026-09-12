@@ -53,7 +53,7 @@ function script_title() {
 
 function main_menu_ui() {
   top_line
-  title "• HELPER SCRIPT FOR CREALITY $(script_title) •" "${blue}"
+  title "• CFS POWER SCRIPT FOR CREALITY $(script_title) •" "${blue}"
   title "Copyright © Cyril Guislain (Guilouz)" "${white}"
   inner_line
   title "/!\\ ONLY USE THIS SCRIPT WITH LATEST FIRMWARE VERSION /!\\" "${darkred}"

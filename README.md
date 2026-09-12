@@ -1,4 +1,4 @@
-# Creality Helper Script for K1 Series with CFS Upgrade Kit Firmware
+# CFS Power Script for K1 Series with CFS Upgrade Kit Firmware
 
 > [!WARNING]
 > **THIS REPOSITORY IS STILL VERY MUCH AN ACTIVE WORK IN PROGRESS! PROCEED AT YOUR OWN RISK!**
