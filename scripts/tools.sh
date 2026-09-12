@@ -85,7 +85,7 @@ function reset_factory_settings_message(){
   echo -e " │ ${cyan}settings only performs a partial reset.                      ${white}│"
   hr
   echo -e " │ ${cyan}Note: After factory reset all features already been          ${white}│"
-  echo -e " │ ${cyan}installed with Creality Helper Script must be reinstalled.   ${white}│"
+  echo -e " │ ${cyan}installed with CFS Power Script must be reinstalled.         ${white}│"
   hr
   bottom_line
 }

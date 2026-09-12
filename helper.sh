@@ -13,10 +13,10 @@ for script in "${HELPER_SCRIPT_FOLDER}/scripts/menu/10SE/"*.sh; do . "${script}"
 
 function update_helper_script() {
   echo -e "${white}"
-  echo -e "Info: Updating Creality Helper Script..."
+  echo -e "Info: Updating CFS Power Script..."
   cd "${HELPER_SCRIPT_FOLDER}"
   git reset --hard && git pull
-  ok_msg "Creality Helper Script has been updated!"
+  ok_msg "CFS Power Script has been updated!"
   echo -e "   ${green}Please restart script to load the new version.${white}"
   echo
   exit 0
