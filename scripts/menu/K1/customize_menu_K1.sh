@@ -7,16 +7,13 @@ function customize_menu_ui_k1() {
   title '[ CUSTOMIZE MENU ]' "${yellow}"
   inner_line
   hr
-  menu_option '1' 'Install' 'Custom Boot Display'
-  menu_option '2' 'Remove' 'Custom Boot Display'
+  menu_option '1' 'Remove' 'Creality Web Interface'
+  menu_option '2' 'Restore' 'Creality Web Interface'
   hr
-  menu_option '3' 'Remove' 'Creality Web Interface'
-  menu_option '4' 'Restore' 'Creality Web Interface'
+  menu_option '3' 'Install' 'Guppy Screen'
+  menu_option '4' 'Remove' 'Guppy Screen'
   hr
-  menu_option '5' 'Install' 'Guppy Screen'
-  menu_option '6' 'Remove' 'Guppy Screen'
-  hr
-  menu_option '7' 'Install' 'Creality Dynamic Logos for Fluidd'
+  menu_option '5' 'Install' 'Creality Dynamic Logos for Fluidd'
   hr
   inner_line
   hr
@@ -35,22 +32,6 @@ function customize_menu_k1() {
     read -p " ${white}Type your choice and validate with Enter: ${yellow}" customize_menu_opt
     case "${customize_menu_opt}" in
       1)
-        if [ -f "$BOOT_DISPLAY_FILE" ]; then
-          error_msg "Custom Boot Display is already installed!"
-        elif [ ! -d "$BOOT_DISPLAY_FOLDER" ]; then
-          error_msg "Please use latest firmware to install Custom Boot Display!"  
-        else
-          run "install_custom_boot_display" "customize_menu_ui_k1"
-        fi;;
-      2)
-        if [ ! -f "$BOOT_DISPLAY_FILE" ]; then
-          error_msg "Custom Boot Display is not installed!"
-        elif [ ! -d "$BOOT_DISPLAY_FOLDER" ]; then
-          error_msg "Please use latest firmware to restore Stock Boot Display!"  
-        else
-          run "remove_custom_boot_display" "customize_menu_ui_k1"
-        fi;;
-      3)
         if [ ! -d "$FLUIDD_FOLDER" ] && [ ! -d "$MAINSAIL_FOLDER" ]; then
           error_msg "Fluidd or Mainsail is needed, please install one of them first!"
         elif [ ! -f "$CREALITY_WEB_FILE" ]; then
@@ -60,7 +41,7 @@ function customize_menu_k1() {
         else
           run "remove_creality_web_interface" "customize_menu_ui_k1"
         fi;;
-      4)
+      2)
         if [ -f "$CREALITY_WEB_FILE" ]; then
           error_msg "Creality Web Interface is already present!"
         elif [ ! -f "$INITD_FOLDER"/S99start_app ]; then
@@ -68,7 +49,7 @@ function customize_menu_k1() {
         else
           run "restore_creality_web_interface" "customize_menu_ui_k1"
         fi;;
-      5)
+      3)
         if [ -d "$GUPPY_SCREEN_FOLDER" ]; then
           error_msg "Guppy Screen is already installed!"
         elif [ ! -d "$MOONRAKER_FOLDER" ] && [ ! -d "$NGINX_FOLDER" ]; then
@@ -84,13 +65,13 @@ function customize_menu_k1() {
         else
           run "install_guppy_screen" "customize_menu_ui_k1"
         fi;;
-      6)
+      4)
         if [ ! -d "$GUPPY_SCREEN_FOLDER" ]; then
           error_msg "Guppy Screen is not installed!"
         else
           run "remove_guppy_screen" "customize_menu_ui_k1"
         fi;;
-      7)
+      5)
         if [ -f "$FLUIDD_LOGO_FILE" ]; then
           error_msg "Creality Dynamic Logos for Fluidd are already installed!"
         elif [ ! -d "$FLUIDD_FOLDER" ]; then

@@ -155,12 +155,6 @@ function set_paths() {
   OCTOAPP_COMPANION_FOLDER="${USR_DATA}/octoapp"
   OCTOAPP_COMPANION_URL="https://github.com/crysxd/OctoApp-Plugin.git"
 
-  # Custom Boot Display #
-  BOOT_DISPLAY_FOLDER="/etc/boot-display"
-  BOOT_DISPLAY_FILE="${BOOT_DISPLAY_FOLDER}/part0/pic_100.jpg"
-  BOOT_DISPLAY_K1_URL="${HS_FILES}/boot-display/k1_boot_display.tar.gz"
-  BOOT_DISPLAY_K1M_URL="${HS_FILES}/boot-display/k1max_boot_display.tar.gz"
-  BOOT_DISPLAY_STOCK_URL="${HS_FILES}/boot-display/stock_boot_display.tar.gz"
   
   # Creality Web Interface #
   CREALITY_WEB_FILE="/usr/bin/web-server"
