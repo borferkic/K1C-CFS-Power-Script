@@ -7,17 +7,13 @@ if [ ! -f /etc/init.d/S58factoryreset ]; then
   chmod 755 /etc/init.d/S58factoryreset
 fi
 
+# This script only supports the Creality K1 series (K1, K1C, K1 Max).
 get_model=$( /usr/bin/get_sn_mac.sh model 2>&1 )
-if echo "$get_model" | grep -iq "K1"; then 
+if echo "$get_model" | grep -iq "K1"; then
   model="K1"
-elif echo "$get_model" | grep -iq "F001"; then 
-  model="3V3"
-elif echo "$get_model" | grep -iq "F002"; then 
-  model="3V3"
-elif echo "$get_model" | grep -iq "F005"; then 
-  model="3KE"
-elif echo "$get_model" | grep -iq "F003"; then 
-  model="10SE"
+else
+  echo "This script only supports Creality K1 series printers (detected: ${get_model})."
+  exit 1
 fi
 
 function get_script_version() {
@@ -36,19 +32,7 @@ function version_line() {
 }
 
 function script_title() {
-  local title
-  if [ "$model" = "K1" ]; then
-    title="K1 SERIES"
-  elif [ "$model" = "3V3" ]; then
-    title="ENDER-3 V3 SERIES"
-  elif [ "$model" = "3KE" ]; then
-    title="ENDER-3 V3 KE"
-  elif [ "$model" = "10SE" ]; then
-    title="CR-10 SE"
-  else
-    title="PRINTERS"
-  fi
-  echo "${title}"
+  echo "K1 SERIES"
 }
 
 function main_menu_ui() {
@@ -83,62 +67,22 @@ function main_menu() {
     read -p "${white} Type your choice and validate with Enter: ${yellow}" main_menu_opt
     case "${main_menu_opt}" in
       1) clear
-         if [ "$model" = "K1" ]; then
-           install_menu_k1
-         elif [ "$model" = "3V3" ]; then
-           install_menu_3v3
-         elif [ "$model" = "3KE" ]; then
-           install_menu_3ke
-         else
-           install_menu_10se
-         fi
+         install_menu_k1
          break;;
       2) clear
-         if [ "$model" = "K1" ]; then
-           remove_menu_k1
-         elif [ "$model" = "3V3" ]; then
-           remove_menu_3v3
-         elif [ "$model" = "3KE" ]; then
-           remove_menu_3ke
-         else
-           remove_menu_10se
-         fi
+         remove_menu_k1
          break;;
       3) clear
-         if [ "$model" = "K1" ]; then
-           customize_menu_k1
-         elif [ "$model" = "3V3" ]; then
-           customize_menu_3v3
-         elif [ "$model" = "3KE" ]; then
-           customize_menu_3ke
-         else
-           customize_menu_10se
-         fi
+         customize_menu_k1
          break;;
       4) clear
          backup_restore_menu
          break;;
       5) clear
-         if [ "$model" = "K1" ]; then
-           tools_menu_k1
-         elif [ "$model" = "3V3" ]; then
-           tools_menu_3v3
-         elif [ "$model" = "3KE" ]; then
-           tools_menu_3ke
-         else
-           tools_menu_10se
-         fi
+         tools_menu_k1
          main_ui;;
       6) clear
-         if [ "$model" = "K1" ]; then
-           info_menu_k1
-         elif [ "$model" = "3V3" ]; then
-           info_menu_3v3
-         elif [ "$model" = "3KE" ]; then
-           info_menu_3ke
-         else
-           info_menu_10se
-         fi
+         info_menu_k1
          break;;
       7) clear
          system_menu

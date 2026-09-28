@@ -17,7 +17,6 @@ function set_paths() {
   CURL="${HELPER_SCRIPT_FOLDER}/files/fixes/curl"
   INITD_FOLDER="/etc/init.d"
   USR_DATA="/usr/data"
-  USR_SHARE="/usr/share"
   PRINTER_DATA_FOLDER="$USR_DATA/printer_data"
 
   # Helper Script #
@@ -41,7 +40,6 @@ function set_paths() {
   NGINX_FOLDER="${USR_DATA}/nginx"
   NGINX_URL="${HS_FILES}/moonraker/nginx.tar.gz"
   NGINX_SERVICE_URL="${HS_FILES}/services/S50nginx"
-  NGINX_CONF_URL="${HS_FILES}/moonraker/nginx.conf"
   
   # Supervisor Lite #
   SUPERVISOR_FILE="/usr/bin/supervisorctl"
@@ -59,7 +57,6 @@ function set_paths() {
   KLIPPER_KLIPPY_FOLDER="/usr/share/klipper/klippy"
   KLIPPER_SERVICE_URL="${HS_FILES}/services/S55klipper_service"
   KLIPPER_GCODE_URL="${HS_FILES}/fixes/gcode.py"
-  KLIPPER_GCODE_3V3_URL="${HS_FILES}/fixes/gcode_3v3.py"
   
   # Fluidd #
   FLUIDD_FOLDER="${USR_DATA}/fluidd"
@@ -104,7 +101,6 @@ function set_paths() {
   # Useful Macros #
   USEFUL_MACROS_FILE="${HS_CONFIG_FOLDER}/useful-macros.cfg"
   USEFUL_MACROS_URL="${HS_FILES}/macros/useful-macros.cfg"
-  USEFUL_MACROS_3V3_URL="${HS_FILES}/macros/useful-macros-3v3.cfg"
   
   # Save Z-Offset Macros #
   SAVE_ZOFFSET_FILE="${HS_CONFIG_FOLDER}/save-zoffset.cfg"
@@ -115,13 +111,10 @@ function set_paths() {
   SCREWS_ADJUST_URL="${HS_FILES}/screws-tilt-adjust/screws_tilt_adjust.py"
   SCREWS_ADJUST_K1_URL="${HS_FILES}/screws-tilt-adjust/screws-tilt-adjust-k1.cfg"
   SCREWS_ADJUST_K1M_URL="${HS_FILES}/screws-tilt-adjust/screws-tilt-adjust-k1max.cfg"
-  SCREWS_ADJUST_3KE_URL="${HS_FILES}/screws-tilt-adjust/screws-tilt-adjust-3ke.cfg"
   
   # M600 Support #
   M600_SUPPORT_FILE="${HS_CONFIG_FOLDER}/M600-support.cfg"
   M600_SUPPORT_URL="${HS_FILES}/macros/M600-support.cfg"
-  M600_SUPPORT_3V3_URL="${HS_FILES}/macros/M600-support-3v3.cfg"
-  M600_SUPPORT_3KE_URL="${HS_FILES}/macros/M600-support-ke.cfg"
   
   # Git Backup #
   GIT_BACKUP_INSTALLER="${HS_FILES}/git-backup/git-backup.sh"
@@ -140,7 +133,6 @@ function set_paths() {
   
   # USB Camera Support
   USB_CAMERA_FILE="${INITD_FOLDER}/S50usb_camera"
-  USB_CAMERA_SINGLE_URL="${HS_FILES}/services/S50usb_camera-single"
   USB_CAMERA_DUAL_URL="${HS_FILES}/services/S50usb_camera-dual"
   
   # OctoEverywhere #
@@ -177,8 +169,6 @@ function set_paths() {
   GUPPY_SCREEN_FOLDER="${USR_DATA}/guppyscreen"
   GUPPY_SCREEN_URL1="${HS_FILES}/guppy-screen/guppy_update.cfg"
   GUPPY_SCREEN_URL2="${HS_FILES}/guppy-screen/guppy-update.sh"
-  GUPPY_SCREEN_3V3_URL="${HS_FILES}/guppy-screen/guppy_update-3v3.cfg"
-  GUPPY_SCREEN_CONFIG_3V3_URL="${HS_FILES}/guppy-screen/guppyconfig-3v3.json"
   
   # Creality Dynamic Logos for Fluidd #
   FLUIDD_LOGO_FILE="${USR_DATA}/fluidd/logo_creality_v2.svg"
