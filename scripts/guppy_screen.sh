@@ -24,45 +24,24 @@ function install_guppy_screen(){
         if [ -f "$USR_DATA"/guppyscreen.tar.gz ]; then
           rm -f "$USR_DATA"/guppyscreen.tar.gz
         fi
-        if [ "$model" = "K1" ] || [ "$model" = "3V3" ]; then
-          local theme_choice
-          while true; do
-            read -p " Do you want to install ${green}Nightly Build ${white}or ${green}Release Build ${white}? (${yellow}nightly${white}/${yellow}release${white}): ${yellow}" theme_choice
-            case "${theme_choice}" in
-              NIGHTLY|nightly)
-                echo -e "${white}"
-                echo -e "Info: Downloading Guppy Screen..."
-                "$CURL" -L https://github.com/ballaswag/guppyscreen/releases/download/nightly/guppyscreen.tar.gz -o "$USR_DATA"/guppyscreen.tar.gz
-                break;;
-              RELEASE|release)
-                echo -e "${white}"
-                echo -e "Info: Downloading Guppy Screen..."
-                "$CURL" -L https://github.com/ballaswag/guppyscreen/releases/latest/download/guppyscreen.tar.gz -o "$USR_DATA"/guppyscreen.tar.gz
-                break;;
-              *)
-                error_msg "Please select a correct choice!";;
-            esac
-          done
-        else
-          local theme_choice
-          while true; do
-            read -p " Do you want to install ${green}Nightly Build ${white}or ${green}Release Build ${white}? (${yellow}nightly${white}/${yellow}release${white}): ${yellow}" theme_choice
-            case "${theme_choice}" in
-              NIGHTLY|nightly)
-                echo -e "${white}"
-                echo -e "Info: Downloading Guppy Screen..."
-                "$CURL" -L https://github.com/ballaswag/guppyscreen/releases/download/nightly/guppyscreen-smallscreen.tar.gz -o "$USR_DATA"/guppyscreen.tar.gz
-                break;;
-              RELEASE|release)
-                echo -e "${white}"
-                echo -e "Info: Downloading Guppy Screen..."
-                "$CURL" -L https://github.com/ballaswag/guppyscreen/releases/latest/download/guppyscreen-smallscreen.tar.gz -o "$USR_DATA"/guppyscreen.tar.gz
-                break;;
-              *)
-                error_msg "Please select a correct choice!";;
-            esac
-          done
-        fi
+        local theme_choice
+        while true; do
+          read -p " Do you want to install ${green}Nightly Build ${white}or ${green}Release Build ${white}? (${yellow}nightly${white}/${yellow}release${white}): ${yellow}" theme_choice
+          case "${theme_choice}" in
+            NIGHTLY|nightly)
+              echo -e "${white}"
+              echo -e "Info: Downloading Guppy Screen..."
+              "$CURL" -L https://github.com/ballaswag/guppyscreen/releases/download/nightly/guppyscreen.tar.gz -o "$USR_DATA"/guppyscreen.tar.gz
+              break;;
+            RELEASE|release)
+              echo -e "${white}"
+              echo -e "Info: Downloading Guppy Screen..."
+              "$CURL" -L https://github.com/ballaswag/guppyscreen/releases/latest/download/guppyscreen.tar.gz -o "$USR_DATA"/guppyscreen.tar.gz
+              break;;
+            *)
+              error_msg "Please select a correct choice!";;
+          esac
+        done
         echo -e "Info: Installing files..."
         tar -xvf "$USR_DATA"/guppyscreen.tar.gz -C "$USR_DATA"
         rm -f "$USR_DATA"/guppyscreen.tar.gz
@@ -130,17 +109,7 @@ function install_guppy_screen(){
         mkdir -p "$KLIPPER_CONFIG_FOLDER"/GuppyScreen/scripts
         cp "$GUPPY_SCREEN_FOLDER"/scripts/*.cfg "$KLIPPER_CONFIG_FOLDER"/GuppyScreen
         cp "$GUPPY_SCREEN_FOLDER"/scripts/*.py "$KLIPPER_CONFIG_FOLDER"/GuppyScreen/scripts
-        if [ "$model" = "K1" ]; then
-          ln -sf "$GUPPY_SCREEN_URL1" "$KLIPPER_CONFIG_FOLDER"/GuppyScreen/guppy_update.cfg
-        else
-          ln -sf "$GUPPY_SCREEN_3V3_URL" "$KLIPPER_CONFIG_FOLDER"/GuppyScreen/guppy_update.cfg
-        fi
-        if [ "$model" = "3V3" ]; then
-          if [ -f "$GUPPY_SCREEN_FOLDER"/guppyconfig.json ];then
-            rm -f "$GUPPY_SCREEN_FOLDER"/guppyconfig.json
-          fi
-          cp "$GUPPY_SCREEN_CONFIG_3V3_URL" "$GUPPY_SCREEN_FOLDER"/guppyconfig.json
-        fi
+        ln -sf "$GUPPY_SCREEN_URL1" "$KLIPPER_CONFIG_FOLDER"/GuppyScreen/guppy_update.cfg
         chmod 775 "$GUPPY_SCREEN_URL2"
         if grep -q "include GuppyScreen" "$PRINTER_CFG" ; then
           echo -e "Info: Guppy Screen configurations are already enabled in printer.cfg file."
@@ -154,13 +123,11 @@ function install_guppy_screen(){
         else
           echo -e "Info: Stock configuration is already disabled in gcode_macro.cfg file..."
         fi
-        if [ "$model" = "K1" ]; then
-          if grep -q '\[gcode_macro INPUTSHAPER\]' "$MACROS_CFG" ; then
-            echo -e "Info: Replacing stock configuration in gcode_macro.cfg file..."
-            sed -i 's/SHAPER_CALIBRATE AXIS=y/SHAPER_CALIBRATE/' "$MACROS_CFG"
-          else
-            echo -e "Info: Stock configuration is already replaced in gcode_macro.cfg file..."
-          fi
+        if grep -q '\[gcode_macro INPUTSHAPER\]' "$MACROS_CFG" ; then
+          echo -e "Info: Replacing stock configuration in gcode_macro.cfg file..."
+          sed -i 's/SHAPER_CALIBRATE AXIS=y/SHAPER_CALIBRATE/' "$MACROS_CFG"
+        else
+          echo -e "Info: Stock configuration is already replaced in gcode_macro.cfg file..."
         fi
         sync
         echo -e "Info: Restarting Moonraker service..."
@@ -249,13 +216,11 @@ function remove_guppy_screen(){
         else
           echo -e "Info: Stock configuration is already enabled in gcode_macro.cfg file..."
         fi
-        if [ "$model" = "K1" ]; then
-          if grep -q '\[gcode_macro INPUTSHAPER\]' "$MACROS_CFG" ; then
-            echo -e "Info: Restoring stock configuration in gcode_macro.cfg file..."
-            sed -i 's/SHAPER_CALIBRATE/SHAPER_CALIBRATE AXIS=y/' "$MACROS_CFG"
-          else
-            echo -e "Info: Stock configuration is already restored in gcode_macro.cfg file..."
-          fi
+        if grep -q '\[gcode_macro INPUTSHAPER\]' "$MACROS_CFG" ; then
+          echo -e "Info: Restoring stock configuration in gcode_macro.cfg file..."
+          sed -i 's/SHAPER_CALIBRATE/SHAPER_CALIBRATE AXIS=y/' "$MACROS_CFG"
+        else
+          echo -e "Info: Stock configuration is already restored in gcode_macro.cfg file..."
         fi
         echo -e "Info: Restarting Moonraker service..."
         stop_moonraker
