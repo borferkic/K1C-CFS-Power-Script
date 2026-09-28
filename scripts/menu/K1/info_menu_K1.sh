@@ -49,7 +49,10 @@ function info_menu_ui_k1() {
   info_line "$(check_file_k1 "$BUZZER_FILE")" 'Buzzer Support'
   info_line "$(check_folder_k1 "$NOZZLE_CLEANING_FOLDER")" 'Nozzle Cleaning Fan Control'
   info_line "$(check_file_k1 "$FAN_CONTROLS_FILE")" 'Fans Control Macros' 
-  info_line "$(check_folder_k1 "$IMP_SHAPERS_FOLDER")" 'Improved Shapers Calibrations'
+  # C-001: module retired; only shown for legacy installs.
+  if [ -d "$IMP_SHAPERS_FOLDER" ]; then
+    info_line "$(check_folder_k1 "$IMP_SHAPERS_FOLDER")" 'Improved Shapers Calibrations (legacy)'
+  fi
   info_line "$(check_file_k1 "$USEFUL_MACROS_FILE")" 'Useful Macros'
   info_line "$(check_file_k1 "$SAVE_ZOFFSET_FILE")" 'Save Z-Offset Macros'
   info_line "$(check_file_k1 "$SCREWS_ADJUST_FILE")" 'Screws Tilt Adjust Support'
