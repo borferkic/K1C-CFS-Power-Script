@@ -73,7 +73,6 @@ function info_menu_ui_k1() {
   info_line "$(check_simplyprint_k1)" 'SimplyPrint'
   hr
   subtitle '•CUSTOMIZATION:'
-  info_line "$(check_file_k1 "$BOOT_DISPLAY_FILE")" 'Custom Boot Display'
   info_line "$(check_file_k1 "$CREALITY_WEB_FILE")" 'Creality Web Interface'
   info_line "$(check_folder_k1 "$GUPPY_SCREEN_FOLDER")" 'Guppy Screen'
   info_line "$(check_file_k1 "$FLUIDD_LOGO_FILE")" 'Creality Dynamic Logos for Fluidd'
