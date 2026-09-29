@@ -216,6 +216,14 @@ purge from `START_PRINT` so the printer does not try to purge before loading
 filament. To purge, add `ADAPT_PURGE_MOD` to the end of the slicer start G-code.
 Enabling a skirt in the slicer is also recommended to prime the nozzle.
 
+#### KAMP settings are saved
+
+The bed mesh type (adaptive, full or none) and the purge line type (adaptive or classic) are chosen from
+the KAMP settings menus (`KAMP_BED_MESH_SETTINGS` and `KAMP_PURGE_LINE_SETTINGS`, also available as macros
+in PowerScreen). Your choice is saved in `variables.cfg`, the same file that Save Z-Offset uses, and it is
+restored when Klipper starts, so it is no longer reset to *adaptive* on every restart. Until you choose
+something, the defaults are the adaptive bed mesh and the adaptive purge line.
+
 ### Repository error when installing Moonraker
 
 To avoid a repository warning when installing Moonraker, mark it as a safe Git
