@@ -102,6 +102,7 @@ function remove_powerscreen(){
         echo -e "Info: Restarting Klipper service..."
         restart_klipper
         ok_msg "PowerScreen has been removed successfully!"
+        echo -e "   It is recommended to restart the printer now."
         return;;
       N|n)
         error_msg "Deletion canceled!"
