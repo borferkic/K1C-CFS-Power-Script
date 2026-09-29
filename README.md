@@ -21,7 +21,7 @@ Guilouz, adapted to the K1C and to the CFS firmware.
 ## Features
 
 - **PowerScreen touch interface.** Replaces the Creality touch screen with [PowerScreen](https://github.com/borferkic/K1C-CFS-POWER-SCREEN), a K1C interface aware of the CFS. Install the `stable` or `nightly` build from the menu; everything is backed up and can be restored, and updates come from Fluidd or Mainsail.
-- **Bed Coordinates Fix.** The latest CFS firmware for the K1C generates wrong Y axis coordinates; this module corrects `[stepper_y]` in `printer.cfg` and nothing else, with a backup of the original values.
+- **Bed Coordinates Fix.** The latest CFS firmware for the K1C generates wrong Y axis coordinates; this module corrects `[stepper_y]` and the nozzle wipe position on the brush in `printer.cfg` and nothing else, with a backup of the original values.
 - **Power Macros.** Installs the Power Script `gcode_macro.cfg`, `printer_params.cfg` and `box.cfg` (your originals are backed up) with the extra `STRESS_TEST` (motion stress test), `PID_HOTEND` (hotend PID calibration) and `RELOAD_CAMERA` (restart the camera service) macros.
 - **Manual filament change with `M600`.** The CFS firmware has no `M600`; this module adds it, keeps the CFS `RESUME` untouched and opens the PowerScreen **MANUAL FILAMENT CHANGE** menu (unload, load, resume, stop).
 - **KAMP adapted to the CFS.** Adaptive bed mesh and purge line that respect the CFS purge routine (see [KAMP and the CFS purge](#kamp-and-the-cfs-purge)).
@@ -115,10 +115,12 @@ Before replacing anything, the first copy of each file is saved in
 [Install] Menu → 7) Install Bed Coordinates Fix
 ```
 
-The latest CFS firmware for the K1C generates wrong Y axis coordinates. This module sets
-`position_endstop: -0.5`, `position_min: -0.5`, `position_max: 227.5` and
-`gcode_position_max: 220` in the `[stepper_y]` section of `printer.cfg`. Nothing else in
-`printer.cfg` is changed, and it does not need any other module.
+The latest CFS firmware for the K1C generates wrong Y axis coordinates. This module changes
+only these keys of `printer.cfg`, and it does not need any other module:
+
+- In `[stepper_y]`: `position_endstop: -0.5`, `position_min: -0.5`, `position_max: 227.5` and `gcode_position_max: 220`.
+- In `[prtouch_v2]` (the nozzle wipe on the brush): `clr_noz_start_x: 59` and `clr_noz_len_x: 36`, so the wipe spans X 59 to 95.
+
 The original values are saved in `/usr/data/helper-script-backup/bed-fix/`, and
 `[Remove] Menu → 7) Remove Bed Coordinates Fix` puts them back without touching the includes added by other modules.
 

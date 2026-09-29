@@ -36,7 +36,7 @@ function migrate_split_power_config(){
     mkdir -p "$BED_FIX_BACKUP_FOLDER"
     cp -p "$old" "$BED_FIX_BACKUP_FOLDER/printer.cfg.orig"
     awk -v keys="^(${BED_FIX_KEYS})[ \t]*:" '
-      /^\[/ { in_y = ($0 == "[stepper_y]") }
+      /^\[/ { in_y = ($0 ~ /^\[stepper_y\]/) }
       in_y && $0 ~ keys { print }' "$old" > "$BED_FIX_BACKUP_FOLDER/stepper_y.orig"
   fi
   rm -f "$old"
@@ -48,7 +48,7 @@ function migrate_split_power_config(){
 function migrate_stepper_y_gcode_max(){
   [ -f "$BED_FIX_BACKUP_FOLDER/stepper_y.orig" ] || return 0
   [ -f "$PRINTER_CFG" ] || return 0
-  if awk '/^\[/ { in_y = ($0 == "[stepper_y]") }
+  if awk '/^\[/ { in_y = ($0 ~ /^\[stepper_y\]/) }
           in_y && /^gcode_position_max[ \t]*:[ \t]*220[ \t]*$/ { ok = 1 }
           END { exit !ok }' "$PRINTER_CFG"; then
     return 0
@@ -59,8 +59,34 @@ function migrate_stepper_y_gcode_max(){
   restart_klipper
 }
 
+# Version 1.0.3 also sets the nozzle wipe position on the brush. Apply it on
+# printers where the Bed Coordinates Fix is already installed.
+function migrate_bed_fix_wipe(){
+  [ -f "$BED_FIX_BACKUP_FOLDER/stepper_y.orig" ] || return 0
+  [ -f "$PRINTER_CFG" ] || return 0
+  if [ ! -f "$BED_FIX_BACKUP_FOLDER/prtouch.orig" ]; then
+    if [ -f "$BED_FIX_BACKUP_FOLDER/printer.cfg.orig" ]; then
+      extract_bed_fix_original "$BED_FIX_BACKUP_FOLDER/printer.cfg.orig"
+    else
+      extract_bed_fix_original "$PRINTER_CFG"
+    fi
+  fi
+  if awk -v x="$BED_FIX_WIPE_X" -v len="$BED_FIX_WIPE_LEN_X" '
+       /^\[/ { in_p = ($0 ~ /^\[prtouch_v[0-9]+\]/) }
+       in_p && $0 ~ ("^clr_noz_start_x[ \t]*:[ \t]*" x "[ \t]*$") { a = 1 }
+       in_p && $0 ~ ("^clr_noz_len_x[ \t]*:[ \t]*" len "[ \t]*$") { b = 1 }
+       END { exit !(a && b) }' "$PRINTER_CFG"; then
+    return 0
+  fi
+  echo -e "${white}Info: Applying the nozzle wipe position of the Bed Coordinates Fix..."
+  patch_nozzle_wipe
+  echo -e "Info: Restarting Klipper service..."
+  restart_klipper
+}
+
 function run_migrations(){
   migrate_update_manager_entry
   migrate_split_power_config
   migrate_stepper_y_gcode_max
+  migrate_bed_fix_wipe
 }
