@@ -20,9 +20,8 @@ Guilouz, adapted to the K1C and to the CFS firmware.
 
 Main differences from the original Helper Script:
 
-- **K1 series only.** Support for the Ender-3 V3, Ender-3 V3 KE and CR-10 SE has been removed; the script refuses to run on other printers.
 - **[PowerScreen](https://github.com/borferkic/K1C-CFS-POWER-SCREEN)** replaces Guppy Screen as the touch screen interface.
-- **Power Macros & Bed Coordinates Fix**: fixes the Y axis coordinates the CFS firmware leaves wrong and installs the Power Script macros.
+- **Fix for the wrong Y axis coordinates.** The latest CFS firmware for the K1C generates wrong Y coordinates; the **Power Macros & Bed Coordinates Fix** module corrects them and also installs the Power Script macros.
 - **M600 Support** works with the CFS firmware and opens the PowerScreen filament change menu.
 - **Custom boot animation** installed automatically the first time the script runs.
 - **KAMP adapted to the CFS firmware** (see [KAMP and the CFS purge](#kamp-and-the-cfs-purge)).
@@ -97,7 +96,7 @@ updates) are **disabled**. It then asks which build to install (`stable` or
 [Customize] Menu → 6) Install Power Macros & Bed Coordinates Fix
 ```
 
-The CFS firmware leaves the Y axis coordinates wrong. This module:
+The latest CFS firmware for the K1C generates wrong Y axis coordinates. This module:
 
 - Sets `position_endstop: -0.5`, `position_min: -0.5` and `position_max: 227.5` in the `[stepper_y]` section of `printer.cfg`. Nothing else in `printer.cfg` is changed except the missing `[include gcode_macro.cfg]`, `[include printer_params.cfg]` and `[include box.cfg]` lines.
 - **Replaces** `gcode_macro.cfg`, `printer_params.cfg` and `box.cfg` with the Power Script versions. They also add the `STRESS_TEST` (motion stress test), `PID_HOTEND` (hotend PID calibration) and `RELOAD_CAMERA` (restart the camera service) macros.
