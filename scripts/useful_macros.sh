@@ -7,7 +7,7 @@ function useful_macros_message(){
   title 'Useful Macros' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}It allows to use some usefull macros like Bed Leveling, PID,   ${white}│"
+  echo -e " │ ${cyan}It allows to use some useful macros like Bed Leveling, PID,    ${white}│"
   echo -e " │ ${cyan}stress test or backup and restore Klipper configurations       ${white}│"
   echo -e " │ ${cyan}files and Moonraker database.                                  ${white}│"
   hr

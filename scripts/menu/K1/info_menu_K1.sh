@@ -61,7 +61,7 @@ function info_menu_ui_k1() {
   hr
   subtitle '•REMOTE ACCESS:'
   info_line "$(check_folder_k1 "$OCTOEVERYWHERE_FOLDER")" 'OctoEverywhere'
-  info_line "$(check_folder_k1 "$MOONRAKER_OBICO_FOLDER")" 'Obico'
+  info_line "$(check_folder_k1 "$MOONRAKER_OBICO_FOLDER")" 'Moonraker Obico'
   info_line "$(check_folder_k1 "$MOBILERAKER_COMPANION_FOLDER")" 'Mobileraker Companion'
   hr
   subtitle '•CUSTOMIZATION:'
