@@ -10,7 +10,7 @@ set -e
 BED_FIX_KEYS="position_endstop|position_min|position_max|gcode_position_max"
 BED_FIX_WIPE_KEYS="clr_noz_start_x|clr_noz_start_y|clr_noz_len_x"
 BED_FIX_WIPE_X=59
-BED_FIX_WIPE_Y=225
+BED_FIX_WIPE_Y=223
 BED_FIX_WIPE_LEN_X=36
 BED_FIX_MESH_KEYS="mesh_min|mesh_max"
 BED_FIX_MESH_MIN="1,1"
@@ -26,7 +26,7 @@ function bed_coordinates_fix_message(){
   echo -e " │ ${cyan}[stepper_y]: position_endstop -0.5, position_min -0.5,         ${white}│"
   echo -e " │ ${cyan}position_max 227.5 and gcode_position_max 220.                 ${white}│"
   echo -e " │ ${cyan}[prtouch_v2]: the nozzle wipe on the brush, X 59 to 95 at      ${white}│"
-  echo -e " │ ${cyan}Y 225 (clr_noz_start_x 59, clr_noz_start_y 225,                ${white}│"
+  echo -e " │ ${cyan}Y 223 (clr_noz_start_x 59, clr_noz_start_y 223,                ${white}│"
   echo -e " │ ${cyan}clr_noz_len_x 36).                                             ${white}│"
   echo -e " │ ${cyan}[bed_mesh]: mesh_min 1,1 and mesh_max 220,215.                 ${white}│"
   echo -e " │ ${cyan}Nothing else is changed.                                       ${white}│"
