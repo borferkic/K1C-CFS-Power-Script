@@ -72,5 +72,6 @@ rm -rf /root/.cache
 set_paths
 set_permissions
 install_boot_animation
+run_migrations
 update_menu
 main_menu
