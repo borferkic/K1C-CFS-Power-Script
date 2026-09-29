@@ -155,6 +155,7 @@ from Fluidd or Mainsail (**Settings → Software Updates**).
 | `[Backup & Restore]` | Klipper configuration files and Moonraker database |
 | `[Tools]` | Klipper configuration updates, printing G-code files from folders, camera settings, service restarts, Entware updates, cache and log cleanup, firmware restore and factory reset |
 | `[Information]` | Installed components and their status |
+| `[System]` | Printer system information: firmware, hostname, serial number, IP and MAC address, CPU, RAM and disk usage, uptime |
 
 ## Known issues
 
