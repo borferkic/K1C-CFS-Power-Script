@@ -84,9 +84,35 @@ function migrate_bed_fix_wipe(){
   restart_klipper
 }
 
+# Version 1.0.4 also sets the bed mesh area. Apply it on printers where the Bed
+# Coordinates Fix is already installed.
+function migrate_bed_fix_mesh(){
+  [ -f "$BED_FIX_BACKUP_FOLDER/stepper_y.orig" ] || return 0
+  [ -f "$PRINTER_CFG" ] || return 0
+  if [ ! -f "$BED_FIX_BACKUP_FOLDER/bed_mesh.orig" ]; then
+    if [ -f "$BED_FIX_BACKUP_FOLDER/printer.cfg.orig" ]; then
+      extract_bed_fix_original "$BED_FIX_BACKUP_FOLDER/printer.cfg.orig"
+    else
+      extract_bed_fix_original "$PRINTER_CFG"
+    fi
+  fi
+  if awk -v min="$BED_FIX_MESH_MIN" -v max="$BED_FIX_MESH_MAX" '
+       /^\[/ { in_m = ($0 ~ /^\[bed_mesh\]/) }
+       in_m && $0 ~ ("^mesh_min[ \t]*:[ \t]*" min "[ \t]*$") { a = 1 }
+       in_m && $0 ~ ("^mesh_max[ \t]*:[ \t]*" max "[ \t]*$") { b = 1 }
+       END { exit !(a && b) }' "$PRINTER_CFG"; then
+    return 0
+  fi
+  echo -e "${white}Info: Applying the bed mesh area of the Bed Coordinates Fix..."
+  patch_bed_mesh
+  echo -e "Info: Restarting Klipper service..."
+  restart_klipper
+}
+
 function run_migrations(){
   migrate_update_manager_entry
   migrate_split_power_config
   migrate_stepper_y_gcode_max
   migrate_bed_fix_wipe
+  migrate_bed_fix_mesh
 }
