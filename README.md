@@ -154,6 +154,18 @@ The module does not override the CFS `RESUME`: it adds `M600_RESUME` and
 `M600_CANCEL`, which restore the fan, the idle timeout and the module state and
 then call the firmware commands. The automatic CFS color changes do not use `M600`.
 
+### Creality Dynamic Logos for Fluidd
+
+```text
+[Customize & PowerScreen] Menu → 5) Install Creality Dynamic Logos for Fluidd
+```
+
+Adds the **Creality V1** and **Creality V2** themes to Fluidd and selects **Creality V2**. It adds the
+two themes to the Fluidd `config.json` without replacing it, so the themes of your Fluidd version are kept.
+If a Fluidd update removes them, the script adds them back the next time it starts. Fluidd needs
+Moonraker running to remember the selected theme; if it is not running, pick Creality V2 in the Fluidd theme
+settings. Clear the browser cache if the themes do not show up.
+
 ### Camera Support
 
 ```text
