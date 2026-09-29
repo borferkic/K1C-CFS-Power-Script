@@ -26,6 +26,24 @@ function migrate_update_manager_entry(){
   fi
 }
 
+# Versions before 1.0.1 left gcode_position_max of [stepper_y] as set by the
+# firmware. Correct it on printers where Power Macros & Bed Coordinates Fix is
+# already installed.
+function migrate_stepper_y_gcode_max(){
+  [ -f "$POWER_CONFIG_BACKUP_FOLDER/printer.cfg" ] || return 0
+  [ -f "$PRINTER_CFG" ] || return 0
+  if awk '/^\[/ { in_y = ($0 == "[stepper_y]") }
+          in_y && /^gcode_position_max[ \t]*:[ \t]*220[ \t]*$/ { ok = 1 }
+          END { exit !ok }' "$PRINTER_CFG"; then
+    return 0
+  fi
+  echo -e "${white}Info: Correcting gcode_position_max in [stepper_y]..."
+  patch_stepper_y
+  echo -e "Info: Restarting Klipper service..."
+  restart_klipper
+}
+
 function run_migrations(){
   migrate_update_manager_entry
+  migrate_stepper_y_gcode_max
 }

@@ -101,7 +101,7 @@ updates) are **disabled**. It then asks which build to install (`stable` or
 
 The latest CFS firmware for the K1C generates wrong Y axis coordinates. This module:
 
-- Sets `position_endstop: -0.5`, `position_min: -0.5` and `position_max: 227.5` in the `[stepper_y]` section of `printer.cfg`. Nothing else in `printer.cfg` is changed except the missing `[include gcode_macro.cfg]`, `[include printer_params.cfg]` and `[include box.cfg]` lines.
+- Sets `position_endstop: -0.5`, `position_min: -0.5`, `position_max: 227.5` and `gcode_position_max: 220` in the `[stepper_y]` section of `printer.cfg`. Nothing else in `printer.cfg` is changed except the missing `[include gcode_macro.cfg]`, `[include printer_params.cfg]` and `[include box.cfg]` lines.
 - **Replaces** `gcode_macro.cfg`, `printer_params.cfg` and `box.cfg` with the Power Script versions. They also add the `STRESS_TEST` (motion stress test), `PID_HOTEND` (hotend PID calibration) and `RELOAD_CAMERA` (restart the camera service) macros.
 - Keeps `START_PRINT` disabled when KAMP is installed, because KAMP provides its own.
 
