@@ -109,10 +109,23 @@ function migrate_bed_fix_mesh(){
   restart_klipper
 }
 
+# A Fluidd update (or reinstall) replaces config.json and the Creality themes
+# disappear. Add them again when the logos were installed.
+function migrate_fluidd_logos(){
+  [ -f "$FLUIDD_LOGO_FILE" ] || return 0
+  [ -f "$FLUIDD_FOLDER/config.json" ] || return 0
+  if grep -q '"Creality V2"' "$FLUIDD_FOLDER/config.json"; then
+    return 0
+  fi
+  echo -e "${white}Info: Restoring the Creality themes in the Fluidd config.json file..."
+  add_creality_theme_presets || true
+}
+
 function run_migrations(){
   migrate_update_manager_entry
   migrate_split_power_config
   migrate_stepper_y_gcode_max
   migrate_bed_fix_wipe
   migrate_bed_fix_mesh
+  migrate_fluidd_logos
 }
