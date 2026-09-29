@@ -45,7 +45,8 @@ function ensure_printer_include(){
   mv "${PRINTER_CFG}.tmp" "$PRINTER_CFG"
 }
 
-# Sets the three position_* keys of [stepper_y]; nothing else is modified.
+# Sets the position_* keys and gcode_position_max of [stepper_y]; nothing else
+# is modified. gcode_position_max is added after position_max when it is missing.
 function patch_stepper_y(){
   if ! grep -q "^\[stepper_y\]" "$PRINTER_CFG" ; then
     error_msg "[stepper_y] was not found in printer.cfg, skipping the Y axis fix!"
@@ -53,11 +54,22 @@ function patch_stepper_y(){
   fi
   echo -e "Info: Fixing the Y axis limits in [stepper_y]..."
   awk '
+    # First pass: does [stepper_y] already have gcode_position_max?
+    NR == FNR {
+      if ($0 ~ /^\[/) in_y = ($0 == "[stepper_y]")
+      if (in_y && $0 ~ /^gcode_position_max[ \t]*:/) has_gcode_max = 1
+      next
+    }
     /^\[/ { in_y = ($0 == "[stepper_y]") }
     in_y && /^position_endstop[ \t]*:/ { print "position_endstop: -0.5"; next }
     in_y && /^position_min[ \t]*:/     { print "position_min: -0.5"; next }
-    in_y && /^position_max[ \t]*:/     { print "position_max: 227.5"; next }
-    { print }' "$PRINTER_CFG" > "${PRINTER_CFG}.tmp"
+    in_y && /^position_max[ \t]*:/ {
+      print "position_max: 227.5"
+      if (!has_gcode_max) print "gcode_position_max: 220"
+      next
+    }
+    in_y && /^gcode_position_max[ \t]*:/ { print "gcode_position_max: 220"; next }
+    { print }' "$PRINTER_CFG" "$PRINTER_CFG" > "${PRINTER_CFG}.tmp"
   mv "${PRINTER_CFG}.tmp" "$PRINTER_CFG"
 }
 
