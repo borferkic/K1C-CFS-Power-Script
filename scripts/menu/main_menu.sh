@@ -49,7 +49,6 @@ function main_menu_ui() {
   main_menu_option '4' '[Backup & Restore]' 'Menu'
   main_menu_option '5' '[Tools]' 'Menu'
   main_menu_option '6' '[Information]' 'Menu'
-  main_menu_option '7' '[System]' 'Menu'
   hr
   inner_line
   hr
@@ -80,12 +79,9 @@ function main_menu() {
          break;;
       5) clear
          tools_menu_k1
-         main_ui;;
+         break;;
       6) clear
          info_menu_k1
-         break;;
-      7) clear
-         system_menu
          break;;
       Q|q)
          clear; exit 0;;
