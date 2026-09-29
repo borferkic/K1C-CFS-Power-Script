@@ -80,17 +80,6 @@ function info_line() {
   printf " │   $color${status} ${white}${text}%-${padding}s${white}│\n" ''
 }
 
-function system_line() {
-  local title="$1"
-  local value="$2"
-  local max_length=63
-  local title_length=${#title}
-  local separator=": "
-  local value_length=${#value}
-  local value_padding=$((max_length - title_length - ${#separator} - value_length))
-  printf " │ ${green}%s${white}%s${white}\e[97m%s%-*s%s${white}│\n" "$title" "$separator" "$value" $value_padding ''
-}
-
 function install_msg() {
   read -p "${white} Are you sure you want to install ${green}${1} ${white}? (${yellow}y${white}/${yellow}n${white}): ${yellow}" $2
 }
