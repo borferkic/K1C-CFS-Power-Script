@@ -35,6 +35,9 @@ function info_menu_ui_k1() {
   info_line "$(check_file_k1 "$ENTWARE_FILE")" 'Entware'
   info_line "$(check_file_k1 "$KLIPPER_SHELL_FILE")" 'Klipper Gcode Shell Command'
   hr
+  subtitle '•POWER SCRIPT:'
+  info_line "$(check_file_k1 "$POWER_CONFIG_BACKUP_FOLDER/printer.cfg")" 'Power Macros & Bed Coordinates Fix'
+  hr
   subtitle '•IMPROVEMENTS:'
   info_line "$(check_folder_k1 "$KAMP_FOLDER")" 'Klipper Adaptive Meshing & Purging'
   info_line "$(check_file_k1 "$BUZZER_FILE")" 'Buzzer Support'
@@ -71,7 +74,6 @@ function info_menu_ui_k1() {
     info_line "$(check_folder_k1 "$GUPPY_SCREEN_FOLDER")" 'Guppy Screen (legacy)'
   fi
   info_line "$(check_file_k1 "$FLUIDD_LOGO_FILE")" 'Creality Dynamic Logos for Fluidd'
-  info_line "$(check_file_k1 "$POWER_CONFIG_BACKUP_FOLDER/printer.cfg")" 'Power Macros & Bed Coordinates Fix'
   hr
   inner_line
   hr

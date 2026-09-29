@@ -16,7 +16,7 @@ function power_config_fixes_message(){
   echo -e " │ ${cyan}STRESS_TEST, PID_HOTEND and RELOAD_CAMERA macros.              ${white}│"
   hr
   echo -e " │ ${yellow}These files are REPLACED. Your originals are saved first       ${white}│"
-  echo -e " │ ${yellow}and can be restored from the Customize menu.                   ${white}│"
+  echo -e " │ ${yellow}and can be restored from the Remove menu.                      ${white}│"
   hr
   bottom_line
 }

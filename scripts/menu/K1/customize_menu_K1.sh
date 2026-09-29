@@ -15,9 +15,6 @@ function customize_menu_ui_k1() {
   hr
   menu_option '5' 'Install' 'Creality Dynamic Logos for Fluidd'
   hr
-  menu_option '6' 'Install' 'Power Macros & Bed Coordinates Fix'
-  menu_option '7' 'Remove' 'Power Macros & Bed Coordinates Fix'
-  hr
   inner_line
   hr
   bottom_menu_option 'b' 'Back to [Main Menu]' "${yellow}"
@@ -77,18 +74,6 @@ function customize_menu_k1() {
           error_msg "Fluidd is needed, please install it first!"
         else
           run "install_creality_dynamic_logos" "customize_menu_ui_k1"
-        fi;;
-      6)
-        if [ -f "$POWER_CONFIG_BACKUP_FOLDER/printer.cfg" ]; then
-          error_msg "Power Macros & Bed Coordinates Fix is already installed!"
-        else
-          run "install_power_config_fixes" "customize_menu_ui_k1"
-        fi;;
-      7)
-        if [ ! -f "$POWER_CONFIG_BACKUP_FOLDER/printer.cfg" ]; then
-          error_msg "Power Macros & Bed Coordinates Fix is not installed!"
-        else
-          run "remove_power_config_fixes" "customize_menu_ui_k1"
         fi;;
       B|b)
         clear; main_menu; break;;
