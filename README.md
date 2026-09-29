@@ -18,15 +18,18 @@ CFS Power Script is a helper script for the **Creality K1C** running the
 [Creality Helper Script](https://github.com/Guilouz/Creality-Helper-Script) by
 Guilouz, adapted to the K1C and to the CFS firmware.
 
-Main differences from the original Helper Script:
+## Features
 
-- **[PowerScreen](https://github.com/borferkic/K1C-CFS-POWER-SCREEN)** replaces Guppy Screen as the touch screen interface.
-- **Fix for the wrong Y axis coordinates.** The latest CFS firmware for the K1C generates wrong Y coordinates; the **Power Macros & Bed Coordinates Fix** module corrects them and also installs the Power Script macros.
-- **M600 Support** works with the CFS firmware and opens the PowerScreen filament change menu.
-- **Custom boot animation** installed automatically the first time the script runs.
-- **KAMP adapted to the CFS firmware** (see [KAMP and the CFS purge](#kamp-and-the-cfs-purge)).
-- **Camera Support** merges *Camera Settings Control* and *USB Camera Support* into a single entry.
-- Modules that duplicated PowerScreen, overlapped the Power Script configuration or did not work on the K1C were removed from the *Install* menu: *Improved Shapers Calibrations*, *Custom Boot Display*, *Guppy Screen*, *GuppyFLO*, *OctoApp Companion*, *SimplyPrint*, *Fans Control Macros* and *Useful Macros*. *Improved Shapers Calibrations*, *Fans Control Macros* and *Useful Macros* still show up in the *Remove* menu when they are installed.
+- **PowerScreen touch interface.** Replaces the Creality touch screen with [PowerScreen](https://github.com/borferkic/K1C-CFS-POWER-SCREEN), a K1C interface aware of the CFS. Install the `stable` or `nightly` build from the menu; everything is backed up and can be restored, and updates come from Fluidd or Mainsail.
+- **Fix for the wrong Y axis coordinates.** The latest CFS firmware for the K1C generates wrong Y coordinates. The **Power Macros & Bed Coordinates Fix** corrects them, adds the missing `printer.cfg` includes and installs the Power Script `gcode_macro.cfg`, `printer_params.cfg` and `box.cfg`, with a backup of your originals.
+- **Extra macros.** `STRESS_TEST` (motion stress test), `PID_HOTEND` (hotend PID calibration) and `RELOAD_CAMERA` (restart the camera service).
+- **Manual filament change with `M600`.** The CFS firmware has no `M600`; this module adds it, keeps the CFS `RESUME` untouched and opens the PowerScreen **MANUAL FILAMENT CHANGE** menu (unload, load, resume, stop).
+- **KAMP adapted to the CFS.** Adaptive bed mesh and purge line that respect the CFS purge routine (see [KAMP and the CFS purge](#kamp-and-the-cfs-purge)).
+- **Custom boot animation.** Creality logo, "POWER SCRIPT" and "LOADING...", applied automatically the first time the script runs, with the original animation backed up.
+- **Camera Support.** Brightness, saturation and contrast macros, plus optional USB camera support, in a single entry.
+- **Web interfaces and remote access.** Moonraker and Nginx, Fluidd, Mainsail, and OctoEverywhere, Moonraker Obico or Mobileraker Companion for remote monitoring and notifications.
+- **Print and printer utilities.** Moonraker Timelapse, Save Z-Offset Macros, Screws Tilt Adjust, Buzzer Support, Nozzle Cleaning Fan Control, Git Backup, Entware, and Klipper and Moonraker backup and restore.
+- **Safe by design.** Every module can be removed, dependencies are checked before installing, and configuration files are backed up before they are replaced.
 
 ## Requirements
 
