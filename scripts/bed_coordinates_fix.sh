@@ -8,8 +8,9 @@ set -e
 # listed here.
 
 BED_FIX_KEYS="position_endstop|position_min|position_max|gcode_position_max"
-BED_FIX_WIPE_KEYS="clr_noz_start_x|clr_noz_len_x"
+BED_FIX_WIPE_KEYS="clr_noz_start_x|clr_noz_start_y|clr_noz_len_x"
 BED_FIX_WIPE_X=59
+BED_FIX_WIPE_Y=225
 BED_FIX_WIPE_LEN_X=36
 BED_FIX_MESH_KEYS="mesh_min|mesh_max"
 BED_FIX_MESH_MIN="1,1"
@@ -24,8 +25,9 @@ function bed_coordinates_fix_message(){
   echo -e " │ ${cyan}coordinates. This module sets, in printer.cfg:                 ${white}│"
   echo -e " │ ${cyan}[stepper_y]: position_endstop -0.5, position_min -0.5,         ${white}│"
   echo -e " │ ${cyan}position_max 227.5 and gcode_position_max 220.                 ${white}│"
-  echo -e " │ ${cyan}[prtouch_v2]: the nozzle wipe on the brush, from X 59 to       ${white}│"
-  echo -e " │ ${cyan}X 95 (clr_noz_start_x 59 and clr_noz_len_x 36).                ${white}│"
+  echo -e " │ ${cyan}[prtouch_v2]: the nozzle wipe on the brush, X 59 to 95 at      ${white}│"
+  echo -e " │ ${cyan}Y 225 (clr_noz_start_x 59, clr_noz_start_y 225,                ${white}│"
+  echo -e " │ ${cyan}clr_noz_len_x 36).                                             ${white}│"
   echo -e " │ ${cyan}[bed_mesh]: mesh_min 1,1 and mesh_max 220,215.                 ${white}│"
   echo -e " │ ${cyan}Nothing else is changed.                                       ${white}│"
   hr
@@ -71,9 +73,10 @@ function patch_nozzle_wipe(){
     return
   fi
   echo -e "Info: Fixing the nozzle wipe position in [prtouch]..."
-  awk -v x="$BED_FIX_WIPE_X" -v len="$BED_FIX_WIPE_LEN_X" '
+  awk -v x="$BED_FIX_WIPE_X" -v y="$BED_FIX_WIPE_Y" -v len="$BED_FIX_WIPE_LEN_X" '
     /^\[/ { in_p = ($0 ~ /^\[prtouch_v[0-9]+\]/) }
     in_p && /^clr_noz_start_x[ \t]*:/ { print "clr_noz_start_x: " x; next }
+    in_p && /^clr_noz_start_y[ \t]*:/ { print "clr_noz_start_y: " y; next }
     in_p && /^clr_noz_len_x[ \t]*:/   { print "clr_noz_len_x: " len; next }
     { print }' "$PRINTER_CFG" > "${PRINTER_CFG}.tmp"
   mv "${PRINTER_CFG}.tmp" "$PRINTER_CFG"
