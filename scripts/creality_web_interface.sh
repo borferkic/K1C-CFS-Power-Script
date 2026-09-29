@@ -145,7 +145,7 @@ function restore_creality_web_interface(){
         if [ -f /usr/bin/web-server.disabled ] && [ -f "$INITD_FOLDER"/S99start_app ]; then
           mv /usr/bin/web-server.disabled /usr/bin/web-server
         fi
-        if [ -f /usr/bin/Monitor.disabled ] && [ ! -d "$GUPPY_SCREEN_FOLDER" ] && [ ! -d "$POWERSCREEN_FOLDER" ]; then
+        if [ -f /usr/bin/Monitor.disabled ] && [ ! -d "$POWERSCREEN_FOLDER" ]; then
           mv /usr/bin/Monitor.disabled /usr/bin/Monitor
         fi
         echo -e "Info: Restarting services..."
@@ -157,7 +157,7 @@ function restore_creality_web_interface(){
         if [ -f /usr/bin/web-server ] && [ -f "$INITD_FOLDER"/S99start_app ]; then
           /usr/bin/web-server > /dev/null 2>&1 &
         fi
-        if [ -f /usr/bin/Monitor ] && [ ! -d "$GUPPY_SCREEN_FOLDER" ] && [ ! -d "$POWERSCREEN_FOLDER" ]; then
+        if [ -f /usr/bin/Monitor ] && [ ! -d "$POWERSCREEN_FOLDER" ]; then
           /usr/bin/Monitor > /dev/null 2>&1 &
         fi
         ok_msg "Creality Web Interface has been restored successfully!"

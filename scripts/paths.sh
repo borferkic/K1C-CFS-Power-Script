@@ -169,10 +169,6 @@ function set_paths() {
   POWERSCREEN_INSTALLER_URL="https://raw.githubusercontent.com/borferkic/K1C-CFS-POWER-SCREEN/main/installer.sh"
   POWERSCREEN_INSTALLER_TMP="/tmp/powerscreen-installer.sh"
 
-  # Guppy Screen (legacy: removal only) #
-  GUPPY_SCREEN_FOLDER="${USR_DATA}/guppyscreen"
-  GUPPY_SCREEN_URL1="${HS_FILES}/guppy-screen/guppy_update.cfg"
-  GUPPY_SCREEN_URL2="${HS_FILES}/guppy-screen/guppy-update.sh"
   
   # Creality Dynamic Logos for Fluidd #
   FLUIDD_LOGO_FILE="${USR_DATA}/fluidd/logo_creality_v2.svg"
