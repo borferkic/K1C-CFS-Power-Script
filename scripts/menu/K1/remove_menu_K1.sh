@@ -72,8 +72,6 @@ function remove_menu_k1() {
           error_msg "Moonraker and Nginx are not installed!"
         elif [ -d "$POWERSCREEN_FOLDER" ]; then
           error_msg "Moonraker is needed to use PowerScreen, please uninstall it first!"
-        elif [ -d "$GUPPY_SCREEN_FOLDER" ]; then
-          error_msg "Moonraker is needed to use Guppy Screen, please uninstall it first!"
         else
          run "remove_moonraker_nginx" "remove_menu_ui_k1"
         fi;;
@@ -120,8 +118,6 @@ function remove_menu_k1() {
           error_msg "Klipper Gcode Shell Command is needed to use Buzzer Support, please uninstall it first!"
         elif [ -f "$CAMERA_SETTINGS_FILE" ]; then
           error_msg "Klipper Gcode Shell Command is needed to use Camera Settings Control, please uninstall it first!"
-        elif [ -d "$GUPPY_SCREEN_FOLDER" ]; then
-          error_msg "Klipper Gcode Shell Command is needed to use Guppy Screen, please uninstall it first!"
         elif [ -d "$IMP_SHAPERS_FOLDER" ]; then
           error_msg "Klipper Gcode Shell Command is needed to use Improved Shapers Calibrations, please uninstall it first!"
         elif [ -f "$GIT_BACKUP_FILE" ]; then

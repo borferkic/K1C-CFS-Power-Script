@@ -71,9 +71,6 @@ function info_menu_ui_k1() {
   subtitle '•CUSTOMIZATION:'
   info_line "$(check_file_k1 "$CREALITY_WEB_FILE")" 'Creality Web Interface'
   info_line "$(check_folder_k1 "$POWERSCREEN_FOLDER")" 'PowerScreen'
-  if [ -d "$GUPPY_SCREEN_FOLDER" ]; then
-    info_line "$(check_folder_k1 "$GUPPY_SCREEN_FOLDER")" 'Guppy Screen (legacy)'
-  fi
   info_line "$(check_file_k1 "$FLUIDD_LOGO_FILE")" 'Creality Dynamic Logos for Fluidd'
   hr
   inner_line
