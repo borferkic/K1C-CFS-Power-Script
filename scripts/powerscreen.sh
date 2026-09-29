@@ -13,13 +13,13 @@ function powerscreen_message(){
   hr
   echo -e " │ ${cyan}PowerScreen replaces the Creality touch screen.              ${white}│"
   hr
-  echo -e " │ ${white}The following will be ${darkred}DISABLED${white}:                               │"
-  echo -e " │ ${white} - Creality screen (Monitor, display-server)                  │"
-  echo -e " │ ${white} - Creality services: Creality Cloud, Creality Print LAN      │"
-  echo -e " │ ${white}   connection and OTA firmware updates                        │"
+  echo -e " │ ${white}The following will be ${darkred}DISABLED${white}:                              ${white}│"
+  echo -e " │ ${white} - Creality screen (Monitor, display-server)                 │"
+  echo -e " │ ${white} - Creality services: Creality Cloud, Creality Print LAN     │"
+  echo -e " │ ${white}   connection and OTA firmware updates                       │"
   hr
   echo -e " │ ${white}Everything is backed up and restored if PowerScreen is       │"
-  echo -e " │ ${white}removed.                                                      │"
+  echo -e " │ ${white}removed.                                                     │"
   hr
   bottom_line
 }
