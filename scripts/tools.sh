@@ -79,12 +79,12 @@ function reset_factory_settings_message(){
   title 'Reset factory settings' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}This the best way to reset the printer to its factory          ${white}│"
+  echo -e " │ ${cyan}This is the best way to reset the printer to its factory       ${white}│"
   echo -e " │ ${cyan}settings.                                                      ${white}│"
   echo -e " │ ${cyan}Note that the Factory Reset function in the screen menu        ${white}│"
   echo -e " │ ${cyan}settings only performs a partial reset.                        ${white}│"
   hr
-  echo -e " │ ${cyan}Note: After factory reset all features already been            ${white}│"
+  echo -e " │ ${cyan}Note: After a factory reset all features already               ${white}│"
   echo -e " │ ${cyan}installed with CFS Power Script must be reinstalled.           ${white}│"
   hr
   bottom_line

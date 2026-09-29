@@ -7,7 +7,7 @@ function save_zoffset_macros_message(){
   title 'Save Z-Offset Macros' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}It allows to save and load the the Z-Offset automatically.     ${white}│"
+  echo -e " │ ${cyan}It allows to save and load the Z-Offset automatically.         ${white}│"
   hr
   bottom_line
 }
