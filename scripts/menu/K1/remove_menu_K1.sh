@@ -17,25 +17,26 @@ function remove_menu_ui_k1() {
   menu_option ' 5' 'Remove' 'Klipper Gcode Shell Command'
   hr
   subtitle '•POWER SCRIPT:'
-  menu_option ' 6' 'Remove' 'Power Macros & Bed Coordinates Fix'
+  menu_option ' 6' 'Remove' 'Power Macros'
+  menu_option ' 7' 'Remove' 'Bed Coordinates Fix'
   hr
   subtitle '•IMPROVEMENTS:'
-  menu_option ' 7' 'Remove' 'Klipper Adaptive Meshing & Purging'
-  menu_option ' 8' 'Remove' 'Buzzer Support'
-  menu_option ' 9' 'Remove' 'Nozzle Cleaning Fan Control'
-  menu_option '10' 'Remove' 'Save Z-Offset Macros'
-  menu_option '11' 'Remove' 'Screws Tilt Adjust Support'
-  menu_option '12' 'Remove' 'M600 Support'
-  menu_option '13' 'Remove' 'Git Backup'
+  menu_option ' 8' 'Remove' 'Klipper Adaptive Meshing & Purging'
+  menu_option ' 9' 'Remove' 'Buzzer Support'
+  menu_option '10' 'Remove' 'Nozzle Cleaning Fan Control'
+  menu_option '11' 'Remove' 'Save Z-Offset Macros'
+  menu_option '12' 'Remove' 'Screws Tilt Adjust Support'
+  menu_option '13' 'Remove' 'M600 Support'
+  menu_option '14' 'Remove' 'Git Backup'
   hr
   subtitle '•CAMERA:'
-  menu_option '14' 'Remove' 'Moonraker Timelapse'
-  menu_option '15' 'Remove' 'Camera Support'
+  menu_option '15' 'Remove' 'Moonraker Timelapse'
+  menu_option '16' 'Remove' 'Camera Support'
   hr
   subtitle '•REMOTE ACCESS:'
-  menu_option '16' 'Remove' 'OctoEverywhere'
-  menu_option '17' 'Remove' 'Moonraker Obico'
-  menu_option '18' 'Remove' 'Mobileraker Companion'
+  menu_option '17' 'Remove' 'OctoEverywhere'
+  menu_option '18' 'Remove' 'Moonraker Obico'
+  menu_option '19' 'Remove' 'Mobileraker Companion'
   hr
   if [ -d "$IMP_SHAPERS_FOLDER" ] || [ -f "$FAN_CONTROLS_FILE" ] || [ -f "$USEFUL_MACROS_FILE" ]; then
     subtitle '•LEGACY (no longer installable):'
@@ -125,86 +126,92 @@ function remove_menu_k1() {
           error_msg "Klipper Gcode Shell Command is needed to use Improved Shapers Calibrations, please uninstall it first!"
         elif [ -f "$GIT_BACKUP_FILE" ]; then
           error_msg "Klipper Gcode Shell Command is needed to use Git Backup, please uninstall it first!"
-        elif [ -f "$POWER_CONFIG_BACKUP_FOLDER/printer.cfg" ]; then
-          error_msg "Klipper Gcode Shell Command is needed to use Power Macros & Bed Coordinates Fix, please remove it first!"
+        elif [ -f "$POWER_CONFIG_BACKUP_FOLDER/gcode_macro.cfg" ]; then
+          error_msg "Klipper Gcode Shell Command is needed to use Power Macros, please remove them first!"
         elif [ -f "$USEFUL_MACROS_FILE" ]; then
           error_msg "Klipper Gcode Shell Command is needed to use Useful Macros, please uninstall it first!"
         else
           run "remove_gcode_shell_command" "remove_menu_ui_k1"
         fi;;
       6)
-        if [ ! -f "$POWER_CONFIG_BACKUP_FOLDER/printer.cfg" ]; then
-          error_msg "Power Macros & Bed Coordinates Fix is not installed!"
+        if [ ! -f "$POWER_CONFIG_BACKUP_FOLDER/gcode_macro.cfg" ]; then
+          error_msg "Power Macros are not installed!"
         else
-          run "remove_power_config_fixes" "remove_menu_ui_k1"
+          run "remove_power_macros" "remove_menu_ui_k1"
         fi;;
       7)
+        if [ ! -f "$BED_FIX_BACKUP_FOLDER/stepper_y.orig" ]; then
+          error_msg "Bed Coordinates Fix is not installed!"
+        else
+          run "remove_bed_coordinates_fix" "remove_menu_ui_k1"
+        fi;;
+      8)
         if [ ! -d "$KAMP_FOLDER" ]; then
           error_msg "Klipper Adaptive Meshing & Purging is not installed!"
         else
           run "remove_kamp" "remove_menu_ui_k1"
         fi;;
-      8)
+      9)
         if [ ! -f "$BUZZER_FILE" ]; then
           error_msg "Buzzer Support is not installed!"
         else
           run "remove_buzzer_support" "remove_menu_ui_k1"
         fi;;
-      9)
+      10)
         if [ ! -d "$NOZZLE_CLEANING_FOLDER" ]; then
           error_msg "Nozzle Cleaning Fan Control is not installed!"
         else
           run "remove_nozzle_cleaning_fan_control" "remove_menu_ui_k1"
         fi;;
-      10)
+      11)
         if [ ! -f "$SAVE_ZOFFSET_FILE" ]; then
           error_msg "Save Z-Offset Macros are not installed!"
         else
           run "remove_save_zoffset_macros" "remove_menu_ui_k1"
         fi;;
-      11)
+      12)
         if [ ! -f "$SCREWS_ADJUST_FILE" ]; then
           error_msg "Screws Tilt Adjust Support is not installed!"
         else
           run "remove_screws_tilt_adjust" "remove_menu_ui_k1"
         fi;;
-      12)
+      13)
         if [ ! -f "$M600_SUPPORT_FILE" ]; then
           error_msg "M600 Support is not installed!"
         else
           run "remove_m600_support" "remove_menu_ui_k1"
         fi;;
-      13)
+      14)
         if [ ! -f "$GIT_BACKUP_FILE" ]; then
           error_msg "Git Backup is not installed!"
         else
           run "remove_git_backup" "remove_menu_ui_k1"
         fi;;
-      14)
+      15)
         if [ ! -f "$TIMELAPSE_FILE" ]; then
           error_msg "Moonraker Timelapse is not installed!"
         else
           run "remove_moonraker_timelapse" "remove_menu_ui_k1"
         fi;;
-      15)
+      16)
         if [ ! -f "$CAMERA_SETTINGS_FILE" ] && [ ! -f "$USB_CAMERA_FILE" ]; then
           error_msg "Camera Support is not installed!"
         else
           run "remove_camera_support" "remove_menu_ui_k1"
         fi;;
-      16)
+      17)
         if [ ! -d "$OCTOEVERYWHERE_FOLDER" ]; then
           error_msg "OctoEverywhere is not installed!"
         else
           run "remove_octoeverywhere" "remove_menu_ui_k1"
         fi;;
-      17)
+      18)
         if [ ! -d "$MOONRAKER_OBICO_FOLDER" ]; then
           error_msg "Moonraker Obico is not installed!"
         else
           run "remove_moonraker_obico" "remove_menu_ui_k1"
         fi;;
-      18)
+      19)
         if [ ! -d "$MOBILERAKER_COMPANION_FOLDER" ]; then
           error_msg "Mobileraker Companion is not installed!"
         else

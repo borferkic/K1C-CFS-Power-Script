@@ -26,11 +26,27 @@ function migrate_update_manager_entry(){
   fi
 }
 
+# Version 1.0.1 installed the Y axis fix together with the Power Macros and kept
+# the original printer.cfg in the Power Macros backup. Move what the Bed
+# Coordinates Fix needs to its own backup folder.
+function migrate_split_power_config(){
+  local old="$POWER_CONFIG_BACKUP_FOLDER/printer.cfg"
+  [ -f "$old" ] || return 0
+  if [ ! -f "$BED_FIX_BACKUP_FOLDER/stepper_y.orig" ]; then
+    mkdir -p "$BED_FIX_BACKUP_FOLDER"
+    cp -p "$old" "$BED_FIX_BACKUP_FOLDER/printer.cfg.orig"
+    awk -v keys="^(${BED_FIX_KEYS})[ \t]*:" '
+      /^\[/ { in_y = ($0 == "[stepper_y]") }
+      in_y && $0 ~ keys { print }' "$old" > "$BED_FIX_BACKUP_FOLDER/stepper_y.orig"
+  fi
+  rm -f "$old"
+}
+
 # Versions before 1.0.1 left gcode_position_max of [stepper_y] as set by the
-# firmware. Correct it on printers where Power Macros & Bed Coordinates Fix is
+# firmware. Correct it on printers where the Bed Coordinates Fix is
 # already installed.
 function migrate_stepper_y_gcode_max(){
-  [ -f "$POWER_CONFIG_BACKUP_FOLDER/printer.cfg" ] || return 0
+  [ -f "$BED_FIX_BACKUP_FOLDER/stepper_y.orig" ] || return 0
   [ -f "$PRINTER_CFG" ] || return 0
   if awk '/^\[/ { in_y = ($0 == "[stepper_y]") }
           in_y && /^gcode_position_max[ \t]*:[ \t]*220[ \t]*$/ { ok = 1 }
@@ -45,5 +61,6 @@ function migrate_stepper_y_gcode_max(){
 
 function run_migrations(){
   migrate_update_manager_entry
+  migrate_split_power_config
   migrate_stepper_y_gcode_max
 }

@@ -116,9 +116,10 @@ function set_paths() {
   M600_SUPPORT_FILE="${HS_CONFIG_FOLDER}/M600-support.cfg"
   M600_SUPPORT_URL="${HS_FILES}/macros/M600-support.cfg"
 
-  # Power Macros & Bed Coordinates Fix #
+  # Power Macros and Bed Coordinates Fix #
   POWER_CONFIG_FIXES_FOLDER="${HS_FILES}/power-config"
   POWER_CONFIG_BACKUP_FOLDER="${HS_BACKUP_FOLDER}/power-config"
+  BED_FIX_BACKUP_FOLDER="${HS_BACKUP_FOLDER}/bed-fix"
   
   # Git Backup #
   GIT_BACKUP_INSTALLER="${HS_FILES}/git-backup/git-backup.sh"
