@@ -4,7 +4,7 @@ set -e
 
 function customize_menu_ui_k1() {
   top_line
-  title '[ CUSTOMIZE MENU ]' "${yellow}"
+  title '[ CUSTOMIZE & POWERSCREEN MENU ]' "${yellow}"
   inner_line
   hr
   menu_option '1' 'Install' 'PowerScreen'

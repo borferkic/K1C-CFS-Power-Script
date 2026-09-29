@@ -45,7 +45,7 @@ function main_menu_ui() {
   hr
   main_menu_option '1' '[Install]' 'Menu'
   main_menu_option '2' '[Remove]' 'Menu'
-  main_menu_option '3' '[Customize]' 'Menu'
+  main_menu_option '3' '[Customize & PowerScreen]' 'Menu'
   main_menu_option '4' '[Backup & Restore]' 'Menu'
   main_menu_option '5' '[Tools]' 'Menu'
   main_menu_option '6' '[Information]' 'Menu'

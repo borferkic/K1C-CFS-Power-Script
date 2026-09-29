@@ -17,25 +17,26 @@ function install_menu_ui_k1() {
   menu_option ' 5' 'Install' 'Klipper Gcode Shell Command'
   hr
   subtitle '•POWER SCRIPT:'
-  menu_option ' 6' 'Install' 'Power Macros & Bed Coordinates Fix'
+  menu_option ' 6' 'Install' 'Power Macros'
+  menu_option ' 7' 'Install' 'Bed Coordinates Fix'
   hr
   subtitle '•IMPROVEMENTS:'
-  menu_option ' 7' 'Install' 'Klipper Adaptive Meshing & Purging'
-  menu_option ' 8' 'Install' 'Buzzer Support'
-  menu_option ' 9' 'Install' 'Nozzle Cleaning Fan Control'
-  menu_option '10' 'Install' 'Save Z-Offset Macros'
-  menu_option '11' 'Install' 'Screws Tilt Adjust Support'
-  menu_option '12' 'Install' 'M600 Support'
-  menu_option '13' 'Install' 'Git Backup'
+  menu_option ' 8' 'Install' 'Klipper Adaptive Meshing & Purging'
+  menu_option ' 9' 'Install' 'Buzzer Support'
+  menu_option '10' 'Install' 'Nozzle Cleaning Fan Control'
+  menu_option '11' 'Install' 'Save Z-Offset Macros'
+  menu_option '12' 'Install' 'Screws Tilt Adjust Support'
+  menu_option '13' 'Install' 'M600 Support'
+  menu_option '14' 'Install' 'Git Backup'
   hr
   subtitle '•CAMERA:'
-  menu_option '14' 'Install' 'Moonraker Timelapse'
-  menu_option '15' 'Install' 'Camera Support'
+  menu_option '15' 'Install' 'Moonraker Timelapse'
+  menu_option '16' 'Install' 'Camera Support'
   hr
   subtitle '•REMOTE ACCESS:'
-  menu_option '16' 'Install' 'OctoEverywhere'
-  menu_option '17' 'Install' 'Moonraker Obico'
-  menu_option '18' 'Install' 'Mobileraker Companion'
+  menu_option '17' 'Install' 'OctoEverywhere'
+  menu_option '18' 'Install' 'Moonraker Obico'
+  menu_option '19' 'Install' 'Mobileraker Companion'
   hr
   inner_line
   hr
@@ -88,20 +89,26 @@ function install_menu_k1() {
           run "install_gcode_shell_command" "install_menu_ui_k1"
         fi;;
       6)
-        if [ -f "$POWER_CONFIG_BACKUP_FOLDER/printer.cfg" ]; then
-          error_msg "Power Macros & Bed Coordinates Fix is already installed!"
+        if [ -f "$POWER_CONFIG_BACKUP_FOLDER/gcode_macro.cfg" ]; then
+          error_msg "Power Macros are already installed!"
         elif [ ! -f "$KLIPPER_SHELL_FILE" ]; then
           error_msg "Klipper Gcode Shell Command is needed, please install it first!"
         else
-          run "install_power_config_fixes" "install_menu_ui_k1"
+          run "install_power_macros" "install_menu_ui_k1"
         fi;;
       7)
+        if [ -f "$BED_FIX_BACKUP_FOLDER/stepper_y.orig" ]; then
+          error_msg "Bed Coordinates Fix is already installed!"
+        else
+          run "install_bed_coordinates_fix" "install_menu_ui_k1"
+        fi;;
+      8)
         if [ -d "$KAMP_FOLDER" ]; then
           error_msg "Klipper Adaptive Meshing & Purging is already installed!"
         else
           run "install_kamp" "install_menu_ui_k1"
         fi;;
-      8)
+      9)
         if [ -f "$BUZZER_FILE" ]; then
           error_msg "Buzzer Support is already installed!"
         elif [ ! -f "$KLIPPER_SHELL_FILE" ]; then
@@ -109,31 +116,31 @@ function install_menu_k1() {
         else
           run "install_buzzer_support" "install_menu_ui_k1"
         fi;;
-      9)
+      10)
         if [ -d "$NOZZLE_CLEANING_FOLDER" ]; then
           error_msg "Nozzle Cleaning Fan Control is already installed!"
         else
           run "install_nozzle_cleaning_fan_control" "install_menu_ui_k1"
         fi;;
-      10)
+      11)
         if [ -f "$SAVE_ZOFFSET_FILE" ]; then
           error_msg "Save Z-Offset Macros are already installed!"
         else
           run "install_save_zoffset_macros" "install_menu_ui_k1"
         fi;;
-      11)
+      12)
         if [ -f "$SCREWS_ADJUST_FILE" ]; then
           error_msg "Screws Tilt Adjust Support is already installed!"
         else
           run "install_screws_tilt_adjust" "install_menu_ui_k1"
         fi;;
-      12)
+      13)
         if [ -f "$M600_SUPPORT_FILE" ]; then
           error_msg "M600 Support is already installed!"
         else
           run "install_m600_support" "install_menu_ui_k1"
         fi;;
-      13)
+      14)
         if [ -f "$GIT_BACKUP_FILE" ]; then
           error_msg "Git Backup is already installed!"
         elif [ ! -f "$ENTWARE_FILE" ]; then
@@ -143,7 +150,7 @@ function install_menu_k1() {
         else
           run "install_git_backup" "install_menu_ui_k1"
         fi;;
-      14)
+      15)
         if [ -f "$TIMELAPSE_FILE" ]; then
           error_msg "Moonraker Timelapse is already installed!"
         elif [ ! -f "$ENTWARE_FILE" ]; then
@@ -151,23 +158,13 @@ function install_menu_k1() {
         else
           run "install_moonraker_timelapse" "install_menu_ui_k1"
         fi;;
-      15)
+      16)
         if [ -f "$CAMERA_SETTINGS_FILE" ] && [ -f "$USB_CAMERA_FILE" ]; then
           error_msg "Camera Support is already installed!"
         elif [ ! -f "$KLIPPER_SHELL_FILE" ]; then
           error_msg "Klipper Gcode Shell Command is needed, please install it first!"
         else
           run "install_camera_support" "install_menu_ui_k1"
-        fi;;
-      16)
-        if [ ! -d "$MOONRAKER_FOLDER" ]; then
-          error_msg "Moonraker and Nginx are needed, please install them first!"
-        elif [ ! -d "$FLUIDD_FOLDER" ] && [ ! -d "$MAINSAIL_FOLDER" ]; then
-          error_msg "Fluidd or Mainsail is needed, please install one of them first!"
-        elif [ ! -f "$ENTWARE_FILE" ]; then
-          error_msg "Entware is needed, please install it first!"
-        else
-          run "install_octoeverywhere" "install_menu_ui_k1"
         fi;;
       17)
         if [ ! -d "$MOONRAKER_FOLDER" ]; then
@@ -177,9 +174,19 @@ function install_menu_k1() {
         elif [ ! -f "$ENTWARE_FILE" ]; then
           error_msg "Entware is needed, please install it first!"
         else
-          run "install_moonraker_obico" "install_menu_ui_k1"
+          run "install_octoeverywhere" "install_menu_ui_k1"
         fi;;
       18)
+        if [ ! -d "$MOONRAKER_FOLDER" ]; then
+          error_msg "Moonraker and Nginx are needed, please install them first!"
+        elif [ ! -d "$FLUIDD_FOLDER" ] && [ ! -d "$MAINSAIL_FOLDER" ]; then
+          error_msg "Fluidd or Mainsail is needed, please install one of them first!"
+        elif [ ! -f "$ENTWARE_FILE" ]; then
+          error_msg "Entware is needed, please install it first!"
+        else
+          run "install_moonraker_obico" "install_menu_ui_k1"
+        fi;;
+      19)
         if [ -d "$MOBILERAKER_COMPANION_FOLDER" ]; then
           error_msg "Mobileraker Companion is already installed!"
         elif [ ! -d "$MOONRAKER_FOLDER" ]; then
