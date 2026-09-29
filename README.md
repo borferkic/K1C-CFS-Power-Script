@@ -1,4 +1,11 @@
-# CFS Power Script for the Creality K1C
+<div align="center">
+  <h1>CFS Power Script for the Creality K1C</h1>
+
+  <a href="https://github.com/borferkic/K1C-CFS-Power-Script/releases/latest"><img src="https://img.shields.io/github/v/release/borferkic/K1C-CFS-Power-Script?style=flat-square&color=2ea44f" alt="Latest release" /></a>
+  <a href="https://github.com/borferkic/K1C-CFS-Power-Script/commits/main"><img src="https://img.shields.io/github/last-commit/borferkic/K1C-CFS-Power-Script?style=flat-square&color=555" alt="Last commit" /></a>
+  <img src="https://img.shields.io/badge/Printer-Creality%20K1C-0078D6?style=flat-square" alt="Printer: Creality K1C" />
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-blue?style=flat-square" alt="License: GPL-3.0" /></a>
+</div>
 
 > [!WARNING]
 > **This project is still a work in progress. Use it at your own risk.**
