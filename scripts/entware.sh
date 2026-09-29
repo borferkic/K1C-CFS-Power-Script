@@ -7,8 +7,8 @@ function entware_message(){
   title 'Entware' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}Entware is a software repository for devices which use Linux ${white}│"
-  echo -e " │ ${cyan}kernel. It allows packages to be added to your printer.      ${white}│"
+  echo -e " │ ${cyan}Entware is a software repository for devices which use Linux   ${white}│"
+  echo -e " │ ${cyan}kernel. It allows packages to be added to your printer.        ${white}│"
   hr
   bottom_line
 }

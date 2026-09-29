@@ -7,8 +7,8 @@ function guppy_screen_message(){
   title 'Guppy Screen' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}Guppy Screen is a touch UI for Klipper using APIs exposed by ${white}│"
-  echo -e " │ ${cyan}Moonraker. It replace Creality touch UI.                     ${white}│"
+  echo -e " │ ${cyan}Guppy Screen is a touch UI for Klipper using APIs exposed by   ${white}│"
+  echo -e " │ ${cyan}Moonraker. It replace Creality touch UI.                       ${white}│"
   hr
   bottom_line
 }

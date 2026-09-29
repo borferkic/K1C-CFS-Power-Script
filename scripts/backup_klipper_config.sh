@@ -7,8 +7,8 @@ function backup_klipper_config_files_message(){
   title 'Backup Klipper configuration files' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}This allows to backup Klipper configuration files in a       ${white}│"
-  echo -e " │ ${cyan}backup_config.tar.gz compressed file.                        ${white}│"
+  echo -e " │ ${cyan}This allows to backup Klipper configuration files in a         ${white}│"
+  echo -e " │ ${cyan}backup_config.tar.gz compressed file.                          ${white}│"
   hr
   bottom_line
 }
@@ -18,8 +18,8 @@ function restore_klipper_config_files_message(){
   title 'Restore Klipper configuration files' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}This allows to restore Klipper configuration files from a    ${white}│"
-  echo -e " │ ${cyan}backup_config.tar.gz compressed file.                        ${white}│"
+  echo -e " │ ${cyan}This allows to restore Klipper configuration files from a      ${white}│"
+  echo -e " │ ${cyan}backup_config.tar.gz compressed file.                          ${white}│"
   hr
   bottom_line
 }

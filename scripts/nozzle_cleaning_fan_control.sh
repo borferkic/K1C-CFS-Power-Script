@@ -7,8 +7,8 @@ function nozzle_cleaning_fan_control_message(){
   title 'Nozzle Cleaning Fan Control' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}This is an Klipper extension to control fans during nozzle   ${white}│"
-  echo -e " │ ${cyan}cleaning.                                                    ${white}│"
+  echo -e " │ ${cyan}This is an Klipper extension to control fans during nozzle     ${white}│"
+  echo -e " │ ${cyan}cleaning.                                                      ${white}│"
   hr
   bottom_line
 }

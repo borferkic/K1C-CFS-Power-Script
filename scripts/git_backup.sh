@@ -7,9 +7,9 @@ function git_backup_message(){
   title 'Git Backup' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}It allows to watch Klipper configuration folder and          ${white}│"
-  echo -e " │ ${cyan}automatically backup to GitHub whenever a change is made in  ${white}│"
-  echo -e " │ ${cyan}that directory.                                              ${white}│"
+  echo -e " │ ${cyan}It allows to watch Klipper configuration folder and            ${white}│"
+  echo -e " │ ${cyan}automatically backup to GitHub whenever a change is made in    ${white}│"
+  echo -e " │ ${cyan}that directory.                                                ${white}│"
   hr
   bottom_line
 }

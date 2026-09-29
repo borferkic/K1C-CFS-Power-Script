@@ -7,8 +7,8 @@ function remove_creality_web_interface_message(){
   title 'Remove Creality Web Interface' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}This allows to remove Creality Web Interface and replace     ${white}│"
-  echo -e " │ ${cyan}it with Fluidd or Mainsail on port 80.                       ${white}│"
+  echo -e " │ ${cyan}This allows to remove Creality Web Interface and replace       ${white}│"
+  echo -e " │ ${cyan}it with Fluidd or Mainsail on port 80.                         ${white}│"
   hr
   bottom_line
 }
@@ -18,7 +18,7 @@ function restore_creality_web_interface_message(){
   title 'Restore Creality Web Interface' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}This allows to restore Creality Web Interface on port 80.    ${white}│"
+  echo -e " │ ${cyan}This allows to restore Creality Web Interface on port 80.      ${white}│"
   hr
   bottom_line
 }

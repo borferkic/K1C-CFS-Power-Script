@@ -7,9 +7,9 @@ function gcode_shell_command_message(){
   title 'Klipper Gcode Shell Command' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}After installing this extension you can execute Linux        ${white}│"
-  echo -e " │ ${cyan}commands or even scripts from Klipper with custom commands   ${white}│"
-  echo -e " │ ${cyan}defined in your configuration files.                         ${white}│"
+  echo -e " │ ${cyan}After installing this extension you can execute Linux          ${white}│"
+  echo -e " │ ${cyan}commands or even scripts from Klipper with custom commands     ${white}│"
+  echo -e " │ ${cyan}defined in your configuration files.                           ${white}│"
   hr
   bottom_line
 }

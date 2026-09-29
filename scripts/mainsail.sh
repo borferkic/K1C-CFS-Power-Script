@@ -7,10 +7,10 @@ function mainsail_message(){
   title 'Mainsail' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}Mainsail makes Klipper more accessible by adding a           ${white}│"
-  echo -e " │ ${cyan}lightweight, responsive web user interface, centred around   ${white}│"
-  echo -e " │ ${cyan}an intuitive and consistent design philosophy.               ${white}│"
-  echo -e " │ ${cyan}It will be accessible on port 4409.                          ${white}│"
+  echo -e " │ ${cyan}Mainsail makes Klipper more accessible by adding a             ${white}│"
+  echo -e " │ ${cyan}lightweight, responsive web user interface, centred around     ${white}│"
+  echo -e " │ ${cyan}an intuitive and consistent design philosophy.                 ${white}│"
+  echo -e " │ ${cyan}It will be accessible on port 4409.                            ${white}│"
   hr
   bottom_line
 }

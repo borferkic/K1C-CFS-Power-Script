@@ -7,8 +7,8 @@ function prevent_updating_klipper_files_message(){
   title 'Prevent updating Klipper configuration files' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}This prevents updating Klipper configuration files when      ${white}│"
-  echo -e " │ ${cyan}Klipper restarts.                                            ${white}│"
+  echo -e " │ ${cyan}This prevents updating Klipper configuration files when        ${white}│"
+  echo -e " │ ${cyan}Klipper restarts.                                              ${white}│"
   hr
   bottom_line
 }
@@ -18,8 +18,8 @@ function allow_updating_klipper_files_message(){
   title 'Allow updating Klipper configuration files' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}This allows updating Klipper configuration files when        ${white}│"
-  echo -e " │ ${cyan}Klipper restarts.                                            ${white}│"
+  echo -e " │ ${cyan}This allows updating Klipper configuration files when          ${white}│"
+  echo -e " │ ${cyan}Klipper restarts.                                              ${white}│"
   hr
   bottom_line
 }
@@ -29,9 +29,9 @@ function printing_gcode_from_folder_message(){
   title 'Fix printing Gcode files from folder' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}From Fluidd or Mainsail it's possible to classify your Gcode ${white}│"
-  echo -e " │ ${cyan}files in folders but by default it's not possible to start   ${white}│"
-  echo -e " │ ${cyan}a print from a folder. This fix allows that.                 ${white}│"
+  echo -e " │ ${cyan}From Fluidd or Mainsail it's possible to classify your Gcode   ${white}│"
+  echo -e " │ ${cyan}files in folders but by default it's not possible to start     ${white}│"
+  echo -e " │ ${cyan}a print from a folder. This fix allows that.                   ${white}│"
   hr
   bottom_line
 }
@@ -41,8 +41,8 @@ function enable_camera_settings_message(){
   title 'Enable camera settings in Moonraker' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}This allows to enable camera settings in Moonraker for       ${white}│"
-  echo -e " │ ${cyan}Fluidd and Mainsail Web interfaces.                          ${white}│"
+  echo -e " │ ${cyan}This allows to enable camera settings in Moonraker for         ${white}│"
+  echo -e " │ ${cyan}Fluidd and Mainsail Web interfaces.                            ${white}│"
   hr
   bottom_line
 }
@@ -52,8 +52,8 @@ function disable_camera_settings_message(){
   title 'Disable camera settings in Moonraker' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}This allows to disable camera settings in Moonraker for      ${white}│"
-  echo -e " │ ${cyan}Fluidd and Mainsail Web interfaces.                          ${white}│"
+  echo -e " │ ${cyan}This allows to disable camera settings in Moonraker for        ${white}│"
+  echo -e " │ ${cyan}Fluidd and Mainsail Web interfaces.                            ${white}│"
   hr
   bottom_line
 }
@@ -63,13 +63,13 @@ function restore_previous_firmware_message(){
   title 'Restore a previous firmware' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}To restore a previous firmware, follow these steps and       ${white}│"
-  echo -e " │ ${cyan}validate your choice:                                        ${white}│"
-  echo -e " │                                                              │"
-  echo -e " │ ${cyan}1. ${white}Copy the firmware (.img) you want to update to the root   ${white}│"
-  echo -e " │    of a USB drive.                                           ${white}│"
-  echo -e " │ ${cyan}2. ${white}Make sure there is only this file on the USB drive.       ${white}│"
-  echo -e " │ ${cyan}3. ${white}Insert the USB drive into the printer.                    ${white}│"
+  echo -e " │ ${cyan}To restore a previous firmware, follow these steps and         ${white}│"
+  echo -e " │ ${cyan}validate your choice:                                          ${white}│"
+  echo -e " │                                                                │"
+  echo -e " │ ${cyan}1. ${white}Copy the firmware (.img) you want to update to the root     ${white}│"
+  echo -e " │    of a USB drive.                                             ${white}│"
+  echo -e " │ ${cyan}2. ${white}Make sure there is only this file on the USB drive.         ${white}│"
+  echo -e " │ ${cyan}3. ${white}Insert the USB drive into the printer.                      ${white}│"
   hr
   bottom_line
 }
@@ -79,13 +79,13 @@ function reset_factory_settings_message(){
   title 'Reset factory settings' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}This the best way to reset the printer to its factory        ${white}│"
-  echo -e " │ ${cyan}settings.                                                    ${white}│"
-  echo -e " │ ${cyan}Note that the Factory Reset function in the screen menu      ${white}│"
-  echo -e " │ ${cyan}settings only performs a partial reset.                      ${white}│"
+  echo -e " │ ${cyan}This the best way to reset the printer to its factory          ${white}│"
+  echo -e " │ ${cyan}settings.                                                      ${white}│"
+  echo -e " │ ${cyan}Note that the Factory Reset function in the screen menu        ${white}│"
+  echo -e " │ ${cyan}settings only performs a partial reset.                        ${white}│"
   hr
-  echo -e " │ ${cyan}Note: After factory reset all features already been          ${white}│"
-  echo -e " │ ${cyan}installed with CFS Power Script must be reinstalled.         ${white}│"
+  echo -e " │ ${cyan}Note: After factory reset all features already been            ${white}│"
+  echo -e " │ ${cyan}installed with CFS Power Script must be reinstalled.           ${white}│"
   hr
   bottom_line
 }

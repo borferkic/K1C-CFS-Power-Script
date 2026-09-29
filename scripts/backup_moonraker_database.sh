@@ -7,8 +7,8 @@ function backup_moonraker_database_message(){
   title 'Backup Moonraker database' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}This allows to backup Moonraker database in a                ${white}│"
-  echo -e " │ ${cyan}backup_database.tar.gz compressed file.                      ${white}│"
+  echo -e " │ ${cyan}This allows to backup Moonraker database in a                  ${white}│"
+  echo -e " │ ${cyan}backup_database.tar.gz compressed file.                        ${white}│"
   hr
   bottom_line
 }
@@ -18,8 +18,8 @@ function restore_moonraker_database_message(){
   title 'Restore Moonraker database' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}This allows to restore Moonraker database from a             ${white}│"
-  echo -e " │ ${cyan}backup_database.tar.gz compressed file.                      ${white}│"
+  echo -e " │ ${cyan}This allows to restore Moonraker database from a               ${white}│"
+  echo -e " │ ${cyan}backup_database.tar.gz compressed file.                        ${white}│"
   hr
   bottom_line
 }

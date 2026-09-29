@@ -7,7 +7,7 @@ function buzzer_support_message(){
   title 'Buzzer Support' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}It allows to play sounds using the motherboard buzzer.       ${white}│"
+  echo -e " │ ${cyan}It allows to play sounds using the motherboard buzzer.         ${white}│"
   hr
   bottom_line
 }

@@ -7,8 +7,8 @@ function improved_shapers_message(){
   title 'Improved Shapers Calibrations' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}It allows to calibrate Input Shaper, Belts Tension and       ${white}│"
-  echo -e " │ ${cyan}generate Graphs.                                             ${white}│"
+  echo -e " │ ${cyan}It allows to calibrate Input Shaper, Belts Tension and         ${white}│"
+  echo -e " │ ${cyan}generate Graphs.                                               ${white}│"
   hr
   bottom_line
 }

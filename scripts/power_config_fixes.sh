@@ -10,13 +10,13 @@ function power_config_fixes_message(){
   title 'Power Macros & Bed Coordinates Fix' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}Fixes the Y axis coordinates the CFS firmware leaves wrong   ${white}│"
-  echo -e " │ ${cyan}and installs the Power Script macros and parameters:         ${white}│"
-  echo -e " │ ${cyan}gcode_macro.cfg, printer_params.cfg and box.cfg, plus the    ${white}│"
-  echo -e " │ ${cyan}STRESS_TEST, PID_HOTEND and RELOAD_CAMERA macros.            ${white}│"
+  echo -e " │ ${cyan}Fixes the Y axis coordinates the CFS firmware leaves wrong     ${white}│"
+  echo -e " │ ${cyan}and installs the Power Script macros and parameters:           ${white}│"
+  echo -e " │ ${cyan}gcode_macro.cfg, printer_params.cfg and box.cfg, plus the      ${white}│"
+  echo -e " │ ${cyan}STRESS_TEST, PID_HOTEND and RELOAD_CAMERA macros.              ${white}│"
   hr
-  echo -e " │ ${yellow}These files are REPLACED. Your originals are saved first     ${white}│"
-  echo -e " │ ${yellow}and can be restored from the Customize menu.                 ${white}│"
+  echo -e " │ ${yellow}These files are REPLACED. Your originals are saved first       ${white}│"
+  echo -e " │ ${yellow}and can be restored from the Customize menu.                   ${white}│"
   hr
   bottom_line
 }

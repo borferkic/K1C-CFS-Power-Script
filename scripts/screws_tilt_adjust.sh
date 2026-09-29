@@ -7,8 +7,8 @@ function screws_tilt_adjust_message(){
   title 'Screws Tilt Adjust Support' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}It allows to add support for Screws Tilt Adjust              ${white}│"
-  echo -e " │ ${cyan}functionality.                                               ${white}│"
+  echo -e " │ ${cyan}It allows to add support for Screws Tilt Adjust                ${white}│"
+  echo -e " │ ${cyan}functionality.                                                 ${white}│"
   hr
   bottom_line
 }

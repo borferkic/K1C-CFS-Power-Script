@@ -7,9 +7,9 @@ function octoeverywhere_message(){
   title 'OctoEverywhere' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}Cloud empower your Klipper printers with free, private, and  ${white}│"
-  echo -e " │ ${cyan}unlimited remote access to your full web control portal from ${white}│"
-  echo -e " │ ${cyan}anywhere!                                                    ${white}│"
+  echo -e " │ ${cyan}Cloud empower your Klipper printers with free, private, and    ${white}│"
+  echo -e " │ ${cyan}unlimited remote access to your full web control portal from   ${white}│"
+  echo -e " │ ${cyan}anywhere!                                                      ${white}│"
   hr
   bottom_line
 }

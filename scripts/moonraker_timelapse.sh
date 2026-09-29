@@ -7,8 +7,8 @@ function moonraker_timelapse_message(){
   title 'Moonraker Timelapse' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}Moonraker Timelapse is a 3rd party Moonraker component to    ${white}│"
-  echo -e " │ ${cyan}create timelapse of 3D prints.                               ${white}│"
+  echo -e " │ ${cyan}Moonraker Timelapse is a 3rd party Moonraker component to      ${white}│"
+  echo -e " │ ${cyan}create timelapse of 3D prints.                                 ${white}│"
   hr
   bottom_line
 }

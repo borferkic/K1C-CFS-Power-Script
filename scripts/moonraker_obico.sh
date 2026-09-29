@@ -7,8 +7,8 @@ function moonraker_obico_message(){
   title 'Moonraker Obico' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}Obico is a Moonraker plugin that allows you to monitor and   ${white}│"
-  echo -e " │ ${cyan}control your 3D printer from anywhere.                       ${white}│"
+  echo -e " │ ${cyan}Obico is a Moonraker plugin that allows you to monitor and     ${white}│"
+  echo -e " │ ${cyan}control your 3D printer from anywhere.                         ${white}│"
   hr
   bottom_line
 }
