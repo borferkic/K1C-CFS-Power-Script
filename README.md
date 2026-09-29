@@ -72,7 +72,7 @@ Guilouz, adapted to the K1C and to the CFS firmware.
 
 1. `[Install]` → *Moonraker and Nginx*, then *Fluidd* (or *Mainsail*).
 2. `[Install]` → *Klipper Gcode Shell Command* (needed by the next steps).
-3. `[Customize]` → *Install Power Macros & Bed Coordinates Fix*.
+3. `[Install]` → *Power Macros & Bed Coordinates Fix*.
 4. `[Customize]` → *Install PowerScreen*.
 5. Optional modules from `[Install]` (KAMP, M600 Support, Camera Support...).
 
@@ -96,7 +96,7 @@ updates) are **disabled**. It then asks which build to install (`stable` or
 ### Power Macros & Bed Coordinates Fix
 
 ```text
-[Customize] Menu → 6) Install Power Macros & Bed Coordinates Fix
+[Install] Menu → 6) Install Power Macros & Bed Coordinates Fix
 ```
 
 The latest CFS firmware for the K1C generates wrong Y axis coordinates. This module:
@@ -108,12 +108,12 @@ The latest CFS firmware for the K1C generates wrong Y axis coordinates. This mod
 Requirement: *Klipper Gcode Shell Command* must be installed (`RELOAD_CAMERA` needs it).
 Before replacing anything, the first copy of each file is saved in
 `/usr/data/helper-script-backup/power-config/` and is never overwritten.
-`[Customize] Menu → 7) Remove Power Macros & Bed Coordinates Fix` restores those originals.
+`[Remove] Menu → 6) Remove Power Macros & Bed Coordinates Fix` restores those originals.
 
 ### M600 Support
 
 ```text
-[Install] Menu → 11) Install M600 Support
+[Install] Menu → 12) Install M600 Support
 ```
 
 The CFS firmware does not define `M600`. This module adds it so the slicer can
@@ -131,7 +131,7 @@ then call the firmware commands. The automatic CFS color changes do not use `M60
 ### Camera Support
 
 ```text
-[Install] Menu → 14) Install Camera Support
+[Install] Menu → 15) Install Camera Support
 ```
 
 Installs the macros to adjust the camera (brightness, saturation, contrast...)
@@ -158,9 +158,9 @@ from Fluidd or Mainsail (**Settings → Software Updates**).
 
 | Menu | Content |
 |---|---|
-| `[Install]` | 1 Moonraker and Nginx, 2 Fluidd, 3 Mainsail, 4 Entware, 5 Klipper Gcode Shell Command, 6 KAMP, 7 Buzzer Support, 8 Nozzle Cleaning Fan Control, 9 Save Z-Offset Macros, 10 Screws Tilt Adjust Support, 11 M600 Support, 12 Git Backup, 13 Moonraker Timelapse, 14 Camera Support, 15 OctoEverywhere, 16 Moonraker Obico, 17 Mobileraker Companion |
-| `[Remove]` | The same 17 entries, plus *Improved Shapers Calibrations* (`x`), *Fans Control Macros* (`y`) and *Useful Macros* (`z`) when they are installed |
-| `[Customize]` | 1 Install / 2 Remove PowerScreen, 3 Remove / 4 Restore the Creality Web Interface, 5 Creality Dynamic Logos for Fluidd, 6 Install / 7 Remove Power Macros & Bed Coordinates Fix |
+| `[Install]` | 1 Moonraker and Nginx, 2 Fluidd, 3 Mainsail, 4 Entware, 5 Klipper Gcode Shell Command, 6 Power Macros & Bed Coordinates Fix, 7 KAMP, 8 Buzzer Support, 9 Nozzle Cleaning Fan Control, 10 Save Z-Offset Macros, 11 Screws Tilt Adjust Support, 12 M600 Support, 13 Git Backup, 14 Moonraker Timelapse, 15 Camera Support, 16 OctoEverywhere, 17 Moonraker Obico, 18 Mobileraker Companion |
+| `[Remove]` | The same 18 entries, plus *Improved Shapers Calibrations* (`x`), *Fans Control Macros* (`y`) and *Useful Macros* (`z`) when they are installed |
+| `[Customize]` | 1 Install / 2 Remove PowerScreen, 3 Remove / 4 Restore the Creality Web Interface, 5 Creality Dynamic Logos for Fluidd |
 | `[Backup & Restore]` | Klipper configuration files and Moonraker database |
 | `[Tools]` | Klipper configuration updates, printing G-code files from folders, camera settings, service restarts, Entware updates, cache and log cleanup, firmware restore and factory reset |
 | `[Information]` | Installed components and their status |
