@@ -118,15 +118,25 @@ function migrate_bed_fix_mesh(){
 }
 
 # A Fluidd update (or reinstall) replaces config.json and the Creality themes
-# disappear. Add them again when the logos were installed.
+# disappear, and the first version of the logos used a blue Creality V2. Add them
+# again, or update their color, when the logos were installed.
 function migrate_fluidd_logos(){
   [ -f "$FLUIDD_LOGO_FILE" ] || return 0
   [ -f "$FLUIDD_FOLDER/config.json" ] || return 0
-  if grep -q '"Creality V2"' "$FLUIDD_FOLDER/config.json"; then
-    return 0
+  local color current
+  color=$(jq -r '.themePresets[]? | select(.name == "Creality V2") | .color' "$FLUIDD_FOLDER/config.json" 2>/dev/null) || color=""
+  if [ "$color" != "$FLUIDD_LOGO_V2_COLOR" ]; then
+    echo -e "${white}Info: Updating the Creality themes in the Fluidd config.json file..."
+    add_creality_theme_presets || true
   fi
-  echo -e "${white}Info: Restoring the Creality themes in the Fluidd config.json file..."
-  add_creality_theme_presets || true
+  # Selected theme: only when Creality V2 is the one in use and its color is old.
+  current=$("$CURL" -s "localhost:7125/server/database/item?namespace=fluidd&key=uiSettings.theme" 2>/dev/null | jq -c '.result.value // empty' 2>/dev/null) || return 0
+  [ -n "$current" ] || return 0
+  if [ "$(echo "$current" | jq -r '.logo.src // ""')" = "logo_creality_v2.svg" ] && \
+     [ "$(echo "$current" | jq -r '.color // ""')" != "$FLUIDD_LOGO_V2_COLOR" ]; then
+    echo -e "Info: Updating the color of the selected Creality V2 theme..."
+    select_creality_v2_theme || true
+  fi
 }
 
 function run_migrations(){

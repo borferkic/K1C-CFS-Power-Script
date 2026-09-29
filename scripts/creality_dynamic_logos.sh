@@ -2,9 +2,12 @@
 
 set -e
 
+# Creality green, measured on the official Creality boot image.
+FLUIDD_LOGO_V2_COLOR="#8EB631"
+
 # Theme presets added to the Fluidd config.json (the file is merged, not replaced,
 # so the presets of the installed Fluidd version are kept).
-FLUIDD_LOGO_PRESETS='[{"name":"Creality V1","color":"#2196F3","isDark":true,"logo":{"src":"logo_creality_v1.svg"}},{"name":"Creality V2","color":"#2196F3","isDark":true,"logo":{"src":"logo_creality_v2.svg"}}]'
+FLUIDD_LOGO_PRESETS='[{"name":"Creality V1","color":"#2196F3","isDark":true,"logo":{"src":"logo_creality_v1.svg"}},{"name":"Creality V2","color":"#8EB631","isDark":true,"logo":{"src":"logo_creality_v2.svg"}}]'
 
 function creality_dynamic_logos_message(){
   top_line
@@ -33,7 +36,7 @@ function select_creality_v2_theme(){
   local current new
   current=$("$CURL" -s "localhost:7125/server/database/item?namespace=fluidd&key=uiSettings.theme" 2>/dev/null | jq -c '.result.value // {}' 2>/dev/null) || current=""
   [ -n "$current" ] || current='{}'
-  new=$(echo "$current" | jq -c '. + {isDark: true, color: "#2196F3", logo: {src: "logo_creality_v2.svg"}}')
+  new=$(echo "$current" | jq -c '. + {isDark: true, color: "#8EB631", logo: {src: "logo_creality_v2.svg"}}')
   "$CURL" -s -X POST -H "Content-Type: application/json" \
     -d "{\"namespace\":\"fluidd\",\"key\":\"uiSettings.theme\",\"value\":$new}" \
     localhost:7125/server/database/item > /dev/null 2>&1
