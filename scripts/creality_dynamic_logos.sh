@@ -43,6 +43,29 @@ function select_creality_theme(){
     localhost:7125/server/database/item > /dev/null 2>&1
 }
 
+# Copies the logo, adds the Creality theme and selects it. Used by the installation
+# and by the reapply option ($1 is the word used in the final message).
+function apply_creality_dynamic_logos(){
+  local done_word="${1:-installed}"
+  echo -e "${white}"
+  echo -e "Info: Copying files..."
+  cp "$FLUIDD_LOGO_URL2" "$FLUIDD_FOLDER"/logo_creality_v2.svg
+  echo -e "Info: Adding the Creality theme to the Fluidd configuration..."
+  if ! add_creality_theme_presets; then
+    error_msg "Unable to update the Fluidd config.json file!"
+    return
+  fi
+  echo -e "Info: Selecting the Creality theme..."
+  if select_creality_theme; then
+    ok_msg "Creality Dynamic Logos for Fluidd have been ${done_word} successfully!"
+    echo -e "   The ${yellow}Creality ${white}theme is now selected."
+  else
+    ok_msg "Creality Dynamic Logos for Fluidd have been ${done_word} successfully!"
+    echo -e "   Moonraker did not answer, select ${yellow}Creality ${white}in the Fluidd theme settings."
+  fi
+  echo -e "   Note: In some cases, it's necessary to clear your web browser's cache to see themes appear."
+}
+
 function install_creality_dynamic_logos(){
   creality_dynamic_logos_message
   local yn
@@ -50,26 +73,32 @@ function install_creality_dynamic_logos(){
     install_msg "Creality Dynamic Logos for Fluidd" yn
     case "${yn}" in
       Y|y)
-        echo -e "${white}"
-        echo -e "Info: Copying files..."
-        cp "$FLUIDD_LOGO_URL2" "$FLUIDD_FOLDER"/logo_creality_v2.svg
-        echo -e "Info: Adding the Creality theme to the Fluidd configuration..."
-        if ! add_creality_theme_presets; then
-          error_msg "Unable to update the Fluidd config.json file!"
-          return
-        fi
-        echo -e "Info: Selecting the Creality theme..."
-        if select_creality_theme; then
-          ok_msg "Creality Dynamic Logos for Fluidd have been installed successfully!"
-          echo -e "   The ${yellow}Creality ${white}theme is now selected."
-        else
-          ok_msg "Creality Dynamic Logos for Fluidd have been installed successfully!"
-          echo -e "   Moonraker did not answer, select ${yellow}Creality ${white}in the Fluidd theme settings."
-        fi
-        echo -e "   Note: In some cases, it's necessary to clear your web browser's cache to see themes appear."
+        apply_creality_dynamic_logos installed
         return;;
       N|n)
         error_msg "Installation canceled!"
+        return;;
+      *)
+        error_msg "Please select a correct choice!";;
+    esac
+  done
+}
+
+# Offered by the Customize menu when the module is already installed.
+function reapply_creality_dynamic_logos(){
+  creality_dynamic_logos_message
+  echo -e " ${yellow}Creality Dynamic Logos for Fluidd are already installed.${white}"
+  echo -e " Reapplying adds the Creality theme to Fluidd again and selects it."
+  echo
+  local yn
+  while true; do
+    reapply_msg "Creality Dynamic Logos for Fluidd" yn
+    case "${yn}" in
+      Y|y)
+        apply_creality_dynamic_logos reapplied
+        return;;
+      N|n)
+        error_msg "Reapply canceled!"
         return;;
       *)
         error_msg "Please select a correct choice!";;

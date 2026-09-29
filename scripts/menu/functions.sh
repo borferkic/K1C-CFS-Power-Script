@@ -96,6 +96,9 @@ function backup_msg() {
   read -p "${white} Are you sure you want to backup ${green}${1} ${white}? (${yellow}y${white}/${yellow}n${white}): ${yellow}" $2
 }
 
+function reapply_msg() {
+  read -p "${white} Are you sure you want to reapply ${green}${1} ${white}? (${yellow}y${white}/${yellow}n${white}): ${yellow}" $2
+}
 function restart_msg() {
   read -p "${white} Are you sure you want to restart ${green}${1} ${white}? (${yellow}y${white}/${yellow}n${white}): ${yellow}" $2
 }
