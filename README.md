@@ -128,10 +128,10 @@ Before replacing anything, the first copy of each file is saved in
 | `[stepper_y]` | `position_endstop`, `position_min` | `-0.5` | Y origin and lower limit |
 | `[stepper_y]` | `position_max` | `227.5` | Y travel, enough to reach the brush area |
 | `[stepper_y]` | `gcode_position_max` | `220` | Maximum Y the slicer can use (the full depth of the bed) |
-| `[prtouch_v2]` | `clr_noz_start_x`, `clr_noz_len_x` | `59`, `36` | Nozzle wipe on the brush, from X 59 to X 95 |
-| `[bed_mesh]` | `mesh_min`, `mesh_max` | `1,1`, `220,220` | Area probed by the bed mesh: the whole bed, from 1 mm to 220 mm on both axes, so the mesh is more complete |
+| `[prtouch_v2]` | `clr_noz_start_x`, `clr_noz_start_y`, `clr_noz_len_x` | `59`, `225`, `36` | Nozzle wipe on the brush: from X 59 to X 95 at Y 225 |
+| `[bed_mesh]` | `mesh_min`, `mesh_max` | `1,1`, `220,215` | Area probed by the bed mesh: X from 1 to 220 and Y from 1 to 215. Y stops at 215 because the toolhead collides beyond it, so the mesh is more complete without reaching that point |
 
-**Result.** With the fix installed, Y can be used up to 220 mm in the slicer, the nozzle passes over the cleaning brush and the bed mesh covers the whole bed instead of leaving the edges out.
+**Result.** With the fix installed, Y can be used up to 220 mm in the slicer, the nozzle passes over the cleaning brush and the bed mesh covers the bed up to X 220 and Y 215 instead of leaving the edges out.
 
 **Backup and removal.** The original values are saved in `/usr/data/helper-script-backup/bed-fix/`.
 `[Remove] Menu → 7) Remove Bed Coordinates Fix` puts them back without touching the includes added by other modules.

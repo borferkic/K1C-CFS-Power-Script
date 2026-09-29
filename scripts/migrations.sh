@@ -59,8 +59,8 @@ function migrate_stepper_y_gcode_max(){
   restart_klipper
 }
 
-# Version 1.0.3 also sets the nozzle wipe position on the brush. Apply it on
-# printers where the Bed Coordinates Fix is already installed.
+# Version 1.0.3 also sets the nozzle wipe position on the brush (Y start added in
+# 1.0.6). Apply it on printers where the Bed Coordinates Fix is already installed.
 function migrate_bed_fix_wipe(){
   [ -f "$BED_FIX_BACKUP_FOLDER/stepper_y.orig" ] || return 0
   [ -f "$PRINTER_CFG" ] || return 0
@@ -71,11 +71,19 @@ function migrate_bed_fix_wipe(){
       extract_bed_fix_original "$PRINTER_CFG"
     fi
   fi
-  if awk -v x="$BED_FIX_WIPE_X" -v len="$BED_FIX_WIPE_LEN_X" '
+  # Backups written before the Y start was managed do not have its original value.
+  if ! grep -q "^clr_noz_start_y" "$BED_FIX_BACKUP_FOLDER/prtouch.orig"; then
+    local source="$PRINTER_CFG"
+    [ -f "$BED_FIX_BACKUP_FOLDER/printer.cfg.orig" ] && source="$BED_FIX_BACKUP_FOLDER/printer.cfg.orig"
+    awk '/^\[/ { in_p = ($0 ~ /^\[prtouch_v[0-9]+\]/) }
+         in_p && /^clr_noz_start_y[ \t]*:/ { print }' "$source" >> "$BED_FIX_BACKUP_FOLDER/prtouch.orig"
+  fi
+  if awk -v x="$BED_FIX_WIPE_X" -v y="$BED_FIX_WIPE_Y" -v len="$BED_FIX_WIPE_LEN_X" '
        /^\[/ { in_p = ($0 ~ /^\[prtouch_v[0-9]+\]/) }
        in_p && $0 ~ ("^clr_noz_start_x[ \t]*:[ \t]*" x "[ \t]*$") { a = 1 }
+       in_p && $0 ~ ("^clr_noz_start_y[ \t]*:[ \t]*" y "[ \t]*$") { c = 1 }
        in_p && $0 ~ ("^clr_noz_len_x[ \t]*:[ \t]*" len "[ \t]*$") { b = 1 }
-       END { exit !(a && b) }' "$PRINTER_CFG"; then
+       END { exit !(a && b && c) }' "$PRINTER_CFG"; then
     return 0
   fi
   echo -e "${white}Info: Applying the nozzle wipe position of the Bed Coordinates Fix..."
@@ -84,7 +92,7 @@ function migrate_bed_fix_wipe(){
   restart_klipper
 }
 
-# Version 1.0.4 also sets the bed mesh area. Apply it on printers where the Bed
+# Version 1.0.4 sets the bed mesh area (mesh_max changed in 1.0.6). Apply it on printers where the Bed
 # Coordinates Fix is already installed.
 function migrate_bed_fix_mesh(){
   [ -f "$BED_FIX_BACKUP_FOLDER/stepper_y.orig" ] || return 0
