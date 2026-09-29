@@ -14,11 +14,11 @@ Guilouz, adapted to the K1C and to the CFS firmware.
 Main differences from the original Helper Script:
 
 - **K1 series only.** Support for the Ender-3 V3, Ender-3 V3 KE and CR-10 SE has been removed; the script refuses to run on other printers.
-- **[PowerScreen](https://github.com/borferkic/K1C-CFS-POWER-SCREEN)** replaces Guppy Screen as the touch screen interface (`[Customize] Menu`).
-- **Custom boot animation** (Creality logo, "POWER SCRIPT" and "LOADING...") installed automatically the first time the script runs.
+- **[PowerScreen](https://github.com/borferkic/K1C-CFS-POWER-SCREEN)** replaces Guppy Screen as the touch screen interface.
+- **Power Macros & Bed Coordinates Fix**: fixes the Y axis coordinates the CFS firmware leaves wrong and installs the Power Script macros.
+- **M600 Support** works with the CFS firmware and opens the PowerScreen filament change menu.
+- **Custom boot animation** installed automatically the first time the script runs.
 - **KAMP adapted to the CFS firmware** (see [KAMP and the CFS purge](#kamp-and-the-cfs-purge)).
-- **Power Macros & Bed Coordinates Fix** (`[Customize] Menu`): fixes the Y axis coordinates that the CFS firmware leaves wrong and installs the Power Script `gcode_macro.cfg`, `printer_params.cfg` and `box.cfg` (your originals are backed up and can be restored), plus the `STRESS_TEST`, `PID_HOTEND` and `RELOAD_CAMERA` macros.
-- **M600 Support** keeps the CFS `RESUME` untouched and opens the PowerScreen filament change menu when PowerScreen is installed.
 - **Camera Support** merges *Camera Settings Control* and *USB Camera Support* into a single entry.
 - Modules that duplicated PowerScreen, overlapped the Power Script configuration or did not work on the K1C were removed from the *Install* menu: *Improved Shapers Calibrations*, *Custom Boot Display*, *Guppy Screen*, *GuppyFLO*, *OctoApp Companion*, *SimplyPrint*, *Fans Control Macros* and *Useful Macros*. *Improved Shapers Calibrations*, *Fans Control Macros* and *Useful Macros* still show up in the *Remove* menu when they are installed.
 
@@ -28,7 +28,7 @@ Main differences from the original Helper Script:
 - SSH access to the printer as `root`.
 - Internet access from the printer to GitHub.
 - The printer date and time set correctly (needed for the SSL connection to GitHub).
-- A factory reset before the first installation is recommended.
+- A factory reset before the first installation is recommended: the script assumes a clean printer.
 - If Moonraker, Fluidd or Mainsail were installed with another script, remove them first.
 
 ## Installation
@@ -59,9 +59,19 @@ Main differences from the original Helper Script:
 
    After the first run, the script can also be started with the `helper` command.
 
-## Install PowerScreen
+### Suggested order on a clean printer
 
-Open the script and select:
+1. `[Install]` → *Moonraker and Nginx*, then *Fluidd* (or *Mainsail*).
+2. `[Install]` → *Klipper Gcode Shell Command* (needed by the next steps).
+3. `[Customize]` → *Install Power Macros & Bed Coordinates Fix*.
+4. `[Customize]` → *Install PowerScreen*.
+5. Optional modules from `[Install]` (KAMP, M600 Support, Camera Support...).
+
+The order of KAMP and *Power Macros & Bed Coordinates Fix* does not matter.
+
+## Modules
+
+### PowerScreen
 
 ```text
 [Customize] Menu → 1) Install PowerScreen
@@ -74,9 +84,7 @@ updates) are **disabled**. It then asks which build to install (`stable` or
 `nightly`). Everything is backed up and restored with
 `[Customize] Menu → 2) Remove PowerScreen`.
 
-## Power Macros & Bed Coordinates Fix
-
-Open the script and select:
+### Power Macros & Bed Coordinates Fix
 
 ```text
 [Customize] Menu → 6) Install Power Macros & Bed Coordinates Fix
@@ -85,11 +93,51 @@ Open the script and select:
 The CFS firmware leaves the Y axis coordinates wrong. This module:
 
 - Sets `position_endstop: -0.5`, `position_min: -0.5` and `position_max: 227.5` in the `[stepper_y]` section of `printer.cfg`. Nothing else in `printer.cfg` is changed except the missing `[include gcode_macro.cfg]`, `[include printer_params.cfg]` and `[include box.cfg]` lines.
-- **Replaces** `gcode_macro.cfg`, `printer_params.cfg` and `box.cfg` with the Power Script versions, which also add the `STRESS_TEST`, `PID_HOTEND` and `RELOAD_CAMERA` macros.
+- **Replaces** `gcode_macro.cfg`, `printer_params.cfg` and `box.cfg` with the Power Script versions. They also add the `STRESS_TEST` (motion stress test), `PID_HOTEND` (hotend PID calibration) and `RELOAD_CAMERA` (restart the camera service) macros.
 - Keeps `START_PRINT` disabled when KAMP is installed, because KAMP provides its own.
 
-Requirements: *Klipper Gcode Shell Command* must be installed (`RELOAD_CAMERA` needs it). Before replacing anything, the first copy of each file is saved in `/usr/data/helper-script-backup/power-config/` and never overwritten.
+Requirement: *Klipper Gcode Shell Command* must be installed (`RELOAD_CAMERA` needs it).
+Before replacing anything, the first copy of each file is saved in
+`/usr/data/helper-script-backup/power-config/` and is never overwritten.
 `[Customize] Menu → 7) Remove Power Macros & Bed Coordinates Fix` restores those originals.
+
+### M600 Support
+
+```text
+[Install] Menu → 11) Install M600 Support
+```
+
+The CFS firmware does not define `M600`. This module adds it so the slicer can
+insert manual filament changes:
+
+1. Add `M600` in the slicer at the layer where the color must change (or let the filament sensor trigger it when the filament runs out).
+2. The printer pauses, parks the toolhead and unloads the filament.
+3. With PowerScreen installed, the **MANUAL FILAMENT CHANGE** menu opens (`UNLOAD`, `LOAD`, `RESUME`, `STOP`, `CLOSE`). `LOAD` and `UNLOAD` are disabled while a print is running. Without PowerScreen, a Mainsail/Fluidd prompt is shown instead.
+4. Change the filament with the buttons and press `RESUME` to continue the print.
+
+The module does not override the CFS `RESUME`: it adds `M600_RESUME` and
+`M600_CANCEL`, which restore the fan, the idle timeout and the module state and
+then call the firmware commands. The automatic CFS color changes do not use `M600`.
+
+### Camera Support
+
+```text
+[Install] Menu → 14) Install Camera Support
+```
+
+Installs the macros to adjust the camera (brightness, saturation, contrast...)
+and, when you answer yes, USB Camera Support to use a third-party USB camera
+(needs Entware). Cameras with the new hardware always get the USB service.
+*Klipper Gcode Shell Command* is required.
+
+### Boot animation
+
+The first time the script runs it replaces the boot animation in
+`/etc/boot-display` with the Power Script one (Creality logo, "POWER SCRIPT" and
+"LOADING..."). The original animation is saved in
+`/usr/data/helper-script-backup/boot-display-original.tar.gz`. There is no menu
+entry: if a firmware update restores the Creality animation, clone the script
+again to apply it again.
 
 ## Updates
 
@@ -101,12 +149,12 @@ from Fluidd or Mainsail (**Settings → Software Updates**).
 
 | Menu | Content |
 |---|---|
-| `[Install]` | Moonraker and Nginx, Fluidd, Mainsail, Entware, Klipper Gcode Shell Command, KAMP, Buzzer Support, Nozzle Cleaning Fan Control, Save Z-Offset Macros, Screws Tilt Adjust Support, M600 Support, Git Backup, Moonraker Timelapse, Camera Support (camera settings and optional USB camera), OctoEverywhere, Moonraker Obico and Mobileraker Companion |
-| `[Remove]` | Removal of every installable module |
-| `[Customize]` | Install / remove PowerScreen, remove / restore the Creality Web Interface, Creality Dynamic Logos for Fluidd, install / remove Power Macros & Bed Coordinates Fix |
+| `[Install]` | 1 Moonraker and Nginx, 2 Fluidd, 3 Mainsail, 4 Entware, 5 Klipper Gcode Shell Command, 6 KAMP, 7 Buzzer Support, 8 Nozzle Cleaning Fan Control, 9 Save Z-Offset Macros, 10 Screws Tilt Adjust Support, 11 M600 Support, 12 Git Backup, 13 Moonraker Timelapse, 14 Camera Support, 15 OctoEverywhere, 16 Moonraker Obico, 17 Mobileraker Companion |
+| `[Remove]` | The same 17 entries, plus *Improved Shapers Calibrations* (`x`), *Fans Control Macros* (`y`) and *Useful Macros* (`z`) when they are installed |
+| `[Customize]` | 1 Install / 2 Remove PowerScreen, 3 Remove / 4 Restore the Creality Web Interface, 5 Creality Dynamic Logos for Fluidd, 6 Install / 7 Remove Power Macros & Bed Coordinates Fix |
 | `[Backup & Restore]` | Klipper configuration files and Moonraker database |
 | `[Tools]` | Klipper configuration updates, printing G-code files from folders, camera settings, service restarts, Entware updates, cache and log cleanup, firmware restore and factory reset |
-| `[Information]` / `[System]` | Installed components and system status |
+| `[Information]` | Installed components and their status |
 
 ## Known issues
 
