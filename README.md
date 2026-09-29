@@ -21,7 +21,7 @@ Guilouz, adapted to the K1C and to the CFS firmware.
 ## Features
 
 - **PowerScreen touch interface.** Replaces the Creality touch screen with [PowerScreen](https://github.com/borferkic/K1C-CFS-POWER-SCREEN), a K1C interface aware of the CFS. Install the `stable` or `nightly` build from the menu; everything is backed up and can be restored, and updates come from Fluidd or Mainsail.
-- **Bed Coordinates Fix.** The latest CFS firmware for the K1C generates wrong Y axis coordinates; this module corrects `[stepper_y]` and the nozzle wipe position on the brush in `printer.cfg` and nothing else, with a backup of the original values.
+- **Bed Coordinates Fix.** The CFS firmware misaligns the bed coordinates and limits of the K1C: the nozzle misses the cleaning brush and the slicer cannot use Y beyond 215 mm on a 220 mm bed. This module corrects them, with a backup of the original values.
 - **Power Macros.** Installs the Power Script `gcode_macro.cfg`, `printer_params.cfg` and `box.cfg` (your originals are backed up) with the extra `STRESS_TEST` (motion stress test), `PID_HOTEND` (hotend PID calibration) and `RELOAD_CAMERA` (restart the camera service) macros.
 - **Manual filament change with `M600`.** The CFS firmware has no `M600`; this module adds it, keeps the CFS `RESUME` untouched and opens the PowerScreen **MANUAL FILAMENT CHANGE** menu (unload, load, resume, stop).
 - **KAMP adapted to the CFS.** Adaptive bed mesh and purge line that respect the CFS purge routine (see [KAMP and the CFS purge](#kamp-and-the-cfs-purge)).
@@ -115,13 +115,23 @@ Before replacing anything, the first copy of each file is saved in
 [Install] Menu → 7) Install Bed Coordinates Fix
 ```
 
-The latest CFS firmware for the K1C generates wrong Y axis coordinates. This module changes
-only these keys of `printer.cfg`, and it does not need any other module:
+**The problem.** The CFS firmware for the K1C misaligns the bed coordinates and their limits. As a result:
 
-- In `[stepper_y]`: `position_endstop: -0.5`, `position_min: -0.5`, `position_max: 227.5` and `gcode_position_max: 220`.
-- In `[prtouch_v2]` (the nozzle wipe on the brush): `clr_noz_start_x: 59` and `clr_noz_len_x: 36`, so the wipe spans X 59 to 95.
+- The nozzle does not pass over the cleaning brush when it wipes itself.
+- The slicer cannot use the Y axis beyond 215 mm, although the bed is 220 mm deep.
 
-The original values are saved in `/usr/data/helper-script-backup/bed-fix/`, and
+**What the fix does.** It corrects the coordinates and limits so the whole bed is usable and the nozzle wipes on the brush. It changes only these keys of `printer.cfg` and does not need any other module:
+
+| Section | Key | Value | Purpose |
+|---|---|---|---|
+| `[stepper_y]` | `position_endstop`, `position_min` | `-0.5` | Y origin and lower limit |
+| `[stepper_y]` | `position_max` | `227.5` | Y travel, enough to reach the brush area |
+| `[stepper_y]` | `gcode_position_max` | `220` | Maximum Y the slicer can use (the full depth of the bed) |
+| `[prtouch_v2]` | `clr_noz_start_x`, `clr_noz_len_x` | `59`, `36` | Nozzle wipe on the brush, from X 59 to X 95 |
+
+**Result.** With the fix installed, Y can be used up to 220 mm in the slicer and the nozzle passes over the cleaning brush.
+
+**Backup and removal.** The original values are saved in `/usr/data/helper-script-backup/bed-fix/`.
 `[Remove] Menu → 7) Remove Bed Coordinates Fix` puts them back without touching the includes added by other modules.
 
 ### M600 Support
