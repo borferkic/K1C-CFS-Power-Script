@@ -148,6 +148,25 @@ function restore_bed_fix(){
   rm -f "$saved"
 }
 
+# Saves the original values, sets the fixed ones and restarts Klipper. Used by the
+# installation and by the reapply option ($1 is the word used in the final message).
+function apply_bed_coordinates_fix(){
+  local done_word="${1:-installed}"
+  echo -e "${white}"
+  if ! grep -q "^\[stepper_y\]" "$PRINTER_CFG" ; then
+    error_msg "[stepper_y] was not found in printer.cfg!"
+    return
+  fi
+  echo -e "Info: Saving the original values..."
+  save_bed_fix_original
+  patch_stepper_y
+  patch_nozzle_wipe
+  patch_bed_mesh
+  echo -e "Info: Restarting Klipper service..."
+  restart_klipper
+  ok_msg "Bed Coordinates Fix has been ${done_word} successfully!"
+}
+
 function install_bed_coordinates_fix(){
   bed_coordinates_fix_message
   local yn
@@ -155,22 +174,33 @@ function install_bed_coordinates_fix(){
     install_msg "Bed Coordinates Fix" yn
     case "${yn}" in
       Y|y)
-        echo -e "${white}"
-        if ! grep -q "^\[stepper_y\]" "$PRINTER_CFG" ; then
-          error_msg "[stepper_y] was not found in printer.cfg!"
-          return
-        fi
-        echo -e "Info: Saving the original values..."
-        save_bed_fix_original
-        patch_stepper_y
-        patch_nozzle_wipe
-        patch_bed_mesh
-        echo -e "Info: Restarting Klipper service..."
-        restart_klipper
-        ok_msg "Bed Coordinates Fix has been installed successfully!"
+        apply_bed_coordinates_fix installed
         return;;
       N|n)
         error_msg "Installation canceled!"
+        return;;
+      *)
+        error_msg "Please select a correct choice!";;
+    esac
+  done
+}
+
+# Offered by the Install menu when the module is already installed.
+function reapply_bed_coordinates_fix(){
+  bed_coordinates_fix_message
+  echo -e " ${yellow}Bed Coordinates Fix is already installed.${white}"
+  echo -e " Reapplying sets the values above again in printer.cfg. The original"
+  echo -e " values saved the first time are kept."
+  echo
+  local yn
+  while true; do
+    reapply_msg "Bed Coordinates Fix" yn
+    case "${yn}" in
+      Y|y)
+        apply_bed_coordinates_fix reapplied
+        return;;
+      N|n)
+        error_msg "Reapply canceled!"
         return;;
       *)
         error_msg "Please select a correct choice!";;

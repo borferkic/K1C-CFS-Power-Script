@@ -90,7 +90,7 @@ function install_menu_k1() {
         fi;;
       6)
         if [ -f "$POWER_CONFIG_BACKUP_FOLDER/gcode_macro.cfg" ]; then
-          error_msg "Power Macros are already installed!"
+          run "reapply_power_macros" "install_menu_ui_k1"
         elif [ ! -f "$KLIPPER_SHELL_FILE" ]; then
           error_msg "Klipper Gcode Shell Command is needed, please install it first!"
         else
@@ -98,7 +98,7 @@ function install_menu_k1() {
         fi;;
       7)
         if [ -f "$BED_FIX_BACKUP_FOLDER/stepper_y.orig" ]; then
-          error_msg "Bed Coordinates Fix is already installed!"
+          run "reapply_bed_coordinates_fix" "install_menu_ui_k1"
         else
           run "install_bed_coordinates_fix" "install_menu_ui_k1"
         fi;;

@@ -68,10 +68,10 @@ function customize_menu_k1() {
           run "restore_creality_web_interface" "customize_menu_ui_k1"
         fi;;
       5)
-        if [ -f "$FLUIDD_LOGO_FILE" ]; then
-          error_msg "Creality Dynamic Logos for Fluidd are already installed!"
-        elif [ ! -d "$FLUIDD_FOLDER" ]; then
+        if [ ! -d "$FLUIDD_FOLDER" ]; then
           error_msg "Fluidd is needed, please install it first!"
+        elif [ -f "$FLUIDD_LOGO_FILE" ]; then
+          run "reapply_creality_dynamic_logos" "customize_menu_ui_k1"
         else
           run "install_creality_dynamic_logos" "customize_menu_ui_k1"
         fi;;
