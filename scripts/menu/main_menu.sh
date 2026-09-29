@@ -32,7 +32,7 @@ function version_line() {
 }
 
 function script_title() {
-  echo "K1 SERIES"
+  echo "K1C"
 }
 
 function main_menu_ui() {
