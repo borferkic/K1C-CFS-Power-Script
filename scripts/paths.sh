@@ -176,7 +176,6 @@ function set_paths() {
   
   # Creality Dynamic Logos for Fluidd #
   FLUIDD_LOGO_FILE="${USR_DATA}/fluidd/logo_creality_v2.svg"
-  FLUIDD_LOGO_URL1="${HS_FILES}/fluidd-logos/logo_creality_v1.svg"
   FLUIDD_LOGO_URL2="${HS_FILES}/fluidd-logos/logo_creality_v2.svg"
 
 }

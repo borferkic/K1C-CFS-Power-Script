@@ -117,25 +117,26 @@ function migrate_bed_fix_mesh(){
   restart_klipper
 }
 
-# A Fluidd update (or reinstall) replaces config.json and the Creality themes
-# disappear, and the first version of the logos used a blue Creality V2. Add them
-# again, or update their color, when the logos were installed.
+# A Fluidd update (or reinstall) replaces config.json and the Creality theme
+# disappears. Versions before 1.0.8 also installed "Creality V1" and "Creality V2"
+# themes. Leave a single "Creality" theme in the Creality green.
 function migrate_fluidd_logos(){
   [ -f "$FLUIDD_LOGO_FILE" ] || return 0
   [ -f "$FLUIDD_FOLDER/config.json" ] || return 0
-  local color current
-  color=$(jq -r '.themePresets[]? | select(.name == "Creality V2") | .color' "$FLUIDD_FOLDER/config.json" 2>/dev/null) || color=""
-  if [ "$color" != "$FLUIDD_LOGO_V2_COLOR" ]; then
-    echo -e "${white}Info: Updating the Creality themes in the Fluidd config.json file..."
+  local state current
+  state=$(jq -r --arg c "$FLUIDD_LOGO_COLOR" '([.themePresets[]? | select(.name == "Creality V1" or .name == "Creality V2")] | length) as $old | ([.themePresets[]? | select(.name == "Creality" and .color == $c)] | length) as $ok | "\($old) \($ok)"' "$FLUIDD_FOLDER/config.json" 2>/dev/null) || state=""
+  if [ "$state" != "0 1" ]; then
+    echo -e "${white}Info: Updating the Creality theme in the Fluidd config.json file..."
     add_creality_theme_presets || true
+    rm -f "$FLUIDD_FOLDER"/logo_creality_v1.svg
   fi
-  # Selected theme: only when Creality V2 is the one in use and its color is old.
+  # Selected theme: only when the Creality logo is the one in use and its color is old.
   current=$("$CURL" -s "localhost:7125/server/database/item?namespace=fluidd&key=uiSettings.theme" 2>/dev/null | jq -c '.result.value // empty' 2>/dev/null) || return 0
   [ -n "$current" ] || return 0
   if [ "$(echo "$current" | jq -r '.logo.src // ""')" = "logo_creality_v2.svg" ] && \
-     [ "$(echo "$current" | jq -r '.color // ""')" != "$FLUIDD_LOGO_V2_COLOR" ]; then
-    echo -e "Info: Updating the color of the selected Creality V2 theme..."
-    select_creality_v2_theme || true
+     [ "$(echo "$current" | jq -r '.color // ""')" != "$FLUIDD_LOGO_COLOR" ]; then
+    echo -e "Info: Updating the color of the selected Creality theme..."
+    select_creality_theme || true
   fi
 }
 

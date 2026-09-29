@@ -162,11 +162,12 @@ then call the firmware commands. The automatic CFS color changes do not use `M60
 [Customize & PowerScreen] Menu → 5) Install Creality Dynamic Logos for Fluidd
 ```
 
-Adds the **Creality V1** and **Creality V2** themes to Fluidd and selects **Creality V2**, which uses the Creality green (`#8EB631`, measured on the official Creality boot image). It adds the
-two themes to the Fluidd `config.json` without replacing it, so the themes of your Fluidd version are kept.
-If a Fluidd update removes them, the script adds them back the next time it starts. Fluidd needs
-Moonraker running to remember the selected theme; if it is not running, pick Creality V2 in the Fluidd theme
-settings. Clear the browser cache if the themes do not show up.
+Adds a single **Creality** theme to Fluidd, with the Creality logo in the Creality green (`#8EB631`, measured
+on the official Creality boot image), and selects it. It adds the theme to the Fluidd `config.json`
+without replacing it, so the themes of your Fluidd version are kept. If a Fluidd update removes it, the
+script adds it back the next time it starts. The old *Creality V1* and *Creality V2* themes are replaced by
+this one. Fluidd needs Moonraker running to remember the selected theme; if it is not running, pick Creality in the
+Fluidd theme settings. Close the Fluidd tabs and clear the browser cache if the theme does not change.
 
 ### Camera Support
 
