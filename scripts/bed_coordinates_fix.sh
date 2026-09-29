@@ -3,13 +3,17 @@
 set -e
 
 # Bed Coordinates Fix: corrects the Y axis coordinates that the CFS firmware
-# generates wrong for the K1C, and the nozzle wipe position on the brush. It only
-# changes the [stepper_y] and [prtouch_v2] keys listed here.
+# generates wrong for the K1C, the nozzle wipe position on the brush and the bed
+# mesh area. It only changes the [stepper_y], [prtouch_v2] and [bed_mesh] keys
+# listed here.
 
 BED_FIX_KEYS="position_endstop|position_min|position_max|gcode_position_max"
 BED_FIX_WIPE_KEYS="clr_noz_start_x|clr_noz_len_x"
 BED_FIX_WIPE_X=59
 BED_FIX_WIPE_LEN_X=36
+BED_FIX_MESH_KEYS="mesh_min|mesh_max"
+BED_FIX_MESH_MIN="1,1"
+BED_FIX_MESH_MAX="220,220"
 
 function bed_coordinates_fix_message(){
   top_line
@@ -22,6 +26,7 @@ function bed_coordinates_fix_message(){
   echo -e " │ ${cyan}position_max 227.5 and gcode_position_max 220.                 ${white}│"
   echo -e " │ ${cyan}[prtouch_v2]: the nozzle wipe on the brush, from X 59 to       ${white}│"
   echo -e " │ ${cyan}X 95 (clr_noz_start_x 59 and clr_noz_len_x 36).                ${white}│"
+  echo -e " │ ${cyan}[bed_mesh]: mesh_min 1,1 and mesh_max 220,220.                 ${white}│"
   echo -e " │ ${cyan}Nothing else is changed.                                       ${white}│"
   hr
   echo -e " │ ${yellow}The original values are saved and restored by the Remove       ${white}│"
@@ -74,6 +79,22 @@ function patch_nozzle_wipe(){
   mv "${PRINTER_CFG}.tmp" "$PRINTER_CFG"
 }
 
+# Sets the bed mesh area in the [bed_mesh] section. Only keys that already exist
+# are changed.
+function patch_bed_mesh(){
+  if ! grep -q "^\[bed_mesh\]" "$PRINTER_CFG" ; then
+    error_msg "[bed_mesh] was not found in printer.cfg, skipping the bed mesh area!"
+    return
+  fi
+  echo -e "Info: Fixing the bed mesh area in [bed_mesh]..."
+  awk -v min="$BED_FIX_MESH_MIN" -v max="$BED_FIX_MESH_MAX" '
+    /^\[/ { in_m = ($0 ~ /^\[bed_mesh\]/) }
+    in_m && /^mesh_min[ \t]*:/ { print "mesh_min: " min; next }
+    in_m && /^mesh_max[ \t]*:/ { print "mesh_max: " max; next }
+    { print }' "$PRINTER_CFG" > "${PRINTER_CFG}.tmp"
+  mv "${PRINTER_CFG}.tmp" "$PRINTER_CFG"
+}
+
 # Saves the original values once, so they can be put back later.
 function save_bed_fix_original(){
   mkdir -p "$BED_FIX_BACKUP_FOLDER"
@@ -83,7 +104,8 @@ function save_bed_fix_original(){
   extract_bed_fix_original "$PRINTER_CFG"
 }
 
-# Writes stepper_y.orig and prtouch.orig from the given printer.cfg when missing.
+# Writes the stepper_y.orig, prtouch.orig and bed_mesh.orig files from the given
+# printer.cfg when they are missing.
 function extract_bed_fix_original(){
   local source="$1"
   mkdir -p "$BED_FIX_BACKUP_FOLDER"
@@ -97,17 +119,22 @@ function extract_bed_fix_original(){
       /^\[/ { in_p = ($0 ~ /^\[prtouch_v[0-9]+\]/) }
       in_p && $0 ~ keys { print }' "$source" > "$BED_FIX_BACKUP_FOLDER/prtouch.orig"
   fi
+  if [ ! -f "$BED_FIX_BACKUP_FOLDER/bed_mesh.orig" ]; then
+    awk -v keys="^(${BED_FIX_MESH_KEYS})[ \t]*:" '
+      /^\[/ { in_m = ($0 ~ /^\[bed_mesh\]/) }
+      in_m && $0 ~ keys { print }' "$source" > "$BED_FIX_BACKUP_FOLDER/bed_mesh.orig"
+  fi
 }
 
 # Puts the saved values back; a key that the original did not have
 # (gcode_position_max) is removed. Other sections and includes are kept.
 function restore_bed_fix(){
   local saved="${PRINTER_CFG}.bedfix"
-  cat "$BED_FIX_BACKUP_FOLDER/stepper_y.orig" "$BED_FIX_BACKUP_FOLDER/prtouch.orig" > "$saved"
-  awk -v ykeys="^(${BED_FIX_KEYS})[ \t]*:" -v pkeys="^(${BED_FIX_WIPE_KEYS})[ \t]*:" '
+  cat "$BED_FIX_BACKUP_FOLDER/stepper_y.orig" "$BED_FIX_BACKUP_FOLDER/prtouch.orig" "$BED_FIX_BACKUP_FOLDER/bed_mesh.orig" > "$saved"
+  awk -v ykeys="^(${BED_FIX_KEYS})[ \t]*:" -v pkeys="^(${BED_FIX_WIPE_KEYS})[ \t]*:" -v mkeys="^(${BED_FIX_MESH_KEYS})[ \t]*:" '
     NR == FNR { split($0, kv, ":"); orig[kv[1]] = $0; next }
-    /^\[/ { in_y = ($0 ~ /^\[stepper_y\]/); in_p = ($0 ~ /^\[prtouch_v[0-9]+\]/) }
-    (in_y && $0 ~ ykeys) || (in_p && $0 ~ pkeys) {
+    /^\[/ { in_y = ($0 ~ /^\[stepper_y\]/); in_p = ($0 ~ /^\[prtouch_v[0-9]+\]/); in_m = ($0 ~ /^\[bed_mesh\]/) }
+    (in_y && $0 ~ ykeys) || (in_p && $0 ~ pkeys) || (in_m && $0 ~ mkeys) {
       split($0, kv, ":")
       if (kv[1] in orig) print orig[kv[1]]
       next
@@ -133,6 +160,7 @@ function install_bed_coordinates_fix(){
         save_bed_fix_original
         patch_stepper_y
         patch_nozzle_wipe
+        patch_bed_mesh
         echo -e "Info: Restarting Klipper service..."
         restart_klipper
         ok_msg "Bed Coordinates Fix has been installed successfully!"
@@ -156,7 +184,7 @@ function remove_bed_coordinates_fix(){
         echo -e "${white}"
         echo -e "Info: Restoring the original values..."
         restore_bed_fix
-        rm -f "$BED_FIX_BACKUP_FOLDER/stepper_y.orig" "$BED_FIX_BACKUP_FOLDER/prtouch.orig" "$BED_FIX_BACKUP_FOLDER/printer.cfg.orig"
+        rm -f "$BED_FIX_BACKUP_FOLDER/stepper_y.orig" "$BED_FIX_BACKUP_FOLDER/prtouch.orig" "$BED_FIX_BACKUP_FOLDER/bed_mesh.orig" "$BED_FIX_BACKUP_FOLDER/printer.cfg.orig"
         rmdir "$BED_FIX_BACKUP_FOLDER" 2>/dev/null || true
         echo -e "Info: Restarting Klipper service..."
         restart_klipper
