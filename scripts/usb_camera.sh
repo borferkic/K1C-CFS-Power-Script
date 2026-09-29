@@ -2,71 +2,29 @@
 
 set -e
 
-function usb_camera_message(){
-  top_line
-  title 'USB Camera Support' "${yellow}"
-  inner_line
-  hr
-  echo -e " │ ${cyan}This allows to use third-party camera from your printer's    ${white}│"
-  echo -e " │ ${cyan}USB port.                                                    ${white}│"
-  hr
-  bottom_line
+# Building blocks of the Camera Support module (see camera_support.sh).
+
+function usb_camera_apply(){
+  echo -e "Info: Copying file..."
+  cp "$USB_CAMERA_DUAL_URL" "$INITD_FOLDER"/S50usb_camera
+  chmod 755 "$INITD_FOLDER"/S50usb_camera
+  echo -e "Info: Installing necessary packages..."
+  "$ENTWARE_FILE" update && "$ENTWARE_FILE" install mjpg-streamer mjpg-streamer-input-http mjpg-streamer-input-uvc mjpg-streamer-output-http mjpg-streamer-www
+  echo -e "Info: Starting service..."
+  "$INITD_FOLDER"/S50usb_camera start
 }
 
-function install_usb_camera(){
-  usb_camera_message
-  local yn
-  while true; do
-    install_msg "USB Camera Support" yn
-    case "${yn}" in
-      Y|y)
-        echo -e "${white}"
-        echo -e "Info: Copying file..."
-        cp "$USB_CAMERA_DUAL_URL" "$INITD_FOLDER"/S50usb_camera
-        chmod 755 "$INITD_FOLDER"/S50usb_camera
-        echo -e "Info: Installing necessary packages..."
-        "$ENTWARE_FILE" update && "$ENTWARE_FILE" install mjpg-streamer mjpg-streamer-input-http mjpg-streamer-input-uvc mjpg-streamer-output-http mjpg-streamer-www
-        echo -e "Info: Starting service..."
-        "$INITD_FOLDER"/S50usb_camera start
-        ok_msg "USB Camera Support has been installed successfully!"
-        return;;
-      N|n)
-        error_msg "Installation canceled!"
-        return;;
-      *)
-        error_msg "Please select a correct choice!";;
-    esac
-  done
-}
-
-function remove_usb_camera(){
-  usb_camera_message
-  local yn
-  while true; do
-    remove_msg "USB Camera Support" yn
-    case "${yn}" in
-      Y|y)
-        echo -e "${white}"
-        echo -e "Info: Stopping service..."
-        "$INITD_FOLDER"/S50usb_camera stop
-        echo -e "Info: Removing file..."
-        rm -f "$INITD_FOLDER"/S50usb_camera
-        echo -e "Info: Removing packages..."
-        set +e
-        "$ENTWARE_FILE" --autoremove remove mjpg-streamer-www
-        "$ENTWARE_FILE" --autoremove remove mjpg-streamer-output-http
-        "$ENTWARE_FILE" --autoremove remove mjpg-streamer-input-uvc
-        "$ENTWARE_FILE" --autoremove remove mjpg-streamer-input-http
-        "$ENTWARE_FILE" --autoremove remove mjpg-streamer
-        set -e
-        ok_msg "USB Camera Support has been removed successfully!"
-        echo -e "   Please reboot your printer by using power switch on back!"
-        return;;
-      N|n)
-        error_msg "Deletion canceled!"
-        return;;
-      *)
-        error_msg "Please select a correct choice!";;
-    esac
-  done
+function usb_camera_unapply(){
+  echo -e "Info: Stopping service..."
+  "$INITD_FOLDER"/S50usb_camera stop
+  echo -e "Info: Removing file..."
+  rm -f "$INITD_FOLDER"/S50usb_camera
+  echo -e "Info: Removing packages..."
+  set +e
+  "$ENTWARE_FILE" --autoremove remove mjpg-streamer-www
+  "$ENTWARE_FILE" --autoremove remove mjpg-streamer-output-http
+  "$ENTWARE_FILE" --autoremove remove mjpg-streamer-input-uvc
+  "$ENTWARE_FILE" --autoremove remove mjpg-streamer-input-http
+  "$ENTWARE_FILE" --autoremove remove mjpg-streamer
+  set -e
 }

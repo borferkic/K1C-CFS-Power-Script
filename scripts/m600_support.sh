@@ -47,12 +47,6 @@ function install_m600_support(){
         else
           echo -e "Info: [filament_switch_sensor] configurations are already disabled in printer.cfg file..."
         fi
-        if grep -q "\[gcode_macro RESUME\]" "$MACROS_CFG" ; then
-          echo -e "Info: Disabling [gcode_macro RESUME] in gcode_macro.cfg file..."
-          sed -i '/^\[gcode_macro RESUME\]/,/^\s*$/ s/^\(\s*\)\([^#]\)/#\1\2/' "$MACROS_CFG"
-        else
-          echo -e "Info: [gcode_macro RESUME] is already disabled in gcode_macro.cfg file..."
-        fi
         echo -e "Info: Restarting Klipper service..."
         restart_klipper
         ok_msg "M600 Support has been installed successfully!"
@@ -93,12 +87,6 @@ function remove_m600_support(){
           sed -i -e 's/^\s*#[[:space:]]*\[filament_switch_sensor filament_sensor\]/[filament_switch_sensor filament_sensor]/' -e '/^\[filament_switch_sensor filament_sensor\]/,/^\s*$/ s/^\(\s*\)#/\1/' "$PRINTER_CFG"
         else
           echo -e "Info: [filament_switch_sensor] configurations are already enabled in printer.cfg file..."        
-        fi
-        if grep -q "#\[gcode_macro RESUME\]" "$MACROS_CFG" ; then
-          echo -e "Info: Enabling [gcode_macro RESUME] in gcode_macro.cfg file..."
-          sed -i -e 's/^\s*#[[:space:]]*\[gcode_macro RESUME\]/[gcode_macro RESUME]/' -e '/^\[gcode_macro RESUME\]/,/^\s*$/ s/^\(\s*\)#/\1/' "$MACROS_CFG"
-        else
-          echo -e "Info: [gcode_macro RESUME] is already enabled in gcode_macro.cfg file..."        
         fi
         if [ ! -n "$(ls -A "$HS_CONFIG_FOLDER")" ]; then
           rm -rf "$HS_CONFIG_FOLDER"

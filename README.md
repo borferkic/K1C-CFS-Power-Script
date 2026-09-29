@@ -1,122 +1,141 @@
-<!--
-METADATOS DEL DOCUMENTO
-Nombre: `README.md`
-Fecha de creación: `2026-09-10`
-Descripción: Presentación pública e instrucciones del script para la Creality K1C con CFS.
-Proyecto: `CFS Power Script`
-Última modificación: `2026-09-12`
--->
-
-<!--
-METADATOS DEL DOCUMENTO
-Nombre: `README.md`
-Fecha de creación: `2026-09-10`
-Descripción: Presentación pública e instrucciones del script para la Creality K1C con CFS.
-Proyecto: `CFS Power Script`
-Última modificación: `2026-09-12`
--->
-
-# CFS Power Script for K1 Series with CFS Upgrade Kit Firmware
+# CFS Power Script for the Creality K1C
 
 > [!WARNING]
-> **THIS REPOSITORY IS STILL VERY MUCH AN ACTIVE WORK IN PROGRESS! PROCEED AT YOUR OWN RISK!**
-
----
+> **This project is still a work in progress. Use it at your own risk.**
+> If you don't know what you're doing, don't use this script.
 
 ## About
 
-This script is a fork of Guilouz awesome Creality Helper Script with modifications to accomodate new code as found in the new K1 series CFS Upgrade Kit firmware (v2.3.5.33).  
-This script is intended for use on Creality **K1 Series** printers with **CFS Upgrade Kit Firmware** and my modifcations are mainly for the START_PRINT macro routine.
+CFS Power Script is a helper script for the **Creality K1C** running the
+**CFS Upgrade Kit firmware** (tested on `2.3.5.34`). It is a fork of the
+[Creality Helper Script](https://github.com/Guilouz/Creality-Helper-Script) by
+Guilouz, adapted to the K1C and to the CFS firmware.
 
-Some modules currently untested so use at your own risk.  
-If you encounter errors please uninstall any modules you installed and factory reset your printer as per the original Guilouz Helper Script Wiki.
+Main differences from the original Helper Script:
 
-**If you don't know what you're doing, I don't recommend using this helper script.**
+- **K1 series only.** Support for the Ender-3 V3, Ender-3 V3 KE and CR-10 SE has been removed; the script refuses to run on other printers.
+- **[PowerScreen](https://github.com/borferkic/K1C-CFS-POWER-SCREEN)** replaces Guppy Screen as the touch screen interface (`[Customize] Menu`).
+- **Custom boot animation** (Creality logo, "POWER SCRIPT" and "LOADING...") installed automatically the first time the script runs.
+- **KAMP adapted to the CFS firmware** (see [KAMP and the CFS purge](#kamp-and-the-cfs-purge)).
+- **Power Macros & Bed Coordinates Fix** (`[Customize] Menu`): fixes the Y axis coordinates that the CFS firmware leaves wrong and installs the Power Script `gcode_macro.cfg`, `printer_params.cfg` and `box.cfg` (your originals are backed up and can be restored), plus the `STRESS_TEST`, `PID_HOTEND` and `RELOAD_CAMERA` macros.
+- **M600 Support** keeps the CFS `RESUME` untouched and opens the PowerScreen filament change menu when PowerScreen is installed.
+- **Camera Support** merges *Camera Settings Control* and *USB Camera Support* into a single entry.
+- Modules that duplicated PowerScreen, overlapped the Power Script configuration or did not work on the K1C were removed from the *Install* menu: *Improved Shapers Calibrations*, *Custom Boot Display*, *Guppy Screen*, *GuppyFLO*, *OctoApp Companion*, *SimplyPrint*, *Fans Control Macros* and *Useful Macros*. *Improved Shapers Calibrations*, *Fans Control Macros* and *Useful Macros* still show up in the *Remove* menu when they are installed.
 
-Currently the CFS firmware has an instruction to perform a purge as part of the START_PRINT routine but when using a CFS filament is often not loaded before the purge process.  
+## Requirements
 
-As a result KAMP is *somewhat working* on the CFS firmware, however, it should be noted that if filament is not pre-loaded to the extruder before starting a print no filament will be extruded during the purge line process or fallback Creality purge.  
-I expect there will be a fix for this but I am by no means any kind of expert when it comes to code/scripts and the modifications found in this repository are purely based off comparing the helper script data to the new CFS upgrade kit firmware data, if you are aware of an effective and simple way to fix this please do feel free to let me know.  
+- A Creality K1C with the CFS Upgrade Kit firmware.
+- SSH access to the printer as `root`.
+- Internet access from the printer to GitHub.
+- The printer date and time set correctly (needed for the SSL connection to GitHub).
+- A factory reset before the first installation is recommended.
+- If Moonraker, Fluidd or Mainsail were installed with another script, remove them first.
 
-In the meantime I would advise enabling skirt/skirt loops in your slicer to purge and prime the nozzle before the print starts.
+## Installation
 
----
+1. Connect to the printer through SSH as `root`:
 
-### Currently tested modules  
-The following modules have been tested on a K1 and seem to be working ok for me but as always use as your own risk.
-- Moonraker and Nginx  
-- Fluidd  
-- Klipper Gcode Shell Command  
-- KAMP (Modification has been made to `START_PRINT` gcode as found in the new CFS kit firmware.)
-  (Purge routine split from `START_PRINT` macro to prevent the printer trying to purge prior to loading filament. Purge can be called by adding `ADAPT_PURGE_MOD` to the end of Slicer start gcode.)  
-- Save Z Offset Macros  
+   ```sh
+   ssh root@YOUR_K1C_IP
+   ```
 
----
+2. Clone the script into `/usr/data/helper-script` (this exact path is required):
 
-## Known Issues / Workarounds for K1 Series CFS Firmware
+   ```sh
+   git clone --depth 1 https://github.com/borferkic/K1C-CFS-Power-Script.git /usr/data/helper-script
+   ```
 
-### Git is Broken  
-Git seems to be broken on the K1 series CFS upgrade kit firmware and as a result you will need to install it manually as follows...  
-*Credit to [@A-Void-Me](https://github.com/A-Void-Me) for the workaround (https://github.com/Guilouz/Creality-Helper-Script-Wiki/discussions/787#discussioncomment-12924972)*
+   If cloning fails with an SSL error, run this command and clone again:
 
-1. SSH into the machine.
-2. Install Entware:
-```
-wget http://bin.entware.net/mipselsf-k3.4/installer/generic.sh -O - | sh
-```
-3. Add Entware to your path:
-```
-export PATH=/opt/bin:/opt/sbin:$PATH
-```
-4. Update and install Git:
-```
-opkg update
-opkg install git-http
-opkg install git  # (Optional, if git is missing)
-```
+   ```sh
+   git config --global http.sslVerify false
+   ```
 
-5. Patch newly installed Git to the usr/bin folder:
-```
-mv /usr/bin/git /usr/bin/git.bak
-ln -s /opt/bin/git /usr/bin/git
-```
+3. Run the script:
 
-Git will now be installed and the Helper Script can be Git cloned to your printer as per the Helper Script Wiki.
+   ```sh
+   sh /usr/data/helper-script/helper.sh
+   ```
 
-> [!NOTE]
-> The following commands will install this forked version with modifications.  
-> If you wish to use Guilouz original Helper Script then use the instructions [here](https://guilouz.github.io/Creality-Helper-Script-Wiki/helper-script/helper-script-installation/)
+   After the first run, the script can also be started with the `helper` command.
 
-6. Clone the script:
-```
-git clone --depth 1 https://github.com/Nik-oli/Creality-Helper-Script-K1-CFS.git /usr/data/helper-script
-```
-7. Run the script:
-```
-sh /usr/data/helper-script/helper.sh
+## Install PowerScreen
+
+Open the script and select:
+
+```text
+[Customize] Menu → 1) Install PowerScreen
 ```
 
-- If you encounter an issue to clone Helper Script repository, enter this command before cloning:  
-```
-git config --global http.sslVerify false
+PowerScreen replaces the Creality touch screen. Before installing, the script
+shows a warning and asks for confirmation, because the Creality screen and the
+Creality services (Creality Cloud, Creality Print LAN connection and OTA firmware
+updates) are **disabled**. It then asks which build to install (`stable` or
+`nightly`). Everything is backed up and restored with
+`[Customize] Menu → 2) Remove PowerScreen`.
+
+## Power Macros & Bed Coordinates Fix
+
+Open the script and select:
+
+```text
+[Customize] Menu → 6) Install Power Macros & Bed Coordinates Fix
 ```
 
----
+The CFS firmware leaves the Y axis coordinates wrong. This module:
 
-### Repo error thrown when installing Moonraker  
-To prevent seeing an error about the repository when installing Moonraker run the following command to add Moonraker to Git as safe:
-```
+- Sets `position_endstop: -0.5`, `position_min: -0.5` and `position_max: 227.5` in the `[stepper_y]` section of `printer.cfg`. Nothing else in `printer.cfg` is changed except the missing `[include gcode_macro.cfg]`, `[include printer_params.cfg]` and `[include box.cfg]` lines.
+- **Replaces** `gcode_macro.cfg`, `printer_params.cfg` and `box.cfg` with the Power Script versions, which also add the `STRESS_TEST`, `PID_HOTEND` and `RELOAD_CAMERA` macros.
+- Keeps `START_PRINT` disabled when KAMP is installed, because KAMP provides its own.
+
+Requirements: *Klipper Gcode Shell Command* must be installed (`RELOAD_CAMERA` needs it). Before replacing anything, the first copy of each file is saved in `/usr/data/helper-script-backup/power-config/` and never overwritten.
+`[Customize] Menu → 7) Remove Power Macros & Bed Coordinates Fix` restores those originals.
+
+## Updates
+
+The script checks for a new version every time it starts and offers to update
+itself. Installed components with an update manager entry can also be updated
+from Fluidd or Mainsail (**Settings → Software Updates**).
+
+## Menus
+
+| Menu | Content |
+|---|---|
+| `[Install]` | Moonraker and Nginx, Fluidd, Mainsail, Entware, Klipper Gcode Shell Command, KAMP, Buzzer Support, Nozzle Cleaning Fan Control, Save Z-Offset Macros, Screws Tilt Adjust Support, M600 Support, Git Backup, Moonraker Timelapse, Camera Support (camera settings and optional USB camera), OctoEverywhere, Moonraker Obico and Mobileraker Companion |
+| `[Remove]` | Removal of every installable module |
+| `[Customize]` | Install / remove PowerScreen, remove / restore the Creality Web Interface, Creality Dynamic Logos for Fluidd, install / remove Power Macros & Bed Coordinates Fix |
+| `[Backup & Restore]` | Klipper configuration files and Moonraker database |
+| `[Tools]` | Klipper configuration updates, printing G-code files from folders, camera settings, service restarts, Entware updates, cache and log cleanup, firmware restore and factory reset |
+| `[Information]` / `[System]` | Installed components and system status |
+
+## Known issues
+
+### KAMP and the CFS purge
+
+The CFS firmware purges as part of the `START_PRINT` routine, but with the CFS
+the filament is often not loaded yet at that point. The KAMP module splits the
+purge from `START_PRINT` so the printer does not try to purge before loading
+filament. To purge, add `ADAPT_PURGE_MOD` to the end of the slicer start G-code.
+Enabling a skirt in the slicer is also recommended to prime the nozzle.
+
+### Repository error when installing Moonraker
+
+To avoid a repository warning when installing Moonraker, mark it as a safe Git
+directory:
+
+```sh
 git config --global --add safe.directory /usr/data/moonraker/moonraker
 ```
 
----
+## Credits
 
-**All credit goes to Guilouz who created the Creality Helper Script.**  
-**Minor modifications have been made purely to facilitate the new routines found in the CFS upgrade kit firmware.**  
+- [Guilouz](https://github.com/Guilouz) — author of the original
+  [Creality Helper Script](https://github.com/Guilouz/Creality-Helper-Script)
+  and its [Wiki](https://guilouz.github.io/Creality-Helper-Script-Wiki/).
+- [Nik-oli](https://github.com/Nik-oli) — CFS firmware adaptations
+  ([Creality-Helper-Script-K1-CFS](https://github.com/Nik-oli/Creality-Helper-Script-K1-CFS)).
 
----
+## License
 
-## Original Helper Script Wiki by Guilouz:  
-[Wiki](https://guilouz.github.io/Creality-Helper-Script-Wiki/)
-
-<br />
+This project is licensed under the GNU General Public License v3.0. See
+[LICENSE](LICENSE).

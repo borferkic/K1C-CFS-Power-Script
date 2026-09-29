@@ -20,15 +20,6 @@ function check_file_k1() {
   fi
 }
 
-function check_simplyprint_k1() {
-  if [ ! -f "$MOONRAKER_CFG" ]; then
-    echo -e "${red}✗"
-  elif grep -q "\[simplyprint\]" "$MOONRAKER_CFG"; then
-    echo -e "${green}✓"
-  else
-    echo -e "${red}✗"
-  fi
-}
 
 function info_menu_ui_k1() {
   top_line
@@ -48,12 +39,16 @@ function info_menu_ui_k1() {
   info_line "$(check_folder_k1 "$KAMP_FOLDER")" 'Klipper Adaptive Meshing & Purging'
   info_line "$(check_file_k1 "$BUZZER_FILE")" 'Buzzer Support'
   info_line "$(check_folder_k1 "$NOZZLE_CLEANING_FOLDER")" 'Nozzle Cleaning Fan Control'
-  info_line "$(check_file_k1 "$FAN_CONTROLS_FILE")" 'Fans Control Macros' 
+  if [ -f "$FAN_CONTROLS_FILE" ]; then
+    info_line "$(check_file_k1 "$FAN_CONTROLS_FILE")" 'Fans Control Macros (legacy)'
+  fi
   # C-001: module retired; only shown for legacy installs.
   if [ -d "$IMP_SHAPERS_FOLDER" ]; then
     info_line "$(check_folder_k1 "$IMP_SHAPERS_FOLDER")" 'Improved Shapers Calibrations (legacy)'
   fi
-  info_line "$(check_file_k1 "$USEFUL_MACROS_FILE")" 'Useful Macros'
+  if [ -f "$USEFUL_MACROS_FILE" ]; then
+    info_line "$(check_file_k1 "$USEFUL_MACROS_FILE")" 'Useful Macros (legacy)'
+  fi
   info_line "$(check_file_k1 "$SAVE_ZOFFSET_FILE")" 'Save Z-Offset Macros'
   info_line "$(check_file_k1 "$SCREWS_ADJUST_FILE")" 'Screws Tilt Adjust Support'
   info_line "$(check_file_k1 "$M600_SUPPORT_FILE")" 'M600 Support'
@@ -61,21 +56,22 @@ function info_menu_ui_k1() {
   hr
   subtitle '•CAMERA:'
   info_line "$(check_file_k1 "$TIMELAPSE_FILE")" 'Moonraker Timelapse'
-  info_line "$(check_file_k1 "$CAMERA_SETTINGS_FILE")" 'Camera Settings Control'
-  info_line "$(check_file_k1 "$USB_CAMERA_FILE")" 'USB Camera Support'
+  info_line "$(check_file_k1 "$CAMERA_SETTINGS_FILE")" 'Camera Support (settings control)'
+  info_line "$(check_file_k1 "$USB_CAMERA_FILE")" 'Camera Support (USB camera)'
   hr
   subtitle '•REMOTE ACCESS:'
   info_line "$(check_folder_k1 "$OCTOEVERYWHERE_FOLDER")" 'OctoEverywhere'
   info_line "$(check_folder_k1 "$MOONRAKER_OBICO_FOLDER")" 'Obico'
-  info_line "$(check_folder_k1 "$GUPPYFLO_FOLDER")" 'GuppyFLO'
   info_line "$(check_folder_k1 "$MOBILERAKER_COMPANION_FOLDER")" 'Mobileraker Companion'
-  info_line "$(check_folder_k1 "$OCTOAPP_COMPANION_FOLDER")" 'OctoApp Companion'
-  info_line "$(check_simplyprint_k1)" 'SimplyPrint'
   hr
   subtitle '•CUSTOMIZATION:'
   info_line "$(check_file_k1 "$CREALITY_WEB_FILE")" 'Creality Web Interface'
-  info_line "$(check_folder_k1 "$GUPPY_SCREEN_FOLDER")" 'Guppy Screen'
+  info_line "$(check_folder_k1 "$POWERSCREEN_FOLDER")" 'PowerScreen'
+  if [ -d "$GUPPY_SCREEN_FOLDER" ]; then
+    info_line "$(check_folder_k1 "$GUPPY_SCREEN_FOLDER")" 'Guppy Screen (legacy)'
+  fi
   info_line "$(check_file_k1 "$FLUIDD_LOGO_FILE")" 'Creality Dynamic Logos for Fluidd'
+  info_line "$(check_file_k1 "$POWER_CONFIG_BACKUP_FOLDER/printer.cfg")" 'Power Macros & Bed Coordinates Fix'
   hr
   inner_line
   hr

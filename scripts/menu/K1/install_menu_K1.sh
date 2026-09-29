@@ -20,25 +20,19 @@ function install_menu_ui_k1() {
   menu_option ' 6' 'Install' 'Klipper Adaptive Meshing & Purging'
   menu_option ' 7' 'Install' 'Buzzer Support'
   menu_option ' 8' 'Install' 'Nozzle Cleaning Fan Control'
-  menu_option ' 9' 'Install' 'Fans Control Macros'
-  menu_option '10' 'Install' 'Useful Macros'
-  menu_option '11' 'Install' 'Save Z-Offset Macros'
-  menu_option '12' 'Install' 'Screws Tilt Adjust Support'
-  menu_option '13' 'Install' 'M600 Support'
-  menu_option '14' 'Install' 'Git Backup'
+  menu_option ' 9' 'Install' 'Save Z-Offset Macros'
+  menu_option '10' 'Install' 'Screws Tilt Adjust Support'
+  menu_option '11' 'Install' 'M600 Support'
+  menu_option '12' 'Install' 'Git Backup'
   hr
   subtitle '•CAMERA:'
-  menu_option '15' 'Install' 'Moonraker Timelapse'
-  menu_option '16' 'Install' 'Camera Settings Control'
-  menu_option '17' 'Install' 'USB Camera Support'
+  menu_option '13' 'Install' 'Moonraker Timelapse'
+  menu_option '14' 'Install' 'Camera Support'
   hr
   subtitle '•REMOTE ACCESS:'
-  menu_option '18' 'Install' 'OctoEverywhere'
-  menu_option '19' 'Install' 'Moonraker Obico'
-  menu_option '20' 'Install' 'GuppyFLO'
-  menu_option '21' 'Install' 'Mobileraker Companion'
-  menu_option '22' 'Install' 'OctoApp Companion'
-  menu_option '23' 'Install' 'SimplyPrint'
+  menu_option '15' 'Install' 'OctoEverywhere'
+  menu_option '16' 'Install' 'Moonraker Obico'
+  menu_option '17' 'Install' 'Mobileraker Companion'
   hr
   inner_line
   hr
@@ -111,38 +105,24 @@ function install_menu_k1() {
           run "install_nozzle_cleaning_fan_control" "install_menu_ui_k1"
         fi;;
       9)
-        if [ -f "$FAN_CONTROLS_FILE" ]; then
-          error_msg "Fans Control Macros are already installed!"
-        else
-          run "install_fans_control_macros" "install_menu_ui_k1"
-        fi;;
-      10)
-        if [ -f "$USEFUL_MACROS_FILE" ]; then
-          error_msg "Useful Macros are already installed!"
-        elif [ ! -f "$KLIPPER_SHELL_FILE" ]; then
-          error_msg "Klipper Gcode Shell Command is needed, please install it first!"
-        else
-          run "install_useful_macros" "install_menu_ui_k1"
-        fi;;
-      11)
         if [ -f "$SAVE_ZOFFSET_FILE" ]; then
           error_msg "Save Z-Offset Macros are already installed!"
         else
           run "install_save_zoffset_macros" "install_menu_ui_k1"
         fi;;
-      12)
+      10)
         if [ -f "$SCREWS_ADJUST_FILE" ]; then
           error_msg "Screws Tilt Adjust Support is already installed!"
         else
           run "install_screws_tilt_adjust" "install_menu_ui_k1"
         fi;;
-      13)
+      11)
         if [ -f "$M600_SUPPORT_FILE" ]; then
           error_msg "M600 Support is already installed!"
         else
           run "install_m600_support" "install_menu_ui_k1"
         fi;;
-      14)
+      12)
         if [ -f "$GIT_BACKUP_FILE" ]; then
           error_msg "Git Backup is already installed!"
         elif [ ! -f "$ENTWARE_FILE" ]; then
@@ -152,7 +132,7 @@ function install_menu_k1() {
         else
           run "install_git_backup" "install_menu_ui_k1"
         fi;;
-      15)
+      13)
         if [ -f "$TIMELAPSE_FILE" ]; then
           error_msg "Moonraker Timelapse is already installed!"
         elif [ ! -f "$ENTWARE_FILE" ]; then
@@ -160,25 +140,15 @@ function install_menu_k1() {
         else
           run "install_moonraker_timelapse" "install_menu_ui_k1"
         fi;;
-      16)
-        if [ -f "$CAMERA_SETTINGS_FILE" ]; then
-          error_msg "Camera Settings Control is already installed!"
-        elif v4l2-ctl --list-devices | grep -q 'CCX2F3299' && [ ! -f "$INITD_FOLDER"/S50usb_camera ]; then
-          error_msg "This is not compatible with the new hardware version of the camera!"
+      14)
+        if [ -f "$CAMERA_SETTINGS_FILE" ] && [ -f "$USB_CAMERA_FILE" ]; then
+          error_msg "Camera Support is already installed!"
         elif [ ! -f "$KLIPPER_SHELL_FILE" ]; then
           error_msg "Klipper Gcode Shell Command is needed, please install it first!"
         else
-          run "install_camera_settings_control" "install_menu_ui_k1"
+          run "install_camera_support" "install_menu_ui_k1"
         fi;;
-      17)
-        if [ -f "$USB_CAMERA_FILE" ]; then
-          error_msg "Camera USB Support is already installed!"
-        elif [ ! -f "$ENTWARE_FILE" ]; then
-          error_msg "Entware is needed, please install it first!"
-        else
-          run "install_usb_camera" "install_menu_ui_k1"
-        fi;;
-      18)
+      15)
         if [ ! -d "$MOONRAKER_FOLDER" ]; then
           error_msg "Moonraker and Nginx are needed, please install them first!"
         elif [ ! -d "$FLUIDD_FOLDER" ] && [ ! -d "$MAINSAIL_FOLDER" ]; then
@@ -188,7 +158,7 @@ function install_menu_k1() {
         else
           run "install_octoeverywhere" "install_menu_ui_k1"
         fi;;
-      19)
+      16)
         if [ ! -d "$MOONRAKER_FOLDER" ]; then
           error_msg "Moonraker and Nginx are needed, please install them first!"
         elif [ ! -d "$FLUIDD_FOLDER" ] && [ ! -d "$MAINSAIL_FOLDER" ]; then
@@ -198,13 +168,7 @@ function install_menu_k1() {
         else
           run "install_moonraker_obico" "install_menu_ui_k1"
         fi;;
-      20)
-        if [ ! -d "$MOONRAKER_FOLDER" ] && [ ! -d "$NGINX_FOLDER" ]; then
-          error_msg "Moonraker and Nginx are needed, please install them first!"
-        else
-          run "install_guppyflo" "install_menu_ui_k1"
-        fi;;
-      21)
+      17)
         if [ -d "$MOBILERAKER_COMPANION_FOLDER" ]; then
           error_msg "Mobileraker Companion is already installed!"
         elif [ ! -d "$MOONRAKER_FOLDER" ]; then
@@ -215,28 +179,6 @@ function install_menu_k1() {
           error_msg "Entware is needed, please install it first!"
         else
           run "install_mobileraker_companion" "install_menu_ui_k1"
-        fi;;
-      22)
-        if [ -d "$OCTOAPP_COMPANION_FOLDER" ]; then
-          error_msg "OctoApp Companion is already installed!"
-        elif [ ! -d "$MOONRAKER_FOLDER" ]; then
-          error_msg "Moonraker and Nginx are needed, please install them first!"
-        elif [ ! -d "$FLUIDD_FOLDER" ] && [ ! -d "$MAINSAIL_FOLDER" ]; then
-          error_msg "Fluidd or Mainsail is needed, please install one of them first!"
-        elif [ ! -f "$ENTWARE_FILE" ]; then
-          error_msg "Entware is needed, please install it first!"
-        else
-          run "install_octoapp_companion" "install_menu_ui_k1"
-        fi;;
-      23)
-        if grep -q "\[simplyprint\]" "$MOONRAKER_CFG"; then
-          error_msg "SimplyPrint is already installed!"
-        elif [ ! -d "$MOONRAKER_FOLDER" ]; then
-          error_msg "Moonraker and Nginx are needed, please install them first!"
-        elif [ ! -d "$FLUIDD_FOLDER" ] && [ ! -d "$MAINSAIL_FOLDER" ]; then
-          error_msg "Fluidd or Mainsail is needed, please install one of them first!"
-        else
-          run "install_simplyprint" "install_menu_ui_k1"
         fi;;
       B|b)
         clear; main_menu; break;;

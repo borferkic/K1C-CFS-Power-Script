@@ -115,6 +115,10 @@ function set_paths() {
   # M600 Support #
   M600_SUPPORT_FILE="${HS_CONFIG_FOLDER}/M600-support.cfg"
   M600_SUPPORT_URL="${HS_FILES}/macros/M600-support.cfg"
+
+  # Power Macros & Bed Coordinates Fix #
+  POWER_CONFIG_FIXES_FOLDER="${HS_FILES}/power-config"
+  POWER_CONFIG_BACKUP_FOLDER="${HS_BACKUP_FOLDER}/power-config"
   
   # Git Backup #
   GIT_BACKUP_INSTALLER="${HS_FILES}/git-backup/git-backup.sh"
@@ -143,23 +147,28 @@ function set_paths() {
   MOONRAKER_OBICO_FOLDER="${USR_DATA}/moonraker-obico"
   MOONRAKER_OBICO_URL="https://github.com/TheSpaghettiDetective/moonraker-obico.git"
   
-  # GuppyFLO #
-  GUPPYFLO_FOLDER="${USR_DATA}/guppyflo"
-  GUPPYFLO_URL="https://github.com/ballaswag/guppyflo/releases/latest/download/guppyflo_mipsle.zip"
   
   # Mobileraker Companion #
   MOBILERAKER_COMPANION_FOLDER="${USR_DATA}/mobileraker_companion"
   MOBILERAKER_COMPANION_URL="https://github.com/Clon1998/mobileraker_companion.git"
   
-  # OctoApp Companion #
-  OCTOAPP_COMPANION_FOLDER="${USR_DATA}/octoapp"
-  OCTOAPP_COMPANION_URL="https://github.com/crysxd/OctoApp-Plugin.git"
 
   
+  # Boot Animation #
+  BOOT_ANIMATION_FOLDER="/etc/boot-display"
+  BOOT_ANIMATION_URL="${HS_FILES}/boot-animation"
+  BOOT_ANIMATION_BACKUP="${HS_BACKUP_FOLDER}/boot-display-original.tar.gz"
+  BOOT_ANIMATION_MARKER="${HELPER_SCRIPT_FOLDER}/.boot_animation_installed"
+
   # Creality Web Interface #
   CREALITY_WEB_FILE="/usr/bin/web-server"
   
-  # Guppy Screen #
+  # PowerScreen #
+  POWERSCREEN_FOLDER="${USR_DATA}/powerscreen"
+  POWERSCREEN_INSTALLER_URL="https://raw.githubusercontent.com/borferkic/K1C-CFS-POWER-SCREEN/main/installer.sh"
+  POWERSCREEN_INSTALLER_TMP="/tmp/powerscreen-installer.sh"
+
+  # Guppy Screen (legacy: removal only) #
   GUPPY_SCREEN_FOLDER="${USR_DATA}/guppyscreen"
   GUPPY_SCREEN_URL1="${HS_FILES}/guppy-screen/guppy_update.cfg"
   GUPPY_SCREEN_URL2="${HS_FILES}/guppy-screen/guppy-update.sh"
