@@ -7,8 +7,8 @@ function fans_control_macros_message(){
   title 'Fans Control Macros' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}This allows to control Motherboard fan from Web interfaces   ${white}│"
-  echo -e " │ ${cyan}or with slicers.                                             ${white}│"
+  echo -e " │ ${cyan}This allows to control Motherboard fan from Web interfaces     ${white}│"
+  echo -e " │ ${cyan}or with slicers.                                               ${white}│"
   hr
   bottom_line
 }

@@ -7,11 +7,11 @@ function moonraker_nginx_message(){
   title 'Moonraker and Nginx' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}Moonraker is a Python 3 based web server that exposes APIs   ${white}│"
-  echo -e " │ ${cyan}with which client applications may use to interact with      ${white}│"
-  echo -e " │ ${cyan}Klipper firmware.                                            ${white}│"
-  echo -e " │ ${cyan}Nginx is a web server that can also be used as a reverse     ${white}│" 
-  echo -e " │ ${cyan}proxy, load balancer, mail proxy and HTTP cache.             ${white}│"
+  echo -e " │ ${cyan}Moonraker is a Python 3 based web server that exposes APIs     ${white}│"
+  echo -e " │ ${cyan}with which client applications may use to interact with        ${white}│"
+  echo -e " │ ${cyan}Klipper firmware.                                              ${white}│"
+  echo -e " │ ${cyan}Nginx is a web server that can also be used as a reverse       ${white}│"
+  echo -e " │ ${cyan}proxy, load balancer, mail proxy and HTTP cache.               ${white}│"
   hr
   bottom_line
 }

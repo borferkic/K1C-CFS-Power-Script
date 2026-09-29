@@ -7,8 +7,8 @@ function m600_support_message(){
   title 'M600 Support' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}It allows to use M600 command in your slicer to change       ${white}│"
-  echo -e " │ ${cyan}filament.                                                    ${white}│"
+  echo -e " │ ${cyan}It allows to use M600 command in your slicer to change         ${white}│"
+  echo -e " │ ${cyan}filament.                                                      ${white}│"
   hr
   bottom_line
 }

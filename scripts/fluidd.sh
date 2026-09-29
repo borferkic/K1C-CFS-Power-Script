@@ -7,9 +7,9 @@ function fluidd_message(){
   title 'Fluidd' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}Fluidd is a free and open-source Klipper Web interface for   ${white}│"
-  echo -e " │ ${cyan}managing your 3d printer.                                    ${white}│"
-  echo -e " │ ${cyan}It will be accessible on port 4408.                          ${white}│"
+  echo -e " │ ${cyan}Fluidd is a free and open-source Klipper Web interface for     ${white}│"
+  echo -e " │ ${cyan}managing your 3d printer.                                      ${white}│"
+  echo -e " │ ${cyan}It will be accessible on port 4408.                            ${white}│"
   hr
   bottom_line
 }

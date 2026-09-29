@@ -7,8 +7,8 @@ function mobileraker_companion_message(){
   title 'Mobileraker Companion' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}Mobileraker Companion allows to push notification for        ${white}│"
-  echo -e " │ ${cyan}Klipper using Moonraker for Mobileraker phone App.           ${white}│"
+  echo -e " │ ${cyan}Mobileraker Companion allows to push notification for          ${white}│"
+  echo -e " │ ${cyan}Klipper using Moonraker for Mobileraker phone App.             ${white}│"
   hr
   bottom_line
 }

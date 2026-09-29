@@ -7,8 +7,8 @@ function creality_dynamic_logos_message(){
   title 'Creality Dynamic Logos for Fluidd' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}This allows to have the dynamic Creality logos on the Fluidd ${white}│"
-  echo -e " │ ${cyan}Web interface.                                               ${white}│"
+  echo -e " │ ${cyan}This allows to have the dynamic Creality logos on the Fluidd   ${white}│"
+  echo -e " │ ${cyan}Web interface.                                                 ${white}│"
   hr
   bottom_line
 }

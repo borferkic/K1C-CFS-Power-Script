@@ -10,9 +10,9 @@ function camera_support_message(){
   title 'Camera Support' "${yellow}"
   inner_line
   hr
-  echo -e " │ ${cyan}Installs the macros to adjust camera settings (brightness,   ${white}│"
-  echo -e " │ ${cyan}saturation, contrast, etc...) and, if you want, USB Camera   ${white}│"
-  echo -e " │ ${cyan}Support to use a third-party camera from the USB port.       ${white}│"
+  echo -e " │ ${cyan}Installs the macros to adjust camera settings (brightness,     ${white}│"
+  echo -e " │ ${cyan}saturation, contrast, etc...) and, if you want, USB Camera     ${white}│"
+  echo -e " │ ${cyan}Support to use a third-party camera from the USB port.         ${white}│"
   hr
   bottom_line
 }
