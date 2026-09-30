@@ -2,6 +2,11 @@
 
 All notable changes to the CFS Power Script. Each release on GitHub carries the entry of its version.
 
+## v1.1.1
+
+### Fixed
+- **Power Macros:** the manual filament macros could not be called from the console (`Unknown command: K1`), because Klipper reads a letter followed by a digit at the start of a name as a G-code command. They are now `PS_NOCFS_UNLOAD_FILAMENT`, `PS_NOCFS_LOAD_FILAMENT` and `PS_NOCFS_CLEAN_BRUSH`. Reapply *Power Macros* from the Install menu to get the new names.
+
 ## v1.1.0
 
 ### Added
