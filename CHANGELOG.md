@@ -2,6 +2,11 @@
 
 All notable changes to the CFS Power Script. Each release on GitHub carries the entry of its version.
 
+## v1.1.3
+
+### Changed
+- **Power Macros:** the descriptions and the internal comments of the manual filament macros (`PS_NOCFS_UNLOAD_FILAMENT`, `PS_NOCFS_LOAD_FILAMENT`, `PS_NOCFS_CLEAN_BRUSH`) are now in English. No behavior change.
+
 ## v1.1.2
 
 ### Changed
