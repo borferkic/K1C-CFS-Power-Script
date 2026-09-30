@@ -7,9 +7,6 @@ All notable changes to the CFS Power Script. Each release on GitHub carries the 
 ### Added
 - **Reapply installed modules:** *Power Macros* (Install 6), *Bed Coordinates Fix* (Install 7) and *Creality Dynamic Logos for Fluidd* (Customize 5) now offer to **reapply** when they are already installed, instead of just saying "already installed". Useful to refresh the configuration after a script update without uninstalling.
 
-### Removed
-- Dead Guppy Screen code: `scripts/guppy_screen.sh`, `files/guppy-screen/`, the unused upstream `README.original.md`, the `GUPPY_*` variables, the legacy Guppy lines in Information and Remove, and the `guppyscreen` entry in `moonraker.asvc`.
-
 ## v1.0.9
 
 ### Fixed
