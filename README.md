@@ -64,16 +64,6 @@ Guilouz, adapted to the K1C and to the CFS firmware.
 
    After the first run, the script can also be started with the `helper` command.
 
-### Suggested order on a clean printer
-
-1. `[Install]` → *Moonraker and Nginx*, then *Fluidd* (or *Mainsail*).
-2. `[Install]` → *Klipper Gcode Shell Command* (needed by the next steps).
-3. `[Install]` → *Power Macros* and *Bed Coordinates Fix*.
-4. `[Customize & PowerScreen]` → *Install PowerScreen*.
-5. Optional modules from `[Install]` (KAMP, M600 Support, Camera Support...).
-
-The order of KAMP, *Power Macros* and *Bed Coordinates Fix* does not matter.
-
 ## Screenshots
 
 <p align="center">
