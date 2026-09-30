@@ -2,6 +2,11 @@
 
 All notable changes to the CFS Power Script. Each release on GitHub carries the entry of its version.
 
+## v1.1.4
+
+### Changed
+- **Power Macros:** the last Spanish texts in the configuration are now in English: the inherited comments of `gcode_macro.cfg` and the value comments of `box.cfg`. No behavior change; reapply *Power Macros* from the Install menu to get them.
+
 ## v1.1.3
 
 ### Changed
