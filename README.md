@@ -7,10 +7,6 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-blue?style=flat-square" alt="License: GPL-3.0" /></a>
 </div>
 
-> [!WARNING]
-> **This project is still a work in progress. Use it at your own risk.**
-> If you don't know what you're doing, don't use this script.
-
 ## About
 
 CFS Power Script is a helper script for the **Creality K1C** running the
