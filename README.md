@@ -74,6 +74,27 @@ Guilouz, adapted to the K1C and to the CFS firmware.
 
 The order of KAMP, *Power Macros* and *Bed Coordinates Fix* does not matter.
 
+## Screenshots
+
+<p align="center">
+  <img src="docs/screenshots/main-menu.png" alt="Main menu" />
+</p>
+
+<table>
+  <tr>
+    <td align="center"><b>Install</b><br /><img src="docs/screenshots/install-menu.png" alt="Install menu" width="100%" /></td>
+    <td align="center"><b>Information</b><br /><img src="docs/screenshots/information-menu.png" alt="Information menu" width="100%" /></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Customize &amp; PowerScreen</b><br /><img src="docs/screenshots/customize-menu.png" alt="Customize and PowerScreen menu" width="100%" /></td>
+    <td align="center"><b>Tools</b><br /><img src="docs/screenshots/tools-menu.png" alt="Tools menu" width="100%" /></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Backup &amp; Restore</b><br /><img src="docs/screenshots/backup-menu.png" alt="Backup and Restore menu" width="100%" /></td>
+    <td></td>
+  </tr>
+</table>
+
 ## Modules
 
 ### PowerScreen
@@ -193,10 +214,6 @@ from Fluidd or Mainsail (**Settings → Software Updates**).
 
 ## Menus
 
-<p align="center">
-  <img src="docs/screenshots/main-menu.png" alt="Main menu" />
-</p>
-
 | Menu | Content |
 |---|---|
 | `[Install]` | 1 Moonraker and Nginx, 2 Fluidd, 3 Mainsail, 4 Entware, 5 Klipper Gcode Shell Command, 6 Power Macros, 7 Bed Coordinates Fix, 8 KAMP, 9 Buzzer Support, 10 Nozzle Cleaning Fan Control, 11 Save Z-Offset Macros, 12 Screws Tilt Adjust Support, 13 M600 Support, 14 Git Backup, 15 Moonraker Timelapse, 16 Camera Support, 17 OctoEverywhere, 18 Moonraker Obico, 19 Mobileraker Companion |
@@ -205,23 +222,6 @@ from Fluidd or Mainsail (**Settings → Software Updates**).
 | `[Backup & Restore]` | Klipper configuration files and Moonraker database |
 | `[Tools]` | Klipper configuration updates, printing G-code files from folders, camera settings, service restarts, Entware updates, cache and log cleanup, firmware restore and factory reset |
 | `[Information]` | Installed components and their status |
-
-### Screenshots
-
-<table>
-  <tr>
-    <td align="center"><b>Install</b><br /><img src="docs/screenshots/install-menu.png" alt="Install menu" width="100%" /></td>
-    <td align="center"><b>Information</b><br /><img src="docs/screenshots/information-menu.png" alt="Information menu" width="100%" /></td>
-  </tr>
-  <tr>
-    <td align="center"><b>Customize &amp; PowerScreen</b><br /><img src="docs/screenshots/customize-menu.png" alt="Customize and PowerScreen menu" width="100%" /></td>
-    <td align="center"><b>Tools</b><br /><img src="docs/screenshots/tools-menu.png" alt="Tools menu" width="100%" /></td>
-  </tr>
-  <tr>
-    <td align="center"><b>Backup &amp; Restore</b><br /><img src="docs/screenshots/backup-menu.png" alt="Backup and Restore menu" width="100%" /></td>
-    <td></td>
-  </tr>
-</table>
 
 ## Known issues
 
