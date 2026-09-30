@@ -2,6 +2,11 @@
 
 All notable changes to the CFS Power Script. Each release on GitHub carries the entry of its version.
 
+## v1.1.2
+
+### Changed
+- **Power Macros:** the alert messages of the manual filament macros are now in English (`The printer must be homed before loading filament.` and `PS_NOCFS_CLEAN_BRUSH: The toolhead must be at X148.5 Y225.`). Reapply *Power Macros* from the Install menu to get them.
+
 ## v1.1.1
 
 ### Fixed
