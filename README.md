@@ -27,7 +27,7 @@ Guilouz, adapted to the K1C and to the CFS firmware.
 - **KAMP adapted to the CFS.** Adaptive bed mesh and purge line that respect the CFS purge routine (see [KAMP and the CFS purge](#kamp-and-the-cfs-purge)).
 - **Custom boot animation.** A lightning bolt strikes the Creality logo, the Power Script logo flashes in, "POWER" assembles and "SCRIPT" is typed, with the "LOADING..." text at the top right. Applied automatically the first time the script runs, with the original animation backed up.
 - **Camera Support.** Brightness, saturation and contrast macros, plus optional USB camera support, in a single entry.
-- **Web interfaces and remote access.** Moonraker and Nginx, Fluidd, Mainsail, and OctoEverywhere, Moonraker Obico or Mobileraker Companion for remote monitoring and notifications.
+- **Web interfaces and remote access.** Moonraker and Nginx, Fluidd (with the Power Script theme by default), Mainsail, and OctoEverywhere, Moonraker Obico or Mobileraker Companion for remote monitoring and notifications.
 - **Print and printer utilities.** Moonraker Timelapse, Save Z-Offset Macros, Screws Tilt Adjust, Buzzer Support, Nozzle Cleaning Fan Control, Git Backup, Entware, and Klipper and Moonraker backup and restore.
 - **Safe by design.** Every module can be removed, dependencies are checked before installing, and configuration files are backed up before they are replaced.
 
@@ -187,6 +187,22 @@ on the official Creality boot image), and selects it. It adds the theme to the F
 without replacing it, so the themes of your Fluidd version are kept. If a Fluidd update removes it, the
 script adds it back the next time it starts. The old *Creality V1* and *Creality V2* themes are replaced by
 this one. Fluidd needs Moonraker running to remember the selected theme; if it is not running, pick Creality in the
+Fluidd theme settings. Close the Fluidd tabs and clear the browser cache if the theme does not change.
+
+### Power Script Theme for Fluidd
+
+```text
+[Customize & PowerScreen] Menu → 6) Install Power Script Theme for Fluidd
+```
+
+Adds the **Power Script** theme to Fluidd and selects it: the Power Script logo in the top bar, the Power Script green
+(`#4ADE80`) as the accent color and a faint Power Script logo as a watermark over the page background. **It is applied
+automatically every time you install Fluidd from this script**, so it is the default theme; choose another one in the
+Fluidd theme settings if you prefer. The theme is added to the Fluidd `config.json` without replacing it, so the themes of your Fluidd
+version and the Creality one are kept. If a Fluidd update removes it, the script adds it back the next time it starts.
+
+The watermark is a `custom.css` file in the `.theme` folder of the Klipper configuration. Delete that file to remove
+only the watermark. Fluidd needs Moonraker running to remember the selected theme; if it is not running, pick Power Script in the
 Fluidd theme settings. Close the Fluidd tabs and clear the browser cache if the theme does not change.
 
 ### Camera Support
