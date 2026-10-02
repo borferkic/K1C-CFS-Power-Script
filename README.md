@@ -25,7 +25,7 @@ Guilouz, adapted to the K1C and to the CFS firmware.
 - **Power Macros.** Installs the Power Script `gcode_macro.cfg`, `printer_params.cfg` and `box.cfg` (your originals are backed up) with the extra `STRESS_TEST` (motion stress test), `PID_HOTEND` (hotend PID calibration) and `RELOAD_CAMERA` (restart the camera service) macros.
 - **Manual filament change with `M600`.** The CFS firmware has no `M600`; this module adds it, keeps the CFS `RESUME` untouched and opens the PowerScreen **MANUAL FILAMENT CHANGE** menu (unload, load, resume, stop).
 - **KAMP adapted to the CFS.** Adaptive bed mesh and purge line that respect the CFS purge routine (see [KAMP and the CFS purge](#kamp-and-the-cfs-purge)).
-- **Custom boot animation.** A lightning bolt strikes the Creality logo, the Power Script logo flashes in, "POWER" assembles and "SCRIPT" is typed, with a looping loader. Applied automatically the first time the script runs, with the original animation backed up.
+- **Custom boot animation.** A lightning bolt strikes the Creality logo, the Power Script logo flashes in, "POWER" assembles and "SCRIPT" is typed, with the "LOADING..." text at the top right. Applied automatically the first time the script runs, with the original animation backed up.
 - **Camera Support.** Brightness, saturation and contrast macros, plus optional USB camera support, in a single entry.
 - **Web interfaces and remote access.** Moonraker and Nginx, Fluidd, Mainsail, and OctoEverywhere, Moonraker Obico or Mobileraker Companion for remote monitoring and notifications.
 - **Print and printer utilities.** Moonraker Timelapse, Save Z-Offset Macros, Screws Tilt Adjust, Buzzer Support, Nozzle Cleaning Fan Control, Git Backup, Entware, and Klipper and Moonraker backup and restore.
@@ -75,7 +75,7 @@ Guilouz, adapted to the K1C and to the CFS firmware.
 </p>
 
 A lightning bolt strikes the Creality logo and, in a flash, the Power Script logo appears. "POWER" assembles
-letter by letter, the bolt glows twice, "SCRIPT" is typed and a loader keeps looping until the printer is ready.
+letter by letter, the bolt glows twice, "SCRIPT" is typed and "LOADING..." keeps cycling its dots at the top right until the printer is ready.
 
 ## Screenshots
 
