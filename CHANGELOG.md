@@ -2,6 +2,11 @@
 
 All notable changes to the CFS Power Script. Each release on GitHub carries the entry of its version.
 
+## v1.1.8
+
+### Changed
+- **Boot animation:** the final "LOADING..." no longer lasts as long: its dots cycle twice instead of six times, so the whole animation goes from about 11.5 to about 7 seconds. It is applied once on the next run of the script, also on printers that already had the previous animation.
+
 ## v1.1.7
 
 ### Changed
