@@ -159,7 +159,7 @@ function set_paths() {
   BOOT_ANIMATION_FOLDER="/etc/boot-display"
   BOOT_ANIMATION_URL="${HS_FILES}/boot-animation"
   BOOT_ANIMATION_BACKUP="${HS_BACKUP_FOLDER}/boot-display-original.tar.gz"
-  BOOT_ANIMATION_MARKER="${HELPER_SCRIPT_FOLDER}/.boot_animation_installed_v3"
+  BOOT_ANIMATION_MARKER="${HELPER_SCRIPT_FOLDER}/.boot_animation_installed_v4"
 
   # Creality Web Interface #
   CREALITY_WEB_FILE="/usr/bin/web-server"

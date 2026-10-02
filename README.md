@@ -75,7 +75,7 @@ Guilouz, adapted to the K1C and to the CFS firmware.
 </p>
 
 A lightning bolt strikes the Creality logo and, in a flash, the Power Script logo appears. "POWER" assembles
-letter by letter, the bolt glows twice, "SCRIPT" is typed and "LOADING..." keeps cycling its dots at the top right until the printer is ready.
+letter by letter, the bolt glows twice, "SCRIPT" is typed and "LOADING..." cycles its dots at the top right for a couple of seconds. The whole animation lasts about 7 seconds.
 
 ## Screenshots
 
