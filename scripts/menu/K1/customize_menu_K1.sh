@@ -14,6 +14,7 @@ function customize_menu_ui_k1() {
   menu_option '4' 'Restore' 'Creality Web Interface'
   hr
   menu_option '5' 'Install' 'Creality Dynamic Logos for Fluidd'
+  menu_option '6' 'Install' 'Power Script Theme for Fluidd'
   hr
   inner_line
   hr
@@ -74,6 +75,14 @@ function customize_menu_k1() {
           run "reapply_creality_dynamic_logos" "customize_menu_ui_k1"
         else
           run "install_creality_dynamic_logos" "customize_menu_ui_k1"
+        fi;;
+      6)
+        if [ ! -d "$FLUIDD_FOLDER" ]; then
+          error_msg "Fluidd is needed, please install it first!"
+        elif [ -f "$FLUIDD_THEME_LOGO_FILE" ]; then
+          run "reapply_power_script_theme" "customize_menu_ui_k1"
+        else
+          run "install_power_script_theme" "customize_menu_ui_k1"
         fi;;
       B|b)
         clear; main_menu; break;;

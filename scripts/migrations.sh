@@ -140,6 +140,19 @@ function migrate_fluidd_logos(){
   fi
 }
 
+# A Fluidd update replaces config.json and the Power Script theme disappears.
+# Add the preset back (the selected theme is not changed). The stylesheet and the
+# logo are copied again too, in case an update removed them.
+function migrate_fluidd_power_theme(){
+  [ -f "$FLUIDD_THEME_LOGO_FILE" ] || return 0
+  [ -f "$FLUIDD_FOLDER/config.json" ] || return 0
+  if ! jq -e '[.themePresets[]? | select(.name == "Power Script")] | length > 0' "$FLUIDD_FOLDER/config.json" > /dev/null 2>&1; then
+    echo -e "${white}Info: Adding the Power Script theme to the Fluidd config.json file..."
+    add_power_script_theme_preset || true
+  fi
+  [ -f "$FLUIDD_CSS_FOLDER/custom.css" ] || { mkdir -p "$FLUIDD_CSS_FOLDER" && cp "$FLUIDD_THEME_CSS_URL" "$FLUIDD_CSS_FOLDER"/custom.css; } || true
+}
+
 function run_migrations(){
   migrate_update_manager_entry
   migrate_split_power_config
@@ -147,4 +160,5 @@ function run_migrations(){
   migrate_bed_fix_wipe
   migrate_bed_fix_mesh
   migrate_fluidd_logos
+  migrate_fluidd_power_theme
 }

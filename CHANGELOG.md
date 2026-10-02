@@ -2,6 +2,11 @@
 
 All notable changes to the CFS Power Script. Each release on GitHub carries the entry of its version.
 
+## v1.1.6
+
+### Added
+- **Power Script Theme for Fluidd:** new Fluidd theme with the Power Script logo, the Power Script green and a faint logo watermark over the page background (`custom.css` in the `.theme` folder of the Klipper configuration). It is applied and selected by default every time Fluidd is installed from the script, and it can be installed or reapplied from *Customize & PowerScreen* → option 6. The Creality theme and the other Fluidd themes are kept, and the theme is added back after a Fluidd update that replaces `config.json`.
+
 ## v1.1.5
 
 ### Changed

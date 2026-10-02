@@ -45,6 +45,8 @@ function install_fluidd(){
         echo -e "Info: Restarting Moonraker service..."
         stop_moonraker
         start_moonraker
+        echo -e "Info: Applying the Power Script theme (default for Fluidd)..."
+        apply_power_script_theme installed
         ok_msg "Fluidd has been installed successfully!"
         echo -e "   You can now connect to Fluidd Web Interface with ${yellow}http://$(check_ipaddress):4408${white}"
         return;;
@@ -67,6 +69,7 @@ function remove_fluidd(){
         echo -e "${white}"
         echo -e "Info: Removing files..."
         rm -rf "$FLUIDD_FOLDER"
+        remove_power_script_theme_css
         if grep -q "\[update_manager fluidd\]" "$MOONRAKER_CFG" ; then
           echo -e "Info: Disabling Fluidd configurations for Update Manager..."
           sed -i '/^\[update_manager fluidd\]/,/^\s*$/ s/^\(\s*\)\([^#]\)/#\1\2/' "$MOONRAKER_CFG"
