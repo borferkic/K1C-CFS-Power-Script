@@ -174,11 +174,9 @@ function set_paths() {
   FLUIDD_LOGO_FILE="${USR_DATA}/fluidd/logo_creality_v2.svg"
   FLUIDD_LOGO_URL2="${HS_FILES}/fluidd-logos/logo_creality_v2.svg"
 
-  # Power Script Theme for Fluidd #
+  # PowerUI Theme for Fluidd #
   FLUIDD_THEME_LOGO_FILE="${USR_DATA}/fluidd/logo_power_script.svg"
   FLUIDD_THEME_LOGO_URL="${HS_FILES}/fluidd-theme/logo_power_script.svg"
-  FLUIDD_THEME_CSS_URL="${HS_FILES}/fluidd-theme/custom.css"
-  FLUIDD_CSS_FOLDER="${KLIPPER_CONFIG_FOLDER}/.theme"
 
 }
 
