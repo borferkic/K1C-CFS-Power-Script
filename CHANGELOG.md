@@ -2,6 +2,12 @@
 
 All notable changes to the CFS Power Script. Each release on GitHub carries the entry of its version.
 
+## v1.1.5
+
+### Changed
+- **Boot animation:** new Power Script boot animation. A lightning bolt strikes the Creality logo, the Power Script logo flashes in, "POWER" assembles, the bolt glows twice, "SCRIPT" is typed and a looping loader replaces "LOADING...". It is applied once on the next run of the script, also on printers that already had the previous animation (the original Creality one stays backed up).
+- **README:** new Power Script logo in the title and a boot animation preview before the screenshots.
+
 ## v1.1.4
 
 ### Changed
