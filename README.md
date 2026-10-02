@@ -1,4 +1,8 @@
 <div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/power-script-logo-dark.svg" />
+    <img src="docs/images/power-script-logo-light.svg" alt="CFS Power Script" width="460" />
+  </picture>
   <h1>CFS Power Script for the Creality K1C</h1>
 
   <a href="https://github.com/borferkic/K1C-CFS-Power-Script/releases/latest"><img src="https://img.shields.io/github/v/release/borferkic/K1C-CFS-Power-Script?style=flat-square&color=2ea44f" alt="Latest release" /></a>
@@ -21,7 +25,7 @@ Guilouz, adapted to the K1C and to the CFS firmware.
 - **Power Macros.** Installs the Power Script `gcode_macro.cfg`, `printer_params.cfg` and `box.cfg` (your originals are backed up) with the extra `STRESS_TEST` (motion stress test), `PID_HOTEND` (hotend PID calibration) and `RELOAD_CAMERA` (restart the camera service) macros.
 - **Manual filament change with `M600`.** The CFS firmware has no `M600`; this module adds it, keeps the CFS `RESUME` untouched and opens the PowerScreen **MANUAL FILAMENT CHANGE** menu (unload, load, resume, stop).
 - **KAMP adapted to the CFS.** Adaptive bed mesh and purge line that respect the CFS purge routine (see [KAMP and the CFS purge](#kamp-and-the-cfs-purge)).
-- **Custom boot animation.** Creality logo, "POWER SCRIPT" and "LOADING...", applied automatically the first time the script runs, with the original animation backed up.
+- **Custom boot animation.** A lightning bolt strikes the Creality logo, the Power Script logo flashes in, "POWER" assembles and "SCRIPT" is typed, with a looping loader. Applied automatically the first time the script runs, with the original animation backed up.
 - **Camera Support.** Brightness, saturation and contrast macros, plus optional USB camera support, in a single entry.
 - **Web interfaces and remote access.** Moonraker and Nginx, Fluidd, Mainsail, and OctoEverywhere, Moonraker Obico or Mobileraker Companion for remote monitoring and notifications.
 - **Print and printer utilities.** Moonraker Timelapse, Save Z-Offset Macros, Screws Tilt Adjust, Buzzer Support, Nozzle Cleaning Fan Control, Git Backup, Entware, and Klipper and Moonraker backup and restore.
@@ -63,6 +67,15 @@ Guilouz, adapted to the K1C and to the CFS firmware.
    ```
 
    After the first run, the script can also be started with the `helper` command.
+
+## Boot animation
+
+<p align="center">
+  <img src="docs/images/boot-animation.gif" alt="Power Script boot animation" width="480" />
+</p>
+
+A lightning bolt strikes the Creality logo and, in a flash, the Power Script logo appears. "POWER" assembles
+letter by letter, the bolt glows twice, "SCRIPT" is typed and a loader keeps looping until the printer is ready.
 
 ## Screenshots
 
@@ -190,8 +203,7 @@ and, when you answer yes, USB Camera Support to use a third-party USB camera
 ### Boot animation
 
 The first time the script runs it replaces the boot animation in
-`/etc/boot-display` with the Power Script one (Creality logo, "POWER SCRIPT" and
-"LOADING..."). The original animation is saved in
+`/etc/boot-display` with the Power Script one (see the preview above). The original animation is saved in
 `/usr/data/helper-script-backup/boot-display-original.tar.gz`. There is no menu
 entry: if a firmware update restores the Creality animation, clone the script
 again to apply it again.
