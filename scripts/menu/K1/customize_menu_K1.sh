@@ -14,7 +14,7 @@ function customize_menu_ui_k1() {
   menu_option '4' 'Restore' 'Creality Web Interface'
   hr
   menu_option '5' 'Install' 'Creality Dynamic Logos for Fluidd'
-  menu_option '6' 'Install' 'Power Script Theme for Fluidd'
+  menu_option '6' 'Install' 'PowerUI Theme for Fluidd'
   hr
   inner_line
   hr

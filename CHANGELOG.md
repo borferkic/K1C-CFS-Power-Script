@@ -2,6 +2,11 @@
 
 All notable changes to the CFS Power Script. Each release on GitHub carries the entry of its version.
 
+## v1.1.7
+
+### Changed
+- **PowerUI Theme for Fluidd:** the theme is now called **PowerUI** (it was "Power Script" in 1.1.6; the old preset is replaced). The logo watermark now uses Fluidd's own *background logo* setting, which draws the logo of the selected theme over the page, as the Creality theme does. The `custom.css` file in the `.theme` folder is no longer used or created, so the theme no longer depends on that folder. Reinstall it from *Customize & PowerScreen* option 6 to turn the background logo on.
+
 ## v1.1.6
 
 ### Added
