@@ -2,6 +2,11 @@
 
 All notable changes to the CFS Power Script. Each release on GitHub carries the entry of its version.
 
+## v1.1.9
+
+### Fixed
+- **PowerScreen removal message:** removing PowerScreen from the menu showed the same warning as installing it ("the following will be disabled"). It now shows its own message: what is restored (the Creality screen and its services: Creality Cloud, Creality Print LAN connection and OTA firmware updates) and what is removed (PowerScreen, its configuration and its Moonraker Update Manager entry).
+
 ## v1.1.8
 
 ### Changed
