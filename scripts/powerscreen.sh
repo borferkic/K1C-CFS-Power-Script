@@ -24,6 +24,27 @@ function powerscreen_message(){
   bottom_line
 }
 
+function powerscreen_remove_message(){
+  top_line
+  title 'PowerScreen' "${yellow}"
+  inner_line
+  hr
+  echo -e " │ ${cyan}PowerScreen will be removed from this printer.                 ${white}│"
+  hr
+  echo -e " │ ${white}The following will be ${green}RESTORED${white}:                                ${white}│"
+  echo -e " │ ${white} - Creality screen (Monitor, display-server)                   ${white}│"
+  echo -e " │ ${white} - Creality services: Creality Cloud, Creality Print LAN       ${white}│"
+  echo -e " │ ${white}   connection and OTA firmware updates                         ${white}│"
+  hr
+  echo -e " │ ${white}The following will be ${darkred}REMOVED${white}:                                 ${white}│"
+  echo -e " │ ${white} - PowerScreen and its configuration                           ${white}│"
+  echo -e " │ ${white} - Its entry in the Moonraker Update Manager                   ${white}│"
+  hr
+  echo -e " │ ${white}Moonraker and Klipper will be restarted.                       ${white}│"
+  hr
+  bottom_line
+}
+
 function install_powerscreen(){
   powerscreen_message
   local yn
@@ -69,7 +90,7 @@ function install_powerscreen(){
 }
 
 function remove_powerscreen(){
-  powerscreen_message
+  powerscreen_remove_message
   local yn
   while true; do
     remove_msg "PowerScreen" yn
