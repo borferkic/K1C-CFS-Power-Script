@@ -26,7 +26,7 @@ Guilouz, adapted to the K1C and to the CFS firmware.
 - **Manual filament change with `M600`.** The CFS firmware has no `M600`; this module adds it, keeps the CFS `RESUME` untouched and opens the PowerScreen **MANUAL FILAMENT CHANGE** menu (unload, load, resume, stop).
 - **KAMP adapted to the CFS.** Adaptive bed mesh and purge line that respect the CFS purge routine (see [KAMP and the CFS purge](#kamp-and-the-cfs-purge)).
 - **Custom boot animation.** A lightning bolt strikes the Creality logo, the Power Script logo flashes in, "POWER" assembles and "SCRIPT" is typed, with the "LOADING..." text at the top right. Applied automatically the first time the script runs, with the original animation backed up.
-- **CFS Diagnostics and USB auto-recovery.** The CFS box sometimes shows as disconnected because the USB-serial adapter drops or its read channel stalls, and the Creality firmware does not recover. A small service logs every drop with its probable cause and, when the box stays disconnected, resets the USB adapter by software (never while printing).
+- **CFS Diagnostics and USB auto-recovery (beta).** The random disconnection of the CFS is a critical fault of the printer with the CFS; this module records it and tries to recover from it. The CFS box sometimes shows as disconnected because the USB-serial adapter drops or its read channel stalls, and the Creality firmware does not recover. A small service logs every drop with its probable cause and, when the box stays disconnected, resets the USB adapter by software (never while printing).
 - **Camera Support.** Brightness, saturation and contrast macros, plus optional USB camera support, in a single entry.
 - **Web interfaces and remote access.** Moonraker and Nginx, Fluidd (with the PowerUI theme by default), Mainsail, and OctoEverywhere, Moonraker Obico or Mobileraker Companion for remote monitoring and notifications.
 - **Print and printer utilities.** Moonraker Timelapse, Save Z-Offset Macros, Screws Tilt Adjust, Buzzer Support, Nozzle Cleaning Fan Control, Git Backup, Entware, and Klipper and Moonraker backup and restore.
@@ -218,7 +218,9 @@ and, when you answer yes, USB Camera Support to use a third-party USB camera
 (needs Entware). Cameras with the new hardware always get the USB service.
 *Klipper Gcode Shell Command* is required.
 
-### CFS Diagnostics
+### CFS Diagnostics (beta)
+
+> **Critical fault and beta status.** The random disconnection of the CFS box is a critical fault of the K1C with the CFS: the print can fail and the box may only come back after unplugging the USB cable. This module and its reconnection script were created because of it. They are in **beta**: the USB reset is proven by hand and in simulation, and it still has to be confirmed on real drops. Use the logs to report what happens.
 
 ```text
 [Install] Menu → 20) Install CFS Diagnostics
