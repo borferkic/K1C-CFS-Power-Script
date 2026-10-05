@@ -78,12 +78,21 @@ function migrate_bed_fix_wipe(){
     awk '/^\[/ { in_p = ($0 ~ /^\[prtouch_v[0-9]+\]/) }
          in_p && /^clr_noz_start_y[ \t]*:/ { print }' "$source" >> "$BED_FIX_BACKUP_FOLDER/prtouch.orig"
   fi
-  if awk -v x="$BED_FIX_WIPE_X" -v y="$BED_FIX_WIPE_Y" -v len="$BED_FIX_WIPE_LEN_X" '
+  # Backups written before the wipe speed was managed do not have its original value.
+  if ! grep -q "^clr_xy_quick_spd" "$BED_FIX_BACKUP_FOLDER/prtouch.orig"; then
+    local spd_source="$PRINTER_CFG"
+    [ -f "$BED_FIX_BACKUP_FOLDER/printer.cfg.orig" ] && spd_source="$BED_FIX_BACKUP_FOLDER/printer.cfg.orig"
+    awk '/^\[/ { in_p = ($0 ~ /^\[prtouch_v[0-9]+\]/) }
+         in_p && /^clr_xy_quick_spd[ \t]*:/ { print }' "$spd_source" >> "$BED_FIX_BACKUP_FOLDER/prtouch.orig"
+  fi
+  if awk -v x="$BED_FIX_WIPE_X" -v y="$BED_FIX_WIPE_Y" -v len="$BED_FIX_WIPE_LEN_X" -v spd="$BED_FIX_WIPE_SPEED" '
        /^\[/ { in_p = ($0 ~ /^\[prtouch_v[0-9]+\]/) }
        in_p && $0 ~ ("^clr_noz_start_x[ \t]*:[ \t]*" x "[ \t]*$") { a = 1 }
        in_p && $0 ~ ("^clr_noz_start_y[ \t]*:[ \t]*" y "[ \t]*$") { c = 1 }
        in_p && $0 ~ ("^clr_noz_len_x[ \t]*:[ \t]*" len "[ \t]*$") { b = 1 }
-       END { exit !(a && b && c) }' "$PRINTER_CFG"; then
+       in_p && /^clr_xy_quick_spd[ \t]*:/ { has_spd = 1 }
+       in_p && $0 ~ ("^clr_xy_quick_spd[ \t]*:[ \t]*" spd "[ \t]*$") { d = 1 }
+       END { exit !(a && b && c && (d || !has_spd)) }' "$PRINTER_CFG"; then
     return 0
   fi
   echo -e "${white}Info: Applying the nozzle wipe position of the Bed Coordinates Fix..."

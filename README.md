@@ -26,6 +26,7 @@ Guilouz, adapted to the K1C and to the CFS firmware.
 - **Manual filament change with `M600`.** The CFS firmware has no `M600`; this module adds it, keeps the CFS `RESUME` untouched and opens the PowerScreen **MANUAL FILAMENT CHANGE** menu (unload, load, resume, stop).
 - **KAMP adapted to the CFS.** Adaptive bed mesh and purge line that respect the CFS purge routine (see [KAMP and the CFS purge](#kamp-and-the-cfs-purge)).
 - **Custom boot animation.** A lightning bolt strikes the Creality logo, the Power Script logo flashes in, "POWER" assembles and "SCRIPT" is typed, with the "LOADING..." text at the top right. Applied automatically the first time the script runs, with the original animation backed up.
+- **CFS Diagnostics and USB auto-recovery.** The CFS box sometimes shows as disconnected because the USB-serial adapter drops or its read channel stalls, and the Creality firmware does not recover. A small service logs every drop with its probable cause and, when the box stays disconnected, resets the USB adapter by software (never while printing).
 - **Camera Support.** Brightness, saturation and contrast macros, plus optional USB camera support, in a single entry.
 - **Web interfaces and remote access.** Moonraker and Nginx, Fluidd (with the PowerUI theme by default), Mainsail, and OctoEverywhere, Moonraker Obico or Mobileraker Companion for remote monitoring and notifications.
 - **Print and printer utilities.** Moonraker Timelapse, Save Z-Offset Macros, Screws Tilt Adjust, Buzzer Support, Nozzle Cleaning Fan Control, Git Backup, Entware, and Klipper and Moonraker backup and restore.
@@ -122,7 +123,8 @@ updates) are **disabled**. It then asks which build to install (`stable` or
 Installs the Power Script macros and parameters:
 
 - **Replaces** `gcode_macro.cfg`, `printer_params.cfg` and `box.cfg` with the Power Script versions, and adds the `[include gcode_macro.cfg]`, `[include printer_params.cfg]` and `[include box.cfg]` lines to `printer.cfg` when they are missing. The versions add the `STRESS_TEST` (motion stress test), `PID_HOTEND` (hotend PID calibration) and `RELOAD_CAMERA` (restart the camera service) macros.
-- Keeps `START_PRINT` disabled when KAMP is installed, because KAMP provides its own.
+- - Sets the CFS purge to a single 100 mm purge per color change in `box.cfg` (`box_first_clean_length`, `box_need_clean_length`, `box_need_clean_length_max` and every `Tn_extrude` at 100), instead of the Creality 140 mm purge done twice. With OrcaSlicer, a flushing volume of 240 mm³ gives about 100 mm; the slicer value decides the length of each color change, and Klipper refuses to start if `box_need_clean_length` is larger than `box_first_clean_length`.
+Keeps `START_PRINT` disabled when KAMP is installed, because KAMP provides its own.
 
 Requirement: *Klipper Gcode Shell Command* must be installed (`RELOAD_CAMERA` needs it).
 Before replacing anything, the first copy of each file is saved in
@@ -148,7 +150,7 @@ Before replacing anything, the first copy of each file is saved in
 | `[stepper_y]` | `position_endstop`, `position_min` | `-0.5` | Y origin and lower limit |
 | `[stepper_y]` | `position_max` | `227.5` | Y travel, enough to reach the brush area |
 | `[stepper_y]` | `gcode_position_max` | `220` | Maximum Y the slicer can use (the full depth of the bed) |
-| `[prtouch_v2]` | `clr_noz_start_x`, `clr_noz_start_y`, `clr_noz_len_x` | `59`, `223`, `36` | Nozzle wipe on the brush: from X 59 to X 95 at Y 223. `clr_noz_start_y` is left as a single value: the firmware only uses the first of its `#`-separated values (`223#205#210#223`), so the rest is removed |
+| `[prtouch_v2]` | `clr_noz_start_x`, `clr_noz_start_y`, `clr_noz_len_x`, `clr_xy_quick_spd` | `59`, `223`, `25`, `70` | Nozzle wipe on the brush: from X 59 to X 84 at Y 223, at 70 mm/s (the firmware default is 100). `clr_noz_start_y` is left as a single value: the firmware only uses the first of its `#`-separated values (`223#205#210#223`), so the rest is removed |
 | `[bed_mesh]` | `mesh_min`, `mesh_max` | `1,1`, `220,215` | Area probed by the bed mesh: X from 1 to 220 and Y from 1 to 215. Y stops at 215 because the toolhead collides beyond it, so the mesh is more complete without reaching that point |
 
 **Bed leveling.** The bed mesh now probes from `1,1` to `220,215`. The firmware default is `10,10` to `210,210`, which leaves a border of about 10 mm without measurement. The mesh grows to cover almost the whole bed: X reaches 220 mm and Y stops at 215 mm, because the toolhead collides beyond that point on the Y axis.
@@ -216,6 +218,21 @@ and, when you answer yes, USB Camera Support to use a third-party USB camera
 (needs Entware). Cameras with the new hardware always get the USB service.
 *Klipper Gcode Shell Command* is required.
 
+### CFS Diagnostics
+
+```text
+[Install] Menu → 20) Install CFS Diagnostics
+```
+
+Installs a small service (`/usr/data/helper-script/files/cfs-diag/cfs_diag.sh`) that watches the CFS box through Moonraker and writes `/usr/data/printer_data/logs/cfs_diag.log`.
+
+- **What it records:** every time the box goes from `connect` to `disconnect`, a snapshot with the state of the USB adapter, the kernel log and the Klipper log, the duration, and the probable cause (the USB hub disabling the adapter port, the adapter read channel stalling with `urb stopped: -32`, the adapter disappearing, or communication timeouts). A one-line summary per event is kept.
+- **USB auto-recovery (on by default when installed):** when the box has been disconnected for 20 seconds, the USB adapter is still present and the printer is **not printing**, it resets the USB device (the same as unplugging and plugging the cable). It tries at most 3 times per event, 60 seconds apart, and at most 6 times per hour, and logs each attempt. It never changes Klipper, the firmware or the box.
+- **Macros:** `CFS_DIAG_STATUS`, `CFS_DIAG_SUMMARY`, `CFS_DIAG_SNAPSHOT`, `CFS_DIAG_CLEAN`, `CFS_DIAG_AUTORECOVER_ON`, `CFS_DIAG_AUTORECOVER_OFF`, `CFS_DIAG_ENABLE` and `CFS_DIAG_DISABLE`.
+
+Requirement: *Klipper Gcode Shell Command* must be installed.
+`[Remove] Menu → 20) Remove CFS Diagnostics` turns the auto-recovery off, stops the service and removes the macros; the log is kept.
+
 ### Boot animation
 
 The first time the script runs it replaces the boot animation in
@@ -234,8 +251,8 @@ from Fluidd or Mainsail (**Settings → Software Updates**).
 
 | Menu | Content |
 |---|---|
-| `[Install]` | 1 Moonraker and Nginx, 2 Fluidd, 3 Mainsail, 4 Entware, 5 Klipper Gcode Shell Command, 6 Power Macros, 7 Bed Coordinates Fix, 8 KAMP, 9 Buzzer Support, 10 Nozzle Cleaning Fan Control, 11 Save Z-Offset Macros, 12 Screws Tilt Adjust Support, 13 M600 Support, 14 Git Backup, 15 Moonraker Timelapse, 16 Camera Support, 17 OctoEverywhere, 18 Moonraker Obico, 19 Mobileraker Companion |
-| `[Remove]` | The same 19 entries, plus *Improved Shapers Calibrations* (`x`), *Fans Control Macros* (`y`) and *Useful Macros* (`z`) when they are installed |
+| `[Install]` | 1 Moonraker and Nginx, 2 Fluidd, 3 Mainsail, 4 Entware, 5 Klipper Gcode Shell Command, 6 Power Macros, 7 Bed Coordinates Fix, 8 KAMP, 9 Buzzer Support, 10 Nozzle Cleaning Fan Control, 11 Save Z-Offset Macros, 12 Screws Tilt Adjust Support, 13 M600 Support, 14 Git Backup, 15 Moonraker Timelapse, 16 Camera Support, 17 OctoEverywhere, 18 Moonraker Obico, 19 Mobileraker Companion, 20 CFS Diagnostics |
+| `[Remove]` | The same 20 entries, plus *Improved Shapers Calibrations* (`x`), *Fans Control Macros* (`y`) and *Useful Macros* (`z`) when they are installed |
 | `[Customize & PowerScreen]` | 1 Install / 2 Remove PowerScreen, 3 Remove / 4 Restore the Creality Web Interface, 5 Creality Dynamic Logos for Fluidd |
 | `[Backup & Restore]` | Klipper configuration files and Moonraker database |
 | `[Tools]` | Klipper configuration updates, printing G-code files from folders, camera settings, service restarts, Entware updates, cache and log cleanup, firmware restore and factory reset |

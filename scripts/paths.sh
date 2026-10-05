@@ -84,6 +84,12 @@ function set_paths() {
   BUZZER_FILE="${HS_CONFIG_FOLDER}/buzzer-support.cfg"
   BUZZER_URL="${HS_FILES}/buzzer-support/buzzer-support.cfg"
   
+  # CFS Diagnostics #
+  CFS_DIAG_FILE="${HS_CONFIG_FOLDER}/cfs-diag.cfg"
+  CFS_DIAG_URL="${HS_FILES}/cfs-diag/cfs-diag.cfg"
+  CFS_DIAG_SCRIPT="${HS_FILES}/cfs-diag/cfs_diag.sh"
+  CFS_DIAG_LOG="${PRINTER_DATA_FOLDER}/logs/cfs_diag.log"
+
   # Nozzle Cleaning Fan Control #
   NOZZLE_CLEANING_FOLDER="${KLIPPER_EXTRAS_FOLDER}/prtouch_v2_fan"
   NOZZLE_CLEANING_URL1="${HS_FILES}/nozzle-cleaning-fan-control/__init__.py"

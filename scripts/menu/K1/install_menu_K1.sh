@@ -38,6 +38,9 @@ function install_menu_ui_k1() {
   menu_option '18' 'Install' 'Moonraker Obico'
   menu_option '19' 'Install' 'Mobileraker Companion'
   hr
+  subtitle '•DIAGNOSTICS:'
+  menu_option '20' 'Install' 'CFS Diagnostics'
+  hr
   inner_line
   hr
   bottom_menu_option 'b' 'Back to [Main Menu]' "${yellow}"
@@ -197,6 +200,14 @@ function install_menu_k1() {
           error_msg "Entware is needed, please install it first!"
         else
           run "install_mobileraker_companion" "install_menu_ui_k1"
+        fi;;
+      20)
+        if [ -f "$CFS_DIAG_FILE" ]; then
+          error_msg "CFS Diagnostics is already installed!"
+        elif [ ! -f "$KLIPPER_SHELL_FILE" ]; then
+          error_msg "Klipper Gcode Shell Command is needed, please install it first!"
+        else
+          run "install_cfs_diag" "install_menu_ui_k1"
         fi;;
       B|b)
         clear; main_menu; break;;

@@ -2,6 +2,15 @@
 
 All notable changes to the CFS Power Script. Each release on GitHub carries the entry of its version.
 
+## v1.2.0
+
+### Added
+- **CFS Diagnostics with USB auto-recovery (Install menu, option 20):** a service that logs each CFS box disconnection with its probable cause and, when the box stays disconnected for 20 seconds while the USB adapter is present and the printer is not printing, resets the USB adapter by software (max 3 attempts per event, 60 seconds apart, 6 per hour). The cause behind the drops is the USB-serial adapter (the hub disabling its port, or its read channel stalling) and the Creality firmware does not recover from it. Macros: `CFS_DIAG_STATUS`, `CFS_DIAG_SUMMARY`, `CFS_DIAG_SNAPSHOT`, `CFS_DIAG_CLEAN`, `CFS_DIAG_AUTORECOVER_ON`, `CFS_DIAG_AUTORECOVER_OFF`, `CFS_DIAG_ENABLE`, `CFS_DIAG_DISABLE`. It requires *Klipper Gcode Shell Command*; the install starts the service and turns the auto-recovery on, and the removal turns it off and keeps the log.
+
+### Changed
+- **Power Macros, CFS purge:** `box.cfg` now purges 100 mm once per color change (`box_first_clean_length`, `box_need_clean_length`, `box_need_clean_length_max` and every `Tn_extrude` at 100) instead of 140 mm twice. Reapply *Power Macros* from the Install menu to get it.
+- **Bed Coordinates Fix, nozzle wipe:** the wipe on the brush is now 25 mm long (X 59 to X 84) at 70 mm/s (`clr_noz_len_x` 25, `clr_xy_quick_spd` 70). It is applied on the next run of the script, also on printers that already had the fix; the original speed is backed up.
+
 ## v1.1.9
 
 ### Fixed
