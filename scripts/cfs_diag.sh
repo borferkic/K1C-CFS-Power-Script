@@ -46,7 +46,8 @@ function install_cfs_diag(){
         ok_msg "CFS Diagnostics has been installed successfully!"
         echo -e "   The service runs now and starts with the printer; the USB auto-recovery is ${yellow}ON${white}."
         echo -e "   Macros: ${yellow}CFS_DIAG_STATUS${white}, ${yellow}CFS_DIAG_SUMMARY${white}, ${yellow}CFS_DIAG_SNAPSHOT${white}, ${yellow}CFS_DIAG_CLEAN${white},"
-        echo -e "   ${yellow}CFS_DIAG_AUTORECOVER_ON${white} / ${yellow}CFS_DIAG_AUTORECOVER_OFF${white} and ${yellow}CFS_DIAG_ENABLE${white} / ${yellow}CFS_DIAG_DISABLE${white}."
+        echo -e "   ${yellow}CFS_DIAG_AUTORECOVER_ON${white} / ${yellow}CFS_DIAG_AUTORECOVER_OFF${white}, ${yellow}CFS_DIAG_LOG_ON${white} / ${yellow}CFS_DIAG_LOG_OFF${white}"
+        echo -e "   and ${yellow}CFS_DIAG_ENABLE${white} / ${yellow}CFS_DIAG_DISABLE${white}."
         return;;
       N|n)
         error_msg "Installation canceled!"

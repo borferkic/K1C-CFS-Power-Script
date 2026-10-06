@@ -37,6 +37,9 @@
   var VERIFY_TRIES = 3;
   var CUSTOM_FILE_URL = "/server/files/config/Helper-Script/cfs-custom-materials.json";
   var CUSTOM_REFRESH_MS = 30000;
+  var DIAG_STATUS_URL = "/server/files/logs/cfs_diag.status";
+  var DIAG_LOG_URL = "/server/files/logs/cfs_diag.log";
+  var DIAG_LOGS_LIST_URL = "/server/files/list?root=logs";
   var MARGIN = 8;
   var SLOT_LETTERS = ["A", "B", "C", "D"];
   var PALETTE = ["#ffffff", "#2b2b2b", "#9ca3af", "#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#8b5cf6", "#ec4899"];
@@ -111,6 +114,7 @@
   var latest = null;
   var CUSTOM = {};          // ids of the custom filaments (from cfs-custom-materials.json)
   var macrosReady = false;  // the CFS_ADD_MATERIAL macro exists (module "CFS Custom Filaments" installed)
+  var diagReady = false;    // the CFS_DIAG_LOG_ON macro exists (module "CFS Diagnostics" installed and up to date)
   var lastSignature = "";
   var pollTimer = null;
   var noDockSince = 0;
@@ -173,6 +177,14 @@
     var slot = {
       kind: "empty", id: "", title: "Empty", detail: "", color: parseColor(col), remain: parseLength(fieldAt(unit.remain_len, i))
     };
+
+    // The box keeps the last color and material of an emptied slot; "vender: none" is what says nothing is loaded
+    // ("unknown" means filament present without an RFID chip).
+    if (vender === "none") {
+      slot.color = "";
+      slot.remain = parseLength("");
+      return slot;
+    }
 
     var hasMaterial = !isNone(mat) && mat !== "unknown";
     var hasVender = !isNone(vender) && vender !== "unknown";
@@ -284,6 +296,9 @@
       .then(function (json) {
         var objects = json && json.result && json.result.objects;
         macrosReady = Array.isArray(objects) && objects.indexOf("gcode_macro CFS_ADD_MATERIAL") >= 0;
+        var diag = Array.isArray(objects) && objects.indexOf("gcode_macro CFS_DIAG_LOG_ON") >= 0;
+        if (diag !== diagReady) lastSignature = "";   // the button appears or disappears at the next render
+        diagReady = diag;
       })
       .catch(function () {});
   }
@@ -393,6 +408,7 @@
       c + " .pcfs-type{font-size:1.125rem;font-weight:500;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}",
       c + " .pcfs-detail{font-size:.75rem;color:" + muted + ";white-space:nowrap;overflow:hidden;text-overflow:ellipsis}",
       c + " .pcfs-note{color:" + muted + ";padding:4px 2px}",
+      c + " .pcfs-footer{display:flex;justify-content:flex-end;margin-top:16px}",
       "@media (max-width:480px){" + c + " .pcfs-grid{grid-template-columns:1fr}}",
 
       ".pcfs-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px;font-family:Roboto,sans-serif;font-size:1rem;line-height:1.5}",
@@ -422,7 +438,14 @@
       ".pcfs-dialog .pcfs-temprow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}",
       ".pcfs-dialog .pcfs-tempcell label{display:block;font-size:.75rem;margin-bottom:2px}",
       ".pcfs-dialog .pcfs-hint{color:" + muted + ";font-size:.8125rem}",
-      ".pcfs-dialog .v-btn[disabled]{opacity:.4;pointer-events:none}"
+      ".pcfs-dialog .v-btn[disabled]{opacity:.4;pointer-events:none}",
+      ".pcfs-dialog.pcfs-busy .v-btn{opacity:.4;pointer-events:none}",
+      ".pcfs-dialog .pcfs-diagrow{display:flex;align-items:center;justify-content:space-between;gap:12px}",
+      ".pcfs-dialog .pcfs-diagname{font-weight:500}",
+      ".pcfs-dialog .pcfs-diagstate{font-size:.875rem;color:" + muted + "}",
+      ".pcfs-dialog .pcfs-diagstate.on{color:var(--v-success-base,#4caf50)}",
+      ".pcfs-dialog .pcfs-diagstate.off{color:var(--v-warning-base,#fb8c00)}",
+      ".pcfs-dialog a.v-btn{text-decoration:none}"
     ].join("");
     var style = document.createElement("style");
     style.id = STYLE_ID;
@@ -667,7 +690,7 @@
   }
 
   function render(data) {
-    var signature = JSON.stringify(data);
+    var signature = JSON.stringify(data) + "|" + diagReady;
     if (signature === lastSignature) return;
     lastSignature = signature;
 
@@ -683,6 +706,13 @@
       data.units.forEach(function (unit) {
         bodyEl.appendChild(renderUnit(unit, data.units.length > 1));
       });
+    }
+    if (diagReady) {
+      var footer = el("div", "pcfs-footer");
+      var diagBtn = textButton("CFS DIAGNOSTICS", false);
+      diagBtn.addEventListener("click", openDiagnostics);
+      footer.appendChild(diagBtn);
+      bodyEl.appendChild(footer);
     }
     if (card && isFloating() && card.parentNode) clampPosition();
   }
@@ -1121,6 +1151,179 @@
         setBusy(false);
         setStatus(error && error.message ? error.message : "The filament could not be added.", "error");
       });
+    });
+
+    document.body.appendChild(modal);
+  }
+
+  // ---------- CFS Diagnostics ----------
+
+  function formatSize(bytes) {
+    if (bytes <= 0) return "0 KB";
+    if (bytes >= 1048576) return (bytes / 1048576).toFixed(1) + " MB";
+    return Math.max(1, Math.round(bytes / 1024)) + " KB";
+  }
+
+  // State written by the diagnostics service (cfs_diag.status; null when it does not exist yet, undefined when it
+  // could not be read) and the size of its log files, reported by Moonraker.
+  function loadDiag() {
+    var status = fetch(DIAG_STATUS_URL + "?t=" + Date.now(), { credentials: "same-origin", cache: "no-store" })
+      .then(function (response) {
+        if (response.status === 404) return null;
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        return response.json();
+      })
+      .catch(function () { return undefined; });
+    var files = fetch(DIAG_LOGS_LIST_URL, { credentials: "same-origin", cache: "no-store" })
+      .then(function (response) {
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        return response.json();
+      })
+      .then(function (json) {
+        var list = (json && json.result) || [];
+        var out = { size: 0, hasOld: false };
+        list.forEach(function (f) {
+          var name = String(f.path || f.filename || "");
+          if (name === "cfs_diag.log") out.size = Number(f.size) || 0;
+          if (name === "cfs_diag.log.1") out.hasOld = true;
+        });
+        return out;
+      })
+      .catch(function () { return null; });
+    return Promise.all([status, files]).then(function (r) {
+      return { status: r[0], size: r[1] ? r[1].size : null, hasOld: r[1] ? r[1].hasOld : false };
+    });
+  }
+
+  function openDiagnostics() {
+    closeEditor();
+    var busy = false;
+    var diag = null;
+
+    modal = el("div", "pcfs-overlay");
+    var dialog = el("div", "pcfs-dialog v-card v-sheet theme--dark rounded-md");
+    modal.appendChild(dialog);
+
+    var head = el("div", "pcfs-dialog-head");
+    head.appendChild(el("span", "font-weight-light", "CFS Diagnostics"));
+    var closeBtn = iconButton(ICONS.close, "Close");
+    head.appendChild(closeBtn);
+    dialog.appendChild(head);
+
+    var body = el("div", "pcfs-dialog-body");
+    var list = el("div", "pcfs-dialog-body");
+    list.style.padding = "0";
+    var info = el("div", "pcfs-hint");
+    var status = el("div", "pcfs-status");
+    body.appendChild(list);
+    body.appendChild(info);
+    body.appendChild(status);
+    dialog.appendChild(body);
+
+    var actions = el("div", "pcfs-actions");
+    var deleteBtn = textButton("Delete log", false);
+    var oldBtn = el("a", "v-btn theme--dark v-size--default v-btn--text");
+    oldBtn.appendChild(el("span", "v-btn__content", "Previous log"));
+    oldBtn.setAttribute("href", DIAG_LOG_URL + ".1");
+    oldBtn.setAttribute("download", "cfs_diag.log.1");
+    var downloadBtn = el("a", "v-btn theme--dark v-size--default v-btn--has-bg primary");
+    downloadBtn.appendChild(el("span", "v-btn__content", "Download log"));
+    downloadBtn.setAttribute("href", DIAG_LOG_URL);
+    downloadBtn.setAttribute("download", "cfs_diag.log");
+    actions.appendChild(deleteBtn);
+    actions.appendChild(oldBtn);
+    actions.appendChild(downloadBtn);
+    dialog.appendChild(actions);
+
+    function setStatus(text, kind) {
+      status.textContent = text;
+      status.className = "pcfs-status" + (kind ? " " + kind : "");
+    }
+
+    function setBusy(value) {
+      busy = value;
+      dialog.classList.toggle("pcfs-busy", value);
+    }
+
+    // Runs a macro and waits until the state shows the change (the shell command ends after the macro).
+    function act(command, check) {
+      if (busy) return;
+      setBusy(true);
+      setStatus("Working...");
+      runScript(command).then(function () {
+        return waitFor(function () {
+          return loadDiag().then(function (d) { diag = d; return check(d); });
+        }, 8, 700);
+      }).then(function (done) {
+        setBusy(false);
+        show(diag);
+        setStatus(done ? "Done." : "The printer did not confirm the change.", done ? "ok" : "error");
+      }).catch(function (error) {
+        setBusy(false);
+        setStatus(error && error.message ? error.message : "The change could not be made.", "error");
+      });
+    }
+
+    function row(name, on, onText, offText, buttonText, command, check, enabled) {
+      var r = el("div", "pcfs-diagrow");
+      var left = el("div", "pcfs-info");
+      left.appendChild(el("span", "pcfs-diagname", name));
+      left.appendChild(el("span", "pcfs-diagstate " + (on ? "on" : "off"), on ? onText : offText));
+      r.appendChild(left);
+      var btn = textButton(buttonText, false);
+      btn.disabled = !enabled;
+      btn.addEventListener("click", function () { act(command, check); });
+      r.appendChild(btn);
+      return r;
+    }
+
+    function show(d) {
+      list.textContent = "";
+      var s = d && d.status;
+      if (d && s === undefined) {
+        info.textContent = "The state of the service could not be read.";
+      } else if (d && s === null) {
+        info.textContent = "The service has not written its state yet: press Start.";
+      } else if (d) {
+        var parts = [];
+        if (d.size !== null) parts.push("Log size: " + formatSize(d.size));
+        parts.push("Disconnections recorded: " + (Number(s.events) || 0));
+        parts.push("CFS: " + String(s.box));
+        info.textContent = parts.join(" · ");
+      } else {
+        info.textContent = "";
+      }
+      var known = !!s;
+      var running = known && s.running === true;
+      list.appendChild(row("Service", running, "Running", "Stopped: not logging and not recovering", running ? "Stop" : "Start",
+        running ? "CFS_DIAG_DISABLE" : "CFS_DIAG_ENABLE", function (x) { return !!(x.status && x.status.running === !running); }, !!d));
+      var logging = known && s.logging !== false;
+      list.appendChild(row("Log", logging, "On", "Off: still watching and recovering", logging ? "Turn off" : "Turn on",
+        logging ? "CFS_DIAG_LOG_OFF" : "CFS_DIAG_LOG_ON", function (x) { return !!(x.status && x.status.logging === !logging); }, known));
+      var recover = known && s.autorecover === true;
+      list.appendChild(row("USB auto-recovery", recover, "On", "Off", recover ? "Turn off" : "Turn on",
+        recover ? "CFS_DIAG_AUTORECOVER_OFF" : "CFS_DIAG_AUTORECOVER_ON", function (x) { return !!(x.status && x.status.autorecover === !recover); }, known));
+      var hasLog = !!d && d.size !== null && d.size > 0;
+      deleteBtn.disabled = !(hasLog || (!!d && d.hasOld));
+      downloadBtn.style.display = hasLog ? "" : "none";
+      oldBtn.style.display = d && d.hasOld ? "" : "none";
+    }
+
+    deleteBtn.addEventListener("click", function () {
+      if (busy) return;
+      if (!window.confirm("Delete the CFS Diagnostics log and its summary? This cannot be undone.")) return;
+      var before = diag && diag.size !== null ? diag.size : 0;
+      act("CFS_DIAG_CLEAN", function (x) { return x.size !== null && (x.size < before || (x.size === 0 && !x.hasOld)); });
+    });
+
+    closeBtn.addEventListener("click", closeEditor);
+
+    show(null);
+    setStatus("Reading...");
+    loadDiag().then(function (d) {
+      diag = d;
+      show(d);
+      setStatus("");
     });
 
     document.body.appendChild(modal);

@@ -8,7 +8,7 @@
 # CFS firmware update status. It never writes to Klipper, the printer
 # firmware or the CFS, and it never sends G-code.
 #
-# Usage: cfs_diag.sh {enable|disable|start|stop|status|snapshot|summary|clean}
+# Usage: cfs_diag.sh {enable|disable|start|stop|status|snapshot|summary|clean|autorecover on|off|logging on|off}
 #
 # Every path and the poll interval can be overridden with environment
 # variables (used for tests off the printer).
@@ -37,6 +37,10 @@ SNAPSHOT_MIN_GAP="${CFS_DIAG_SNAPSHOT_MIN_GAP:-60}"
 USB_SYSFS="${CFS_DIAG_USB_SYSFS:-/sys/bus/usb/devices}"
 USB_VENDOR="${CFS_DIAG_USB_VENDOR:-1a86}"
 AUTORECOVER_FILE="${CFS_DIAG_AUTORECOVER_FILE:-/usr/data/cfs-diag.autorecover}"
+# Logging is on unless LOGOFF_FILE exists ("logging off"): the watcher and the auto-recovery keep running, only the log stops growing.
+LOGOFF_FILE="${CFS_DIAG_LOGOFF_FILE:-/usr/data/cfs-diag.logoff}"
+# State for the Fluidd panel (JSON, rewritten only when it changes).
+STATUS_FILE="${LOG_DIR}/cfs_diag.status"
 RECOVER_AFTER="${CFS_DIAG_RECOVER_AFTER:-20}"
 RECOVER_GAP="${CFS_DIAG_RECOVER_GAP:-60}"
 RECOVER_MAX_ATTEMPTS="${CFS_DIAG_RECOVER_MAX_ATTEMPTS:-3}"
@@ -62,7 +66,10 @@ USB_BAD_PATTERN='disconnect|reset|error|over-current|cannot|failed|unable|EMI|ur
 now_ts() { date '+%Y-%m-%d %H:%M:%S'; }
 now_epoch() { date +%s; }
 
+logging_on() { [ ! -f "$LOGOFF_FILE" ]; }
+
 log() {
+  logging_on || return 0
   mkdir -p "$LOG_DIR" 2>/dev/null
   printf '[%s] %s\n' "$(now_ts)" "$*" >> "$LOG_FILE"
 }
@@ -262,6 +269,7 @@ snapshot_full() {
 }
 
 write_snapshot() {
+  logging_on || return 0
   snapshot_full "$1" "$2" >> "$LOG_FILE"
   LAST_SNAP="$(now_epoch)"
 }
@@ -328,6 +336,26 @@ maybe_autorecover() {
   usb_reset "$age"
 }
 
+# ------------------------------------------------------------- status ----
+
+bool_json() { if "$@"; then echo true; else echo false; fi; }
+
+# Writes the state the Fluidd panel reads. Only touches the file when something changed (no flash wear, no
+# change notifications), so the size of the log is left out: Moonraker already reports it.
+write_status() {
+  local box events new
+  box="${1:-$(box_state_from "$(get_box_json)")}"
+  events=0
+  [ -f "$SUMMARY_FILE" ] && events="$(wc -l < "$SUMMARY_FILE" | tr -d ' ')"
+  new="$(printf '{"running":%s,"boot":%s,"logging":%s,"autorecover":%s,"box":"%s","events":%s}' \
+    "$(bool_json is_running)" "$(bool_json is_enabled)" "$(bool_json logging_on)" \
+    "$(bool_json autorecover_enabled)" "$box" "$events")"
+  if [ "$new" != "$(cat "$STATUS_FILE" 2>/dev/null)" ]; then
+    mkdir -p "$LOG_DIR" 2>/dev/null
+    printf '%s\n' "$new" > "$STATUS_FILE"
+  fi
+}
+
 # ------------------------------------------------------------- the loop ----
 
 open_event() {
@@ -362,6 +390,7 @@ scan_klippy() {
   [ "$size" -gt "$KLIPPY_OFF" ] || return 0
   chunk="$(tail -c +$(( KLIPPY_OFF + 1 )) "$KLIPPY_LOG")"
   KLIPPY_OFF="$size"
+  logging_on || return 0
   frames="$(printf '%s\n' "$chunk" | grep -c -E "$KLIPPY_FRAME_NOISE")"
   if [ "$frames" -gt 0 ]; then
     FRAME_ERRORS=$(( FRAME_ERRORS + frames ))
@@ -382,6 +411,7 @@ scan_dmesg() {
   lines="$(dmesg_usb_since "${DMESG_TS:-0}")"
   [ -n "$lines" ] || return 0
   DMESG_TS="$(cat "${RUN_DIR}/dmesg_ts" 2>/dev/null)"
+  logging_on || return 0
   log "kernel USB messages:"
   printf '%s\n' "$lines" | indent >> "$LOG_FILE"
   if printf '%s\n' "$lines" | grep -q -i -E "$USB_BAD_PATTERN"; then
@@ -435,11 +465,13 @@ tick() {
   scan_klippy
   scan_dmesg
   rotate_log
+  write_status "$box"
 }
 
 cleanup() {
   log "service stopped"
   rm -f "$PID_FILE"
+  write_status
   exit 0
 }
 
@@ -482,6 +514,7 @@ cmd_start() {
   nohup setsid sh "$SELF" _run >/dev/null 2>&1 &
   sleep 1
   if is_running; then
+    write_status
     echo "CFS Diagnostics started (pid $(cat "$PID_FILE")). Log: $LOG_FILE"
   else
     echo "CFS Diagnostics could not be started."
@@ -498,6 +531,7 @@ cmd_stop() {
   kill "$(cat "$PID_FILE")" 2>/dev/null
   sleep 1
   rm -f "$PID_FILE"
+  write_status
   echo "CFS Diagnostics stopped. The log is kept: $LOG_FILE"
 }
 
@@ -520,6 +554,7 @@ esac
 exit 0
 EOF
   chmod 755 "$INITD_FILE"
+  write_status
   echo "CFS Diagnostics enabled: it will start with the printer."
   cmd_start
 }
@@ -527,6 +562,7 @@ EOF
 cmd_disable() {
   cmd_stop
   rm -f "$INITD_FILE"
+  write_status
   echo "CFS Diagnostics disabled: it will not start with the printer."
 }
 
@@ -542,6 +578,7 @@ cmd_status() {
   if is_enabled; then echo "  enabled:  yes (starts with the printer)"; else echo "  enabled:  no"; fi
   echo "  box.state: $(box_state_from "$box_json")   versions: $(box_versions_from "$box_json")"
   echo "  serial device: $(serial_state)"
+  if logging_on; then echo "  logging:  on"; else echo "  logging:  OFF (watching and recovering, nothing is written to the log)"; fi
   if autorecover_enabled; then
     echo "  auto-recovery: ON (resets the USB adapter after ${RECOVER_AFTER}s of disconnection, never while printing)"
   else
@@ -573,6 +610,7 @@ cmd_summary() {
 
 cmd_clean() {
   rm -f "$LOG_FILE" "${LOG_FILE}.1" "$SUMMARY_FILE"
+  write_status
   echo "CFS Diagnostics log and summary deleted."
 }
 
@@ -583,16 +621,39 @@ cmd_autorecover() {
     on)
       mkdir -p "$(dirname "$AUTORECOVER_FILE")"
       : > "$AUTORECOVER_FILE"
+      write_status
       echo "CFS auto-recovery ON: when the box stays disconnected for ${RECOVER_AFTER}s while the USB serial"
       echo "device is present and the printer is not printing, the USB adapter is reset (max ${RECOVER_MAX_ATTEMPTS} tries per event)."
       ;;
     off)
       rm -f "$AUTORECOVER_FILE"
+      write_status
       echo "CFS auto-recovery OFF."
       ;;
     *)
       if autorecover_enabled; then echo "CFS auto-recovery: ON"; else echo "CFS auto-recovery: off"; fi
       echo "Usage: $0 autorecover {on|off}"
+      ;;
+  esac
+}
+
+# Turns the log on or off. The running service reads the flag file every tick, so no restart is needed.
+cmd_logging() {
+  case "$1" in
+    on)
+      rm -f "$LOGOFF_FILE"
+      write_status
+      echo "CFS Diagnostics logging ON."
+      ;;
+    off)
+      mkdir -p "$(dirname "$LOGOFF_FILE")"
+      : > "$LOGOFF_FILE"
+      write_status
+      echo "CFS Diagnostics logging OFF: the watcher and the USB auto-recovery keep running; the log is no longer written."
+      ;;
+    *)
+      if logging_on; then echo "CFS Diagnostics logging: on"; else echo "CFS Diagnostics logging: OFF"; fi
+      echo "Usage: $0 logging {on|off}"
       ;;
   esac
 }
@@ -607,9 +668,10 @@ case "$1" in
   summary) cmd_summary ;;
   clean) cmd_clean ;;
   autorecover) cmd_autorecover "$2" ;;
+  logging) cmd_logging "$2" ;;
   _run) run_loop ;;
   *)
-    echo "Usage: $0 {enable|disable|start|stop|status|snapshot|summary|clean|autorecover on|off}"
+    echo "Usage: $0 {enable|disable|start|stop|status|snapshot|summary|clean|autorecover on|off|logging on|off}"
     exit 1
     ;;
 esac

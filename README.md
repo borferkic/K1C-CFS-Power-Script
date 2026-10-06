@@ -265,7 +265,9 @@ Installs a small service (`/usr/data/helper-script/files/cfs-diag/cfs_diag.sh`) 
 
 - **What it records:** every time the box goes from `connect` to `disconnect`, a snapshot with the state of the USB adapter, the kernel log and the Klipper log, the duration, and the probable cause (the USB hub disabling the adapter port, the adapter read channel stalling with `urb stopped: -32`, the adapter disappearing, or communication timeouts). A one-line summary per event is kept.
 - **USB auto-recovery (on by default when installed):** when the box has been disconnected for 20 seconds, the USB adapter is still present and the printer is **not printing**, it resets the USB device (the same as unplugging and plugging the cable). It tries at most 3 times per event, 60 seconds apart, and at most 6 times per hour, and logs each attempt. It never changes Klipper, the firmware or the box.
-- **Macros:** `CFS_DIAG_STATUS`, `CFS_DIAG_SUMMARY`, `CFS_DIAG_SNAPSHOT`, `CFS_DIAG_CLEAN`, `CFS_DIAG_AUTORECOVER_ON`, `CFS_DIAG_AUTORECOVER_OFF`, `CFS_DIAG_ENABLE` and `CFS_DIAG_DISABLE`.
+- **Macros:** `CFS_DIAG_STATUS`, `CFS_DIAG_SUMMARY`, `CFS_DIAG_SNAPSHOT`, `CFS_DIAG_CLEAN`, `CFS_DIAG_AUTORECOVER_ON`, `CFS_DIAG_AUTORECOVER_OFF`, `CFS_DIAG_LOG_ON`, `CFS_DIAG_LOG_OFF`, `CFS_DIAG_ENABLE` and `CFS_DIAG_DISABLE`.
+- **Log size:** the log is rotated at 1 MB and one backup (`cfs_diag.log.1`) is kept, so it never takes more than about 2 MB. `CFS_DIAG_LOG_OFF` stops writing it altogether while the watcher and the USB auto-recovery keep running (`CFS_DIAG_DISABLE` stops everything, recovery included).
+- **From Fluidd:** with the CFS Panel for Fluidd installed, the card has a **CFS DIAGNOSTICS** button. Its window shows the state, turns the service, the log and the USB auto-recovery on and off, downloads the log (and the previous one) and deletes it. It only needs the macros above, so it appears once CFS Diagnostics is installed.
 
 Requirement: *Klipper Gcode Shell Command* must be installed.
 `[Remove] Menu → 20) Remove CFS Diagnostics` turns the auto-recovery off, stops the service and removes the macros; the log is kept.

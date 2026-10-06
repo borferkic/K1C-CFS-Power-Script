@@ -2,6 +2,15 @@
 
 All notable changes to the CFS Power Script. Each release on GitHub carries the entry of its version.
 
+## v1.3.3
+
+### Added
+- **CFS DIAGNOSTICS button in the CFS card of Fluidd:** opens a window to turn the diagnostics service, its log and the USB auto-recovery on and off, to download the log (and the previous one) and to delete it, without SSH. The service writes its state to `cfs_diag.status` (only when it changes) for the card to read.
+- **`CFS_DIAG_LOG_ON` / `CFS_DIAG_LOG_OFF` macros (`cfs_diag.sh logging on|off`):** stop and resume writing the log while the watcher and the USB auto-recovery keep running. The setting survives a reboot.
+
+### Fixed
+- **CFS card showed an emptied slot as loaded:** the box keeps the color and material of the last spool of a slot, so a slot with no filament (`vender: none`) was drawn with a spool. It is now shown as empty; a spool without an RFID tag (`vender: unknown`) is not affected.
+
 ## v1.3.2
 
 ### Added
