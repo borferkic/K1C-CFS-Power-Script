@@ -2,6 +2,11 @@
 
 All notable changes to the CFS Power Script. Each release on GitHub carries the entry of its version.
 
+## v1.3.2
+
+### Added
+- **CAMERA_OFF and CAMERA_ON macros (Power Macros):** turn the camera off and on from the Fluidd *Macros* panel or the console, without SSH. `CAMERA_OFF` stops the camera service (`cam_app` and `mjpg_streamer`), so the camera stops using the USB hub it shares with the CFS adapter; `CAMERA_ON` starts it again (the same as `RELOAD_CAMERA`). There are no timelapse photos while the camera is off. PowerScreen uses them: tap the camera icon of its title bar to switch the camera. Install the Power Macros again (Install menu, option 6) to get them.
+
 ## v1.3.1
 
 ### Changed

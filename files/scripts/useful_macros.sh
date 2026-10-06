@@ -64,6 +64,12 @@ function reload_camera(){
   exit 0
 }
 
+function stop_camera(){
+  echo -e "Info: Stopping the camera..."
+  ACTION=stop /usr/bin/auto_uvc.sh
+  exit 0
+}
+
 if [ "$1" == "-backup_klipper" ]; then
   backup_klipper
 elif [ "$1" == "-restore_klipper" ]; then
@@ -74,7 +80,9 @@ elif [ "$1" == "-restore_moonraker" ]; then
   restore_moonraker
 elif [ "$1" == "-reload_camera" ]; then
   reload_camera
+elif [ "$1" == "-stop_camera" ]; then
+  stop_camera
 else
-  echo -e "Invalid argument. Usage: $0 [-backup_klipper | -restore_klipper | -backup_moonraker | -restore_moonraker | -reload_camera]"
+  echo -e "Invalid argument. Usage: $0 [-backup_klipper | -restore_klipper | -backup_moonraker | -restore_moonraker | -reload_camera | -stop_camera]"
   exit 1
 fi

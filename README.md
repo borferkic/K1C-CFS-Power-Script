@@ -22,7 +22,7 @@ Guilouz, adapted to the K1C and to the CFS firmware.
 
 - **PowerScreen touch interface.** Replaces the Creality touch screen with [PowerScreen](https://github.com/borferkic/K1C-CFS-POWER-SCREEN), a K1C interface aware of the CFS. Install the `stable` or `nightly` build from the menu; everything is backed up and can be restored, and updates come from Fluidd or Mainsail.
 - **Bed Coordinates Fix.** The CFS firmware misaligns the bed coordinates and limits of the K1C: the nozzle misses the cleaning brush, the slicer cannot use Y beyond 215 mm on a 220 mm bed and the bed mesh leaves the edges unmeasured. This module corrects all three, with a backup of the original values.
-- **Power Macros.** Installs the Power Script `gcode_macro.cfg`, `printer_params.cfg` and `box.cfg` (your originals are backed up) with the extra `STRESS_TEST` (motion stress test), `PID_HOTEND` (hotend PID calibration) and `RELOAD_CAMERA` (restart the camera service) macros.
+- **Power Macros.** Installs the Power Script `gcode_macro.cfg`, `printer_params.cfg` and `box.cfg` (your originals are backed up) with the extra `STRESS_TEST` (motion stress test), `PID_HOTEND` (hotend PID calibration) and `RELOAD_CAMERA` (restart the camera service), `CAMERA_OFF` and `CAMERA_ON` (turn the camera off and on) macros.
 - **Manual filament change with `M600`.** The CFS firmware has no `M600`; this module adds it, keeps the CFS `RESUME` untouched and opens the PowerScreen **MANUAL FILAMENT CHANGE** menu (unload, load, resume, stop).
 - **KAMP adapted to the CFS.** Adaptive bed mesh and purge line that respect the CFS purge routine (see [KAMP and the CFS purge](#kamp-and-the-cfs-purge)).
 - **Custom boot animation.** A lightning bolt strikes the Creality logo, the Power Script logo flashes in, "POWER" assembles and "SCRIPT" is typed, with the "LOADING..." text at the top right. Applied automatically the first time the script runs, with the original animation backed up.
@@ -137,11 +137,13 @@ updates) are **disabled**. It then asks which build to install (`stable` or
 
 Installs the Power Script macros and parameters:
 
-- **Replaces** `gcode_macro.cfg`, `printer_params.cfg` and `box.cfg` with the Power Script versions, and adds the `[include gcode_macro.cfg]`, `[include printer_params.cfg]` and `[include box.cfg]` lines to `printer.cfg` when they are missing. The versions add the `STRESS_TEST` (motion stress test), `PID_HOTEND` (hotend PID calibration) and `RELOAD_CAMERA` (restart the camera service) macros.
+- **Replaces** `gcode_macro.cfg`, `printer_params.cfg` and `box.cfg` with the Power Script versions, and adds the `[include gcode_macro.cfg]`, `[include printer_params.cfg]` and `[include box.cfg]` lines to `printer.cfg` when they are missing. The versions add the `STRESS_TEST` (motion stress test), `PID_HOTEND` (hotend PID calibration) and `RELOAD_CAMERA` (restart the camera service), `CAMERA_OFF` and `CAMERA_ON` (turn the camera off and on) macros.
 - - Sets the CFS purge to a single 100 mm purge per color change in `box.cfg` (`box_first_clean_length`, `box_need_clean_length`, `box_need_clean_length_max` and every `Tn_extrude` at 100), instead of the Creality 140 mm purge done twice. With OrcaSlicer, a flushing volume of 240 mm³ gives about 100 mm; the slicer value decides the length of each color change, and Klipper refuses to start if `box_need_clean_length` is larger than `box_first_clean_length`.
 Keeps `START_PRINT` disabled when KAMP is installed, because KAMP provides its own.
 
 Requirement: *Klipper Gcode Shell Command* must be installed (`RELOAD_CAMERA` needs it).
+
+`CAMERA_OFF` stops the camera service (`cam_app` and `mjpg_streamer`) and `CAMERA_ON` starts it again, from the Fluidd *Macros* panel, the console, or the camera icon in the title bar of PowerScreen (tap it to switch). While the camera is off it stops using the USB hub it shares with the CFS adapter, which is useful to check whether the video traffic has to do with the CFS disconnections, and there are no timelapse photos. The camera comes back on its own after a restart of the printer. To get these macros on a printer that already has the Power Macros, install them again (`[Install] Menu → 6`).
 Before replacing anything, the first copy of each file is saved in
 `/usr/data/helper-script-backup/power-config/` and is never overwritten.
 `[Remove] Menu → 6) Remove Power Macros` restores those originals.

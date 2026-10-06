@@ -14,7 +14,7 @@ function power_macros_message(){
   hr
   echo -e " │ ${cyan}Installs the Power Script macros and parameters:               ${white}│"
   echo -e " │ ${cyan}gcode_macro.cfg, printer_params.cfg and box.cfg, plus the      ${white}│"
-  echo -e " │ ${cyan}STRESS_TEST, PID_HOTEND and RELOAD_CAMERA macros.              ${white}│"
+  echo -e " │ ${cyan}STRESS_TEST, PID_HOTEND and the camera macros.                 ${white}│"
   hr
   echo -e " │ ${yellow}These files are REPLACED. Your originals are saved first       ${white}│"
   echo -e " │ ${yellow}and can be restored from the Remove menu.                      ${white}│"
