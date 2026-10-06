@@ -105,13 +105,17 @@ letter by letter, the bolt glows twice, "SCRIPT" is typed and "LOADING..." cycle
 ### CFS card for Fluidd
 
 <p align="center">
-  <img src="docs/screenshots/fluidd-cfs-card.png" alt="The CFS card in the Fluidd dashboard" />
+  <img src="docs/screenshots/fluidd-cfs-card.png" alt="The CFS card in the Fluidd dashboard, with the CFS DIAGNOSTICS button" />
 </p>
 
 <table>
   <tr>
     <td align="center"><b>Edit a spool</b><br /><img src="docs/screenshots/fluidd-cfs-edit-slot.png" alt="Editing a spool of the CFS card in Fluidd" width="100%" /></td>
     <td align="center"><b>New filament</b><br /><img src="docs/screenshots/fluidd-cfs-new-filament.png" alt="Adding a filament of your own to the material database" width="100%" /></td>
+  </tr>
+  <tr>
+    <td align="center"><b>CFS Diagnostics</b><br /><img src="docs/screenshots/fluidd-cfs-diagnostics.png" alt="The CFS DIAGNOSTICS window of the Fluidd card: service, log and USB auto-recovery" width="100%" /></td>
+    <td></td>
   </tr>
 </table>
 

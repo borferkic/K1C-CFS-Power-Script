@@ -2,6 +2,11 @@
 
 All notable changes to the CFS Power Script. Each release on GitHub carries the entry of its version.
 
+## v1.3.6
+
+### Documentation
+- **README screenshots:** the CFS card of Fluidd is shown with its new *CFS DIAGNOSTICS* button and an emptied slot drawn as empty, and the CFS DIAGNOSTICS window (service, log and USB auto-recovery controls, download and delete) has its own picture.
+
 ## v1.3.5
 
 ### Changed
