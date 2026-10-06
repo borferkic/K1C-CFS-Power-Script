@@ -2,6 +2,11 @@
 
 All notable changes to the CFS Power Script. Each release on GitHub carries the entry of its version.
 
+## v1.3.1
+
+### Changed
+- **Customize & PowerScreen menu:** the options are now grouped in pairs. *Install CFS Panel for Fluidd* and *Remove CFS Panel for Fluidd* (options 7 and 8) have their own group, apart from the Creality Dynamic Logos and the PowerUI Theme (options 5 and 6). The menu screenshots of the README are the ones of this version.
+
 ## v1.3.0
 
 ### Added
