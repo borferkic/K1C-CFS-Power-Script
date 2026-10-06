@@ -2,6 +2,11 @@
 
 All notable changes to the CFS Power Script. Each release on GitHub carries the entry of its version.
 
+## v1.3.7
+
+### Changed
+- **Power Macros, `box.cfg`: `Tn_extrude` is now 200** (it was 100; the Creality original is 140). It is the length the extruder pushes on the first load of a print (`extrude = 200.0` in the Klipper log). It was changed because of the **distance the filament has to travel** (a longer filament path, such as a longer tube between the CFS and the printer), where a load can fail with `key835` (*extrude error, maybe it's blocked at the connections*) or `key849` (*retrude error*) without anything being blocked; on the K1C where it was tested the loads that failed with 100 worked with 200. It is not a guaranteed fix, and the first load of a print now pushes 200 mm instead of 100. Reinstall the Power Macros (`[Install] Menu → 6`) to get it; your Creality original `box.cfg` stays in the backup folder.
+
 ## v1.3.6
 
 ### Documentation
