@@ -2,6 +2,11 @@
 
 All notable changes to the CFS Power Script. Each release on GitHub carries the entry of its version.
 
+## v1.3.4
+
+### Fixed
+- **CFS Diagnostics: stopping and starting the service right away left it running but reported as stopped.** The old process takes up to a poll interval to react to the stop signal and, when it finally did, it deleted the PID file of the new one. Now a stopping service only removes its own PID file, and `stop` waits until the process is gone. This is what the *Stop* and *Start* buttons of the new CFS DIAGNOSTICS window do.
+
 ## v1.3.3
 
 ### Added

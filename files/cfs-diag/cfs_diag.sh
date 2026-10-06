@@ -470,7 +470,7 @@ tick() {
 
 cleanup() {
   log "service stopped"
-  rm -f "$PID_FILE"
+  [ "$(cat "$PID_FILE" 2>/dev/null)" = "$$" ] && rm -f "$PID_FILE"
   write_status
   exit 0
 }
@@ -523,13 +523,20 @@ cmd_start() {
 }
 
 cmd_stop() {
+  local pid waited
   if ! is_running; then
     rm -f "$PID_FILE"
     echo "CFS Diagnostics is not running."
     return 0
   fi
-  kill "$(cat "$PID_FILE")" 2>/dev/null
-  sleep 1
+  pid="$(cat "$PID_FILE")"
+  kill "$pid" 2>/dev/null
+  waited=0
+  while kill -0 "$pid" 2>/dev/null && [ "$waited" -lt $(( POLL_SECONDS + 3 )) ]; do
+    sleep 1
+    waited=$(( waited + 1 ))
+  done
+  kill -9 "$pid" 2>/dev/null
   rm -f "$PID_FILE"
   write_status
   echo "CFS Diagnostics stopped. The log is kept: $LOG_FILE"
