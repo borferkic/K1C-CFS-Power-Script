@@ -2,6 +2,16 @@
 
 All notable changes to the CFS Power Script. Each release on GitHub carries the entry of its version.
 
+## v1.3.5
+
+### Changed
+- **CFS DIAGNOSTICS window of the Fluidd card:** the name of each row is now followed by a colon and a gap before its state (`Service:     Running`), instead of both words running together.
+
+### Documentation
+- **Double purge on color changes (OrcaSlicer):** new section in *Known issues* with the picture of the flushing volumes dialog. The CFS purges in whole rounds, so a flushing volume above about 240 mm³ makes the printer purge twice; setting 235 mm³ in every pair and disabling the automatic calculation of the flushing volumes in the Orca preferences keeps a single round.
+- **Camera off and on:** the README explains the `CAMERA_OFF` / `CAMERA_ON` macros and the camera icon at the top right of PowerScreen (with a picture of it), and that the camera shares the USB hub with the CFS adapter, which is being investigated as a possible factor in the disconnections (not proven).
+- **CFS Diagnostics** is described as the monitor of the work of the CFS, with its log controls in the Fluidd card.
+
 ## v1.3.4
 
 ### Fixed

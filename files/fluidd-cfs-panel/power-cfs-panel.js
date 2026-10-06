@@ -441,7 +441,9 @@
       ".pcfs-dialog .v-btn[disabled]{opacity:.4;pointer-events:none}",
       ".pcfs-dialog.pcfs-busy .v-btn{opacity:.4;pointer-events:none}",
       ".pcfs-dialog .pcfs-diagrow{display:flex;align-items:center;justify-content:space-between;gap:12px}",
-      ".pcfs-dialog .pcfs-diagname{font-weight:500}",
+      ".pcfs-dialog .pcfs-diagleft{display:flex;align-items:baseline;gap:1.4em;min-width:0}",
+      ".pcfs-dialog .pcfs-diagname{font-weight:500;white-space:nowrap}",
+      ".pcfs-dialog .pcfs-diagname::after{content:\":\"}",
       ".pcfs-dialog .pcfs-diagstate{font-size:.875rem;color:" + muted + "}",
       ".pcfs-dialog .pcfs-diagstate.on{color:var(--v-success-base,#4caf50)}",
       ".pcfs-dialog .pcfs-diagstate.off{color:var(--v-warning-base,#fb8c00)}",
@@ -1266,7 +1268,7 @@
 
     function row(name, on, onText, offText, buttonText, command, check, enabled) {
       var r = el("div", "pcfs-diagrow");
-      var left = el("div", "pcfs-info");
+      var left = el("div", "pcfs-diagleft");
       left.appendChild(el("span", "pcfs-diagname", name));
       left.appendChild(el("span", "pcfs-diagstate " + (on ? "on" : "off"), on ? onText : offText));
       r.appendChild(left);

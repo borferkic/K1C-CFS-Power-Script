@@ -26,7 +26,8 @@ Guilouz, adapted to the K1C and to the CFS firmware.
 - **Manual filament change with `M600`.** The CFS firmware has no `M600`; this module adds it, keeps the CFS `RESUME` untouched and opens the PowerScreen **MANUAL FILAMENT CHANGE** menu (unload, load, resume, stop).
 - **KAMP adapted to the CFS.** Adaptive bed mesh and purge line that respect the CFS purge routine (see [KAMP and the CFS purge](#kamp-and-the-cfs-purge)).
 - **Custom boot animation.** A lightning bolt strikes the Creality logo, the Power Script logo flashes in, "POWER" assembles and "SCRIPT" is typed, with the "LOADING..." text at the top right. Applied automatically the first time the script runs, with the original animation backed up.
-- **CFS Diagnostics and USB auto-recovery (beta).** The random disconnection of the CFS is a critical fault of the printer with the CFS; this module records it and tries to recover from it. The CFS box sometimes shows as disconnected because the USB-serial adapter drops or its read channel stalls, and the Creality firmware does not recover. A small service logs every drop with its probable cause and, when the box stays disconnected, resets the USB adapter by software (never while printing).
+- **CFS Diagnostics and USB auto-recovery (beta).** The random disconnection of the CFS is a critical fault of the printer with the CFS; this module records it and tries to recover from it. The CFS box sometimes shows as disconnected because the USB-serial adapter drops or its read channel stalls, and the Creality firmware does not recover. A small service **monitors the work of the CFS**: it logs every drop with its probable cause and, when the box stays disconnected, resets the USB adapter by software (never while printing). Its log can be switched off, downloaded and deleted from the **CFS DIAGNOSTICS** button of the Fluidd card.
+- **Camera on and off, to take the video traffic off the CFS.** The camera and the USB adapter of the CFS share one USB hub, and the drops of the adapter (`disabled by hub (EMI?)`) that disconnect the CFS box and leave the buffer blocked are being investigated together with the camera traffic: it is **not proven** to be the cause, but it is the easiest thing to switch off to find out. The Power Macros add `CAMERA_OFF` and `CAMERA_ON`, and PowerScreen has a **camera icon at the top right** of the title bar: tap it to turn the camera off or on, no SSH needed (see [Camera off and on](#camera-off-and-on)).
 - **CFS card for Fluidd.** A card in the Fluidd dashboard with the four slots of the CFS (a spool in the real color, the material, the remaining filament and the loaded slot) and the humidity and temperature of the box. Click a spool to change its material and color. It can be undocked and dragged anywhere. It talks to Moonraker only: it does not need the Creality web server.
 - **CFS custom filaments.** Most spools have no RFID tag, so the CFS does not know what they are. Add filaments of your own (brand, name, material, temperatures and color) to the material database from the *New filament* button of the card, and PowerScreen and Fluidd show what each spool really is.
 - **Camera Support.** Brightness, saturation and contrast macros, plus optional USB camera support, in a single entry.
@@ -138,12 +139,18 @@ updates) are **disabled**. It then asks which build to install (`stable` or
 Installs the Power Script macros and parameters:
 
 - **Replaces** `gcode_macro.cfg`, `printer_params.cfg` and `box.cfg` with the Power Script versions, and adds the `[include gcode_macro.cfg]`, `[include printer_params.cfg]` and `[include box.cfg]` lines to `printer.cfg` when they are missing. The versions add the `STRESS_TEST` (motion stress test), `PID_HOTEND` (hotend PID calibration) and `RELOAD_CAMERA` (restart the camera service), `CAMERA_OFF` and `CAMERA_ON` (turn the camera off and on) macros.
-- - Sets the CFS purge to a single 100 mm purge per color change in `box.cfg` (`box_first_clean_length`, `box_need_clean_length`, `box_need_clean_length_max` and every `Tn_extrude` at 100), instead of the Creality 140 mm purge done twice. With OrcaSlicer, a flushing volume of 240 mm³ gives about 100 mm; the slicer value decides the length of each color change, and Klipper refuses to start if `box_need_clean_length` is larger than `box_first_clean_length`.
+- - Sets the CFS purge to a single 100 mm purge per color change in `box.cfg` (`box_first_clean_length`, `box_need_clean_length`, `box_need_clean_length_max` and every `Tn_extrude` at 100), instead of the Creality 140 mm purge done twice. The firmware purges in whole rounds of that length, so you get a single round only while the flushing volume of the slicer is about 240 mm³ or less; above that it purges twice (see [Double purge on color changes](#double-purge-on-color-changes-orcaslicer)). Klipper refuses to start if `box_need_clean_length` is larger than `box_first_clean_length`.
 Keeps `START_PRINT` disabled when KAMP is installed, because KAMP provides its own.
 
 Requirement: *Klipper Gcode Shell Command* must be installed (`RELOAD_CAMERA` needs it).
 
-`CAMERA_OFF` stops the camera service (`cam_app` and `mjpg_streamer`) and `CAMERA_ON` starts it again, from the Fluidd *Macros* panel, the console, or the camera icon in the title bar of PowerScreen (tap it to switch). While the camera is off it stops using the USB hub it shares with the CFS adapter, which is useful to check whether the video traffic has to do with the CFS disconnections, and there are no timelapse photos. The camera comes back on its own after a restart of the printer. To get these macros on a printer that already has the Power Macros, install them again (`[Install] Menu → 6`).
+#### Camera off and on
+
+<p align="center">
+  <img src="docs/screenshots/powerscreen-camera-icon.png" alt="The camera icon in the title bar of PowerScreen, with the camera off" width="160" />
+</p>
+
+`CAMERA_OFF` stops the camera service (`cam_app` and `mjpg_streamer`) and `CAMERA_ON` starts it again, from the Fluidd *Macros* panel, the console, or the **camera icon at the top right of the PowerScreen title bar** (next to the Wi-Fi icon and the clock): tap it to switch. The picture above shows the icon with the camera **off** (crossed out); with the camera on it is green and without the cross. PowerScreen asks for confirmation if you turn the camera off while printing. While the camera is off it stops using the USB hub it shares with the CFS adapter, which is useful to check whether the video traffic has to do with the CFS disconnections, and there are no timelapse photos. The camera comes back on its own after a restart of the printer. To get these macros on a printer that already has the Power Macros, install them again (`[Install] Menu → 6`).
 Before replacing anything, the first copy of each file is saved in
 `/usr/data/helper-script-backup/power-config/` and is never overwritten.
 `[Remove] Menu → 6) Remove Power Macros` restores those originals.
@@ -338,6 +345,22 @@ the KAMP settings menus (`KAMP_BED_MESH_SETTINGS` and `KAMP_PURGE_LINE_SETTINGS`
 in PowerScreen). Your choice is saved in `variables.cfg`, the same file that Save Z-Offset uses, and it is
 restored when Klipper starts, so it is no longer reset to *adaptive* on every restart. Until you choose
 something, the defaults are the adaptive bed mesh and the adaptive purge line.
+
+### Double purge on color changes (OrcaSlicer)
+
+On a CFS color change the firmware purges in rounds of a fixed length (`box_need_clean_length`: 100 mm with the Power Macros, 140 mm in the Creality original) and every round is pushed whole. The slicer asks for a flushing volume in mm³, the firmware converts it to a length (`volume / 2.405` mm for 1.75 mm filament) and the number of rounds is that length divided by the round, rounded up. With the 100 mm round, a volume above about **240 mm³** needs a second round, so the printer purges **twice**. This applies to files that do not purge in the prime tower (`purge_in_prime_tower = 0`), which is the usual case with the CFS.
+
+To keep a single round in OrcaSlicer:
+
+1. Open **Preferences** and disable the automatic calculation of the flushing volumes. Otherwise Orca recalculates them every time the filaments or their colors change and overwrites your values (the dialog says so itself).
+2. Open the flushing volumes dialog and set **235** in every cell outside the diagonal (the diagonal stays at 0). Leave the multiplier at 1.
+3. Slice again.
+
+<p align="center">
+  <img src="docs/screenshots/orca-flushing-volumes.png" alt="OrcaSlicer flushing volumes dialog with 235 mm3 in every filament pair" width="380" />
+</p>
+
+With 235 mm³ the Klipper log shows `flush_len: 97` and one round, `length: [100]`, on every color change instead of two. Check it with your own filaments: the less filament is purged, the more of the previous color can remain when going from a dark color to a light one. If that happens, raise the value of that pair, keeping it at or below 240.
 
 ### Repository error when installing Moonraker
 
