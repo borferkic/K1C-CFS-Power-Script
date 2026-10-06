@@ -18,6 +18,11 @@ CFS Power Script is a helper script for the **Creality K1C** running the
 [Creality Helper Script](https://github.com/Guilouz/Creality-Helper-Script) by
 Guilouz, adapted to the K1C and to the CFS firmware.
 
+> [!IMPORTANT]
+> **Install Fluidd to use the CFS widget and everything around it.** The **CFS card** (the four spools, editing a spool, adding your own filaments) and its **CFS DIAGNOSTICS** window (service, log, USB auto-recovery, download and delete the log) live in the Fluidd dashboard. They are not available in Mainsail or without a web interface.
+> Install Fluidd first (`[Install] Menu → 2) Install Fluidd`, which needs Moonraker and Nginx from option 1) and then the card with `[Customize & PowerScreen] Menu → 7) Install CFS Panel for Fluidd`; the installer refuses to add the card if Fluidd is missing.
+> Without Fluidd the CFS modules still work from the console and the macros (`CFS_DIAG_*`, `CFS_ADD_MATERIAL`...) and PowerScreen shows the spools on the printer screen, but you will not have the widget.
+
 ## Features
 
 - **PowerScreen touch interface.** Replaces the Creality touch screen with [PowerScreen](https://github.com/borferkic/K1C-CFS-POWER-SCREEN), a K1C interface aware of the CFS. Install the `stable` or `nightly` build from the menu; everything is backed up and can be restored, and updates come from Fluidd or Mainsail.
@@ -43,6 +48,7 @@ Guilouz, adapted to the K1C and to the CFS firmware.
 - The printer date and time set correctly (needed for the SSL connection to GitHub).
 - A factory reset before the first installation is recommended: the script assumes a clean printer.
 - If Moonraker, Fluidd or Mainsail were installed with another script, remove them first.
+- **Fluidd**, if you want the CFS card and its diagnostics window (see the note at the top).
 
 ## Installation
 
@@ -236,6 +242,9 @@ Fluidd needs Moonraker running to remember the selected theme; if it is not runn
 Fluidd theme settings. Close the Fluidd tabs and clear the browser cache if the theme does not change.
 
 ### CFS Panel for Fluidd
+
+> [!IMPORTANT]
+> This module needs **Fluidd** (`[Install] Menu → 2`). It adds nothing to Mainsail.
 
 ```text
 [Customize & PowerScreen] Menu → 7) Install CFS Panel for Fluidd
