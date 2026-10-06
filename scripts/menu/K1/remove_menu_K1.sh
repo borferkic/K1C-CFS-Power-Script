@@ -38,8 +38,9 @@ function remove_menu_ui_k1() {
   menu_option '18' 'Remove' 'Moonraker Obico'
   menu_option '19' 'Remove' 'Mobileraker Companion'
   hr
-  subtitle '•DIAGNOSTICS:'
+  subtitle '•CFS:'
   menu_option '20' 'Remove' 'CFS Diagnostics'
+  menu_option '21' 'Remove' 'CFS Custom Filaments'
   hr
   if [ -d "$IMP_SHAPERS_FOLDER" ] || [ -f "$FAN_CONTROLS_FILE" ] || [ -f "$USEFUL_MACROS_FILE" ]; then
     subtitle '•LEGACY (no longer installable):'
@@ -121,6 +122,8 @@ function remove_menu_k1() {
           error_msg "Klipper Gcode Shell Command is needed to use Buzzer Support, please uninstall it first!"
         elif [ -f "$CFS_DIAG_FILE" ]; then
           error_msg "Klipper Gcode Shell Command is needed to use CFS Diagnostics, please uninstall it first!"
+        elif [ -f "$CFS_MATERIALS_FILE" ]; then
+          error_msg "Klipper Gcode Shell Command is needed to use CFS Custom Filaments, please uninstall it first!"
         elif [ -f "$CAMERA_SETTINGS_FILE" ]; then
           error_msg "Klipper Gcode Shell Command is needed to use Camera Settings Control, please uninstall it first!"
         elif [ -d "$IMP_SHAPERS_FOLDER" ]; then
@@ -223,6 +226,12 @@ function remove_menu_k1() {
           error_msg "CFS Diagnostics is not installed!"
         else
           run "remove_cfs_diag" "remove_menu_ui_k1"
+        fi;;
+      21)
+        if [ ! -f "$CFS_MATERIALS_FILE" ]; then
+          error_msg "CFS Custom Filaments is not installed!"
+        else
+          run "remove_cfs_custom_filaments" "remove_menu_ui_k1"
         fi;;
       Y|y)
         # Fans Control Macros was retired (own cfg files replace it); only removal is offered.

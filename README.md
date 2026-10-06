@@ -27,6 +27,8 @@ Guilouz, adapted to the K1C and to the CFS firmware.
 - **KAMP adapted to the CFS.** Adaptive bed mesh and purge line that respect the CFS purge routine (see [KAMP and the CFS purge](#kamp-and-the-cfs-purge)).
 - **Custom boot animation.** A lightning bolt strikes the Creality logo, the Power Script logo flashes in, "POWER" assembles and "SCRIPT" is typed, with the "LOADING..." text at the top right. Applied automatically the first time the script runs, with the original animation backed up.
 - **CFS Diagnostics and USB auto-recovery (beta).** The random disconnection of the CFS is a critical fault of the printer with the CFS; this module records it and tries to recover from it. The CFS box sometimes shows as disconnected because the USB-serial adapter drops or its read channel stalls, and the Creality firmware does not recover. A small service logs every drop with its probable cause and, when the box stays disconnected, resets the USB adapter by software (never while printing).
+- **CFS card for Fluidd.** A card in the Fluidd dashboard with the four slots of the CFS (a spool in the real color, the material, the remaining filament and the loaded slot) and the humidity and temperature of the box. Click a spool to change its material and color. It can be undocked and dragged anywhere. It talks to Moonraker only: it does not need the Creality web server.
+- **CFS custom filaments.** Most spools have no RFID tag, so the CFS does not know what they are. Add filaments of your own (brand, name, material, temperatures and color) to the material database from the *New filament* button of the card, and PowerScreen and Fluidd show what each spool really is.
 - **Camera Support.** Brightness, saturation and contrast macros, plus optional USB camera support, in a single entry.
 - **Web interfaces and remote access.** Moonraker and Nginx, Fluidd (with the PowerUI theme by default), Mainsail, and OctoEverywhere, Moonraker Obico or Mobileraker Companion for remote monitoring and notifications.
 - **Print and printer utilities.** Moonraker Timelapse, Save Z-Offset Macros, Screws Tilt Adjust, Buzzer Support, Nozzle Cleaning Fan Control, Git Backup, Entware, and Klipper and Moonraker backup and restore.
@@ -96,6 +98,19 @@ letter by letter, the bolt glows twice, "SCRIPT" is typed and "LOADING..." cycle
   <tr>
     <td align="center"><b>Backup &amp; Restore</b><br /><img src="docs/screenshots/backup-menu.png" alt="Backup and Restore menu" width="100%" /></td>
     <td></td>
+  </tr>
+</table>
+
+### CFS card for Fluidd
+
+<p align="center">
+  <img src="docs/screenshots/fluidd-cfs-card.png" alt="The CFS card in the Fluidd dashboard" />
+</p>
+
+<table>
+  <tr>
+    <td align="center"><b>Edit a spool</b><br /><img src="docs/screenshots/fluidd-cfs-edit-slot.png" alt="Editing a spool of the CFS card in Fluidd" width="100%" /></td>
+    <td align="center"><b>New filament</b><br /><img src="docs/screenshots/fluidd-cfs-new-filament.png" alt="Adding a filament of your own to the material database" width="100%" /></td>
   </tr>
 </table>
 
@@ -207,6 +222,24 @@ are kept. If a Fluidd update removes it, the script adds it back the next time i
 Fluidd needs Moonraker running to remember the selected theme; if it is not running, pick PowerUI in the
 Fluidd theme settings. Close the Fluidd tabs and clear the browser cache if the theme does not change.
 
+### CFS Panel for Fluidd
+
+```text
+[Customize & PowerScreen] Menu → 7) Install CFS Panel for Fluidd
+```
+
+Adds a card to the Fluidd dashboard with the look of Fluidd's own cards (see the [screenshots](#cfs-card-for-fluidd) above):
+
+- **The four slots of the CFS box:** a spool in the real color, the material, the remaining filament in meters when the box reports it, and a green dot on the loaded slot. Empty slots are dimmed. With more than one box connected, each box gets its own group.
+- **Humidity and temperature of the box.**
+- **Click a spool to edit it.** Choose the brand, the material and the filament from the Creality material database (the nozzle temperatures of the filament are shown) and the color, with a picker or a palette. Saving sends the same two commands as the Creality interface and PowerScreen (`BOX_MODIFY_TN_DATA` for `material_type` and `color_value`) and then checks that the CFS reports the change. Editing is blocked while a print is running.
+- **Dock or undock.** The card starts docked in the dashboard, below the cards of its column. The button in its title bar undocks it into a floating card that you can drag anywhere, and the same button docks it again. The arrow collapses it, like the one of the Fluidd cards. The mode, the position and the collapsed state are kept in the browser.
+
+The card reads Moonraker only (the `box` object of Klipper and the gcode endpoint): it does not need the Creality web server and it does not change Klipper. It only appears when the printer has a CFS, and it says *CFS disconnected* when the box is not connected.
+
+It is added by copying `power-cfs-panel.js` to the Fluidd folder and adding one `<script>` tag to Fluidd's `index.html`. Fluidd keeps its own page in the browser cache (it is a PWA), so the module also updates the revision of `index.html` in Fluidd's `sw.js`: that is what makes the browsers load the new page. If a Fluidd update replaces those files, the script adds the card back the next time it starts. After installing, close every Fluidd tab and open it again (twice if the card is not there yet); `Ctrl+Shift+R` also works.
+`[Customize & PowerScreen] Menu → 8) Remove CFS Panel for Fluidd` takes it out again.
+
 ### Camera Support
 
 ```text
@@ -235,6 +268,30 @@ Installs a small service (`/usr/data/helper-script/files/cfs-diag/cfs_diag.sh`) 
 Requirement: *Klipper Gcode Shell Command* must be installed.
 `[Remove] Menu → 20) Remove CFS Diagnostics` turns the auto-recovery off, stops the service and removes the macros; the log is kept.
 
+### CFS Custom Filaments
+
+```text
+[Install] Menu → 21) Install CFS Custom Filaments
+```
+
+Most spools have no RFID tag, so the CFS does not know what they are and they show as *Not set*. This module lets you add filaments of your own to the material database of the K1C and then choose them for a slot, so that PowerScreen and the CFS card of Fluidd show what the spool really is, for example *K3D PLA MATE*.
+
+- **Add a filament:** open a spool in the CFS card of Fluidd and press **New filament** (the button only appears when this module is installed). Pick a similar filament as the base, because the new one starts as a copy of it, and give it a brand, a name, the material, the nozzle, minimum and maximum temperatures and a color. Names use letters, digits, spaces and `. _ + -`, up to 24 characters.
+- **Delete a filament:** **Delete this filament** in the same editor. Spools that were using it show as an unknown material until you choose another one.
+- **Ids:** the new filaments get the ids `90001` to `99999`; Creality uses `00001` to `29001`, so they never collide.
+- **Where it writes:** `material_database.json` and `material_option.json` in `/usr/data/creality/userdata/box`. The first time, a copy of both originals is kept in `/usr/data/backup-cfs-materials`, and every file is written whole and checked before it replaces the old one. Your own list is kept in `/usr/data/printer_data/config/Helper-Script/cfs-custom-materials.json`.
+- **Firmware updates:** an update restores the original database. The next time the script starts it puts your filaments back from that list.
+- **PowerScreen** reads the material database when it starts: restart PowerScreen (or the printer) to see a new filament there. The CFS card of Fluidd shows it right away.
+- **Macros:** `CFS_ADD_MATERIAL`, `CFS_REMOVE_MATERIAL` and `CFS_LIST_MATERIALS`. They refuse to run while printing. Values have no spaces: a `~` stands for a space and the color is `RRGGBB` without `#`:
+
+  ```text
+  CFS_ADD_MATERIAL BASE=00001 BRAND=K3D NAME=PLA~MATE TYPE=PLA NOZZLE=220 MIN=190 MAX=230 COLOR=FFFFFF
+  CFS_REMOVE_MATERIAL ID=90001
+  ```
+
+Requirement: *Klipper Gcode Shell Command* must be installed (the install adds an `include` to `printer.cfg` and restarts Klipper).
+`[Remove] Menu → 21) Remove CFS Custom Filaments` removes the macros but **keeps your filaments** in the database. To take them all out: `sh /usr/data/helper-script/files/cfs-materials/cfs_materials.sh remove-all`.
+
 ### Boot animation
 
 The first time the script runs it replaces the boot animation in
@@ -253,9 +310,9 @@ from Fluidd or Mainsail (**Settings → Software Updates**).
 
 | Menu | Content |
 |---|---|
-| `[Install]` | 1 Moonraker and Nginx, 2 Fluidd, 3 Mainsail, 4 Entware, 5 Klipper Gcode Shell Command, 6 Power Macros, 7 Bed Coordinates Fix, 8 KAMP, 9 Buzzer Support, 10 Nozzle Cleaning Fan Control, 11 Save Z-Offset Macros, 12 Screws Tilt Adjust Support, 13 M600 Support, 14 Git Backup, 15 Moonraker Timelapse, 16 Camera Support, 17 OctoEverywhere, 18 Moonraker Obico, 19 Mobileraker Companion, 20 CFS Diagnostics |
-| `[Remove]` | The same 20 entries, plus *Improved Shapers Calibrations* (`x`), *Fans Control Macros* (`y`) and *Useful Macros* (`z`) when they are installed |
-| `[Customize & PowerScreen]` | 1 Install / 2 Remove PowerScreen, 3 Remove / 4 Restore the Creality Web Interface, 5 Creality Dynamic Logos for Fluidd |
+| `[Install]` | 1 Moonraker and Nginx, 2 Fluidd, 3 Mainsail, 4 Entware, 5 Klipper Gcode Shell Command, 6 Power Macros, 7 Bed Coordinates Fix, 8 KAMP, 9 Buzzer Support, 10 Nozzle Cleaning Fan Control, 11 Save Z-Offset Macros, 12 Screws Tilt Adjust Support, 13 M600 Support, 14 Git Backup, 15 Moonraker Timelapse, 16 Camera Support, 17 OctoEverywhere, 18 Moonraker Obico, 19 Mobileraker Companion, 20 CFS Diagnostics, 21 CFS Custom Filaments |
+| `[Remove]` | The same 21 entries, plus *Improved Shapers Calibrations* (`x`), *Fans Control Macros* (`y`) and *Useful Macros* (`z`) when they are installed |
+| `[Customize & PowerScreen]` | 1 Install / 2 Remove PowerScreen, 3 Remove / 4 Restore the Creality Web Interface, 5 Creality Dynamic Logos for Fluidd, 6 PowerUI Theme for Fluidd, 7 Install / 8 Remove CFS Panel for Fluidd |
 | `[Backup & Restore]` | Klipper configuration files and Moonraker database |
 | `[Tools]` | Klipper configuration updates, printing G-code files from folders, camera settings, service restarts, Entware updates, cache and log cleanup, firmware restore and factory reset |
 | `[Information]` | Installed components and their status |

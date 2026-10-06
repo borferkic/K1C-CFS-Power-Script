@@ -15,6 +15,8 @@ function customize_menu_ui_k1() {
   hr
   menu_option '5' 'Install' 'Creality Dynamic Logos for Fluidd'
   menu_option '6' 'Install' 'PowerUI Theme for Fluidd'
+  menu_option '7' 'Install' 'CFS Panel for Fluidd'
+  menu_option '8' 'Remove' 'CFS Panel for Fluidd'
   hr
   inner_line
   hr
@@ -83,6 +85,20 @@ function customize_menu_k1() {
           run "reapply_power_script_theme" "customize_menu_ui_k1"
         else
           run "install_power_script_theme" "customize_menu_ui_k1"
+        fi;;
+      7)
+        if [ ! -d "$FLUIDD_FOLDER" ]; then
+          error_msg "Fluidd is needed, please install it first!"
+        elif [ -f "$FLUIDD_CFS_PANEL_FILE" ]; then
+          run "reapply_fluidd_cfs_panel" "customize_menu_ui_k1"
+        else
+          run "install_fluidd_cfs_panel" "customize_menu_ui_k1"
+        fi;;
+      8)
+        if [ ! -f "$FLUIDD_CFS_PANEL_FILE" ]; then
+          error_msg "CFS Panel for Fluidd is not installed!"
+        else
+          run "remove_fluidd_cfs_panel" "customize_menu_ui_k1"
         fi;;
       B|b)
         clear; main_menu; break;;

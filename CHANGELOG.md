@@ -2,6 +2,16 @@
 
 All notable changes to the CFS Power Script. Each release on GitHub carries the entry of its version.
 
+## v1.3.0
+
+### Added
+- **CFS Panel for Fluidd (Customize menu, options 7 and 8):** a card in the Fluidd dashboard, with the look of Fluidd's own cards, that shows the four slots of the CFS (a spool in the real color, the material, the remaining filament and the loaded slot) and the humidity and temperature of the box. Click a spool to change its material and color: it sends the same two commands as the Creality interface and PowerScreen (`BOX_MODIFY_TN_DATA`), checks that the CFS reports the change and refuses to edit while printing. The card can be undocked into a floating card that is dragged anywhere, and docked again; its mode, position and collapsed state are kept in the browser. It talks to Moonraker only, so it does not need the Creality web server. It is added with one script tag in Fluidd's `index.html`, and the module also updates the revision of that page in Fluidd's service worker (`sw.js`) so that the browsers load it; if a Fluidd update replaces those files, the script puts the card back the next time it starts.
+- **CFS Custom Filaments (Install menu, option 21):** most spools have no RFID tag, so the CFS does not know what they are. This module adds filaments of your own to the material database of the K1C (brand, name, material, temperatures and color, with the ids `90001` to `99999`), from the **New filament** button in the editor of a spool of the CFS card, or with the macros `CFS_ADD_MATERIAL`, `CFS_REMOVE_MATERIAL` and `CFS_LIST_MATERIALS`. PowerScreen and the card show them (PowerScreen after it restarts). The first time, a copy of the original `material_database.json` and `material_option.json` is kept in `/usr/data/backup-cfs-materials`; your list is kept in the config folder and put back the next time the script starts if a firmware update restores the original database. It requires *Klipper Gcode Shell Command*; removing the module keeps your filaments.
+
+### Changed
+- The *Diagnostics* section of the Install, Remove and Information menus is now called *CFS*, because it also holds CFS Custom Filaments.
+- *Klipper Gcode Shell Command* cannot be removed while CFS Custom Filaments is installed.
+
 ## v1.2.0
 
 ### Added

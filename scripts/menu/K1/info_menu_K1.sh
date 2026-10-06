@@ -68,14 +68,16 @@ function info_menu_ui_k1() {
   info_line "$(check_folder_k1 "$MOONRAKER_OBICO_FOLDER")" 'Moonraker Obico'
   info_line "$(check_folder_k1 "$MOBILERAKER_COMPANION_FOLDER")" 'Mobileraker Companion'
   hr
-  subtitle '•DIAGNOSTICS:'
+  subtitle '•CFS:'
   info_line "$(check_file_k1 "$CFS_DIAG_FILE")" 'CFS Diagnostics'
+  info_line "$(check_file_k1 "$CFS_MATERIALS_FILE")" 'CFS Custom Filaments'
   hr
   subtitle '•CUSTOMIZATION:'
   info_line "$(check_file_k1 "$CREALITY_WEB_FILE")" 'Creality Web Interface'
   info_line "$(check_folder_k1 "$POWERSCREEN_FOLDER")" 'PowerScreen'
   info_line "$(check_file_k1 "$FLUIDD_LOGO_FILE")" 'Creality Dynamic Logos for Fluidd'
   info_line "$(check_file_k1 "$FLUIDD_THEME_LOGO_FILE")" 'PowerUI Theme for Fluidd'
+  info_line "$(check_file_k1 "$FLUIDD_CFS_PANEL_FILE")" 'CFS Panel for Fluidd'
   hr
   inner_line
   hr

@@ -38,8 +38,9 @@ function install_menu_ui_k1() {
   menu_option '18' 'Install' 'Moonraker Obico'
   menu_option '19' 'Install' 'Mobileraker Companion'
   hr
-  subtitle '•DIAGNOSTICS:'
+  subtitle '•CFS:'
   menu_option '20' 'Install' 'CFS Diagnostics'
+  menu_option '21' 'Install' 'CFS Custom Filaments'
   hr
   inner_line
   hr
@@ -208,6 +209,16 @@ function install_menu_k1() {
           error_msg "Klipper Gcode Shell Command is needed, please install it first!"
         else
           run "install_cfs_diag" "install_menu_ui_k1"
+        fi;;
+      21)
+        if [ -f "$CFS_MATERIALS_FILE" ]; then
+          error_msg "CFS Custom Filaments is already installed!"
+        elif [ ! -f "$KLIPPER_SHELL_FILE" ]; then
+          error_msg "Klipper Gcode Shell Command is needed, please install it first!"
+        elif [ ! -f "$CFS_MATERIAL_DB_FILE" ]; then
+          error_msg "The CFS material database was not found on this printer!"
+        else
+          run "install_cfs_custom_filaments" "install_menu_ui_k1"
         fi;;
       B|b)
         clear; main_menu; break;;

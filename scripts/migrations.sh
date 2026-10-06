@@ -160,6 +160,29 @@ function migrate_fluidd_power_theme(){
   fi
 }
 
+# A Fluidd update replaces index.html and the CFS panel tag disappears. Add it back and
+# refresh the panel when this version of the script brings a newer one.
+function migrate_fluidd_cfs_panel(){
+  [ -f "$FLUIDD_CFS_PANEL_FILE" ] || return 0
+  [ -f "$FLUIDD_FOLDER/index.html" ] || return 0
+  if [ -f "$FLUIDD_CFS_PANEL_URL" ] && ! cmp -s "$FLUIDD_CFS_PANEL_URL" "$FLUIDD_CFS_PANEL_FILE"; then
+    echo -e "${white}Info: Updating the CFS panel for Fluidd..."
+    cp "$FLUIDD_CFS_PANEL_URL" "$FLUIDD_CFS_PANEL_FILE"
+  fi
+  if ! grep -q "POWER_CFS_PANEL_START" "$FLUIDD_FOLDER/index.html"; then
+    echo -e "${white}Info: Adding the CFS panel to the Fluidd page..."
+    add_cfs_panel_tag || true
+  fi
+}
+
+# A firmware update restores the original material database and the custom filaments disappear.
+# Put them back from the list kept in the config folder.
+function migrate_cfs_custom_filaments(){
+  [ -f "$CFS_MATERIALS_FILE" ] || return 0
+  [ -f "$CFS_CUSTOM_MATERIALS_FILE" ] || return 0
+  sh "$CFS_MATERIALS_SCRIPT" reapply || true
+}
+
 function run_migrations(){
   migrate_update_manager_entry
   migrate_split_power_config
@@ -168,4 +191,6 @@ function run_migrations(){
   migrate_bed_fix_mesh
   migrate_fluidd_logos
   migrate_fluidd_power_theme
+  migrate_fluidd_cfs_panel
+  migrate_cfs_custom_filaments
 }

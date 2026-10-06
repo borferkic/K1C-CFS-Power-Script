@@ -184,6 +184,17 @@ function set_paths() {
   FLUIDD_THEME_LOGO_FILE="${USR_DATA}/fluidd/logo_power_script.svg"
   FLUIDD_THEME_LOGO_URL="${HS_FILES}/fluidd-theme/logo_power_script.svg"
 
+  # CFS Custom Filaments #
+  CFS_MATERIALS_FILE="${HS_CONFIG_FOLDER}/cfs-materials.cfg"
+  CFS_MATERIALS_URL="${HS_FILES}/cfs-materials/cfs-materials.cfg"
+  CFS_MATERIALS_SCRIPT="${HS_FILES}/cfs-materials/cfs_materials.sh"
+  CFS_CUSTOM_MATERIALS_FILE="${HS_CONFIG_FOLDER}/cfs-custom-materials.json"
+  CFS_MATERIAL_DB_FILE="/usr/data/creality/userdata/box/material_database.json"
+
+  # CFS Panel for Fluidd #
+  FLUIDD_CFS_PANEL_FILE="${USR_DATA}/fluidd/power-cfs-panel.js"
+  FLUIDD_CFS_PANEL_URL="${HS_FILES}/fluidd-cfs-panel/power-cfs-panel.js"
+
 }
 
 function set_permissions() {
