@@ -121,7 +121,7 @@ letter by letter, the bolt glows twice, "SCRIPT" is typed and "LOADING..." cycle
   </tr>
   <tr>
     <td align="center"><b>CFS Diagnostics</b><br /><img src="docs/screenshots/fluidd-cfs-diagnostics.png" alt="The CFS DIAGNOSTICS window of the Fluidd card: service, log and USB auto-recovery" width="100%" /></td>
-    <td></td>
+    <td align="center"><b>Refresh slots</b><br /><img src="docs/screenshots/fluidd-cfs-refresh.png" alt="The REFRESH SLOTS button of the Fluidd card, next to CFS DIAGNOSTICS" width="100%" /></td>
   </tr>
 </table>
 
@@ -288,6 +288,7 @@ Installs a small service (`/usr/data/helper-script/files/cfs-diag/cfs_diag.sh`) 
 - **USB auto-recovery (on by default when installed):** when the box has been disconnected for 20 seconds, the USB adapter is still present and the printer is **not printing**, it resets the USB device (the same as unplugging and plugging the cable). It tries at most 3 times per event, 60 seconds apart, and at most 6 times per hour, and logs each attempt. It never changes Klipper, the firmware or the box.
 - **Macros:** `CFS_DIAG_STATUS`, `CFS_DIAG_SUMMARY`, `CFS_DIAG_SNAPSHOT`, `CFS_DIAG_CLEAN`, `CFS_DIAG_AUTORECOVER_ON`, `CFS_DIAG_AUTORECOVER_OFF`, `CFS_DIAG_LOG_ON`, `CFS_DIAG_LOG_OFF`, `CFS_DIAG_ENABLE` and `CFS_DIAG_DISABLE`.
 - **Log size:** the log is rotated at 1 MB and one backup (`cfs_diag.log.1`) is kept, so it never takes more than about 2 MB. `CFS_DIAG_LOG_OFF` stops writing it altogether while the watcher and the USB auto-recovery keep running (`CFS_DIAG_DISABLE` stops everything, recovery included).
+- **Refresh slots (Fluidd):** if you take a spool out (or put one in) the card does not notice by itself: the CFS only checks its slots when it is asked to, and the Creality firmware only does it when you press the refresh button of its screen. The card has a **REFRESH SLOTS** button that sends the same command as the printer screen (`BOX_INFO_REFRESH`, all the slots): the CFS moves the filament of each slot a little to see if a spool is there and reads its RFID tag. It is disabled while printing, because that movement could upset a color change.
 - **From Fluidd:** with the CFS Panel for Fluidd installed, the card has a **CFS DIAGNOSTICS** button. Its window shows the state, turns the service, the log and the USB auto-recovery on and off, downloads the log (and the previous one) and deletes it. It only needs the macros above, so it appears once CFS Diagnostics is installed.
 
 Requirement: *Klipper Gcode Shell Command* must be installed.

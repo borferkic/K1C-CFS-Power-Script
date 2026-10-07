@@ -2,6 +2,11 @@
 
 All notable changes to the CFS Power Script. Each release on GitHub carries the entry of its version.
 
+## v1.3.8
+
+### Added
+- **CFS panel for Fluidd: REFRESH SLOTS button.** Taking a spool out of the CFS (or putting one in) was not shown on the card until something refreshed the slots. The Creality firmware does not do it by itself either: its screen sends `BOX_INFO_REFRESH ADDR=<box> NUM=15` when you press the refresh button, and the new button sends the same command (the CFS moves the filament of each slot a little to see if a spool is there and reads its RFID tag). It needs no extra module (the macro is Creality's own, also in the Power Macros), it is disabled while printing or paused, hidden when the CFS is disconnected, and shows the error if Moonraker refuses the command. Update the panel (`[Customize & PowerScreen] Menu → 7) Install CFS Panel for Fluidd`) and reload Fluidd.
+
 ## v1.3.7
 
 ### Changed

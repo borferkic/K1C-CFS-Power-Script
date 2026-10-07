@@ -115,6 +115,9 @@
   var CUSTOM = {};          // ids of the custom filaments (from cfs-custom-materials.json)
   var macrosReady = false;  // the CFS_ADD_MATERIAL macro exists (module "CFS Custom Filaments" installed)
   var diagReady = false;    // the CFS_DIAG_LOG_ON macro exists (module "CFS Diagnostics" installed and up to date)
+  var refreshReady = false; // the BOX_INFO_REFRESH macro exists (Creality's own macro, also in the Power Macros)
+  var refreshing = false;   // a refresh of the slots is running
+  var refreshError = "";
   var lastSignature = "";
   var pollTimer = null;
   var noDockSince = 0;
@@ -297,8 +300,10 @@
         var objects = json && json.result && json.result.objects;
         macrosReady = Array.isArray(objects) && objects.indexOf("gcode_macro CFS_ADD_MATERIAL") >= 0;
         var diag = Array.isArray(objects) && objects.indexOf("gcode_macro CFS_DIAG_LOG_ON") >= 0;
-        if (diag !== diagReady) lastSignature = "";   // the button appears or disappears at the next render
+        var refresh = Array.isArray(objects) && objects.indexOf("gcode_macro BOX_INFO_REFRESH") >= 0;
+        if (diag !== diagReady || refresh !== refreshReady) lastSignature = "";   // the buttons appear or disappear at the next render
         diagReady = diag;
+        refreshReady = refresh;
       })
       .catch(function () {});
   }
@@ -408,7 +413,9 @@
       c + " .pcfs-type{font-size:1.125rem;font-weight:500;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}",
       c + " .pcfs-detail{font-size:.75rem;color:" + muted + ";white-space:nowrap;overflow:hidden;text-overflow:ellipsis}",
       c + " .pcfs-note{color:" + muted + ";padding:4px 2px}",
-      c + " .pcfs-footer{display:flex;justify-content:flex-end;margin-top:16px}",
+      c + " .pcfs-footer{display:flex;justify-content:flex-end;align-items:center;flex-wrap:wrap;gap:8px;margin-top:16px}",
+      c + " .pcfs-footer-note{color:" + muted + ";font-size:.75rem;margin-right:auto}",
+      c + " .pcfs-footer-note.error{color:#ff5252}",
       "@media (max-width:480px){" + c + " .pcfs-grid{grid-template-columns:1fr}}",
 
       ".pcfs-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px;font-family:Roboto,sans-serif;font-size:1rem;line-height:1.5}",
@@ -692,7 +699,7 @@
   }
 
   function render(data) {
-    var signature = JSON.stringify(data) + "|" + diagReady;
+    var signature = JSON.stringify(data) + "|" + diagReady + "|" + refreshReady + "|" + refreshing + "|" + refreshError;
     if (signature === lastSignature) return;
     lastSignature = signature;
 
@@ -709,14 +716,54 @@
         bodyEl.appendChild(renderUnit(unit, data.units.length > 1));
       });
     }
-    if (diagReady) {
+    var showRefresh = refreshReady && data.connected && data.units.length > 0;
+    if (diagReady || showRefresh) {
       var footer = el("div", "pcfs-footer");
-      var diagBtn = textButton("CFS DIAGNOSTICS", false);
-      diagBtn.addEventListener("click", openDiagnostics);
-      footer.appendChild(diagBtn);
+      if (showRefresh) {
+        if (refreshError) footer.appendChild(el("span", "pcfs-footer-note error", refreshError));
+        else if (data.printing) footer.appendChild(el("span", "pcfs-footer-note", "Refresh is not available while printing."));
+        else if (refreshing) footer.appendChild(el("span", "pcfs-footer-note", "The CFS is checking every slot: it moves the filament a little."));
+        var refreshBtn = textButton(refreshing ? "REFRESHING..." : "REFRESH SLOTS", false);
+        refreshBtn.title = "Check every slot again (spool present and RFID tag), like the Refresh button of the printer screen";
+        if (data.printing || refreshing) {
+          refreshBtn.disabled = true;
+          refreshBtn.className += " v-btn--disabled";
+        } else {
+          refreshBtn.addEventListener("click", function () { refreshSlots(data); });
+        }
+        footer.appendChild(refreshBtn);
+      }
+      if (diagReady) {
+        var diagBtn = textButton("CFS DIAGNOSTICS", false);
+        diagBtn.addEventListener("click", openDiagnostics);
+        footer.appendChild(diagBtn);
+      }
       bodyEl.appendChild(footer);
     }
     if (card && isFloating() && card.parentNode) clampPosition();
+  }
+
+  // The same command the printer screen sends: BOX_INFO_REFRESH ADDR=<box> NUM=15 (15 = every slot) pre-loads
+  // each slot (the CFS moves the filament a little to see if a spool is there) and reads its RFID tag and length.
+  // It is never sent while printing.
+  function refreshSlots(data) {
+    if (refreshing || !data || data.printing) return;
+    refreshing = true;
+    refreshError = "";
+    lastSignature = "";
+    if (latest) render(latest);
+    var chain = Promise.resolve();
+    data.units.forEach(function (unit) {
+      chain = chain.then(function () { return runScript("BOX_INFO_REFRESH ADDR=" + unit.id + " NUM=15"); });
+    });
+    chain.catch(function (error) {
+      refreshError = error && error.message ? error.message : "The refresh could not be sent.";
+      window.setTimeout(function () { refreshError = ""; lastSignature = ""; if (latest) render(latest); }, 8000);
+    }).then(function () {
+      refreshing = false;
+      lastSignature = "";
+      schedule(0);
+    });
   }
 
   function removeCard() {
