@@ -111,7 +111,7 @@ letter by letter, the bolt glows twice, "SCRIPT" is typed and "LOADING..." cycle
 ### CFS card for Fluidd
 
 <p align="center">
-  <img src="docs/screenshots/fluidd-cfs-card.png" alt="The CFS card in the Fluidd dashboard, with the CFS DIAGNOSTICS button" />
+  <img src="docs/screenshots/fluidd-cfs-refresh.png" alt="The CFS card in the Fluidd dashboard, with the REFRESH SLOTS and CFS DIAGNOSTICS buttons" />
 </p>
 
 <table>
@@ -121,7 +121,7 @@ letter by letter, the bolt glows twice, "SCRIPT" is typed and "LOADING..." cycle
   </tr>
   <tr>
     <td align="center"><b>CFS Diagnostics</b><br /><img src="docs/screenshots/fluidd-cfs-diagnostics.png" alt="The CFS DIAGNOSTICS window of the Fluidd card: service, log and USB auto-recovery" width="100%" /></td>
-    <td align="center"><b>Refresh slots</b><br /><img src="docs/screenshots/fluidd-cfs-refresh.png" alt="The REFRESH SLOTS button of the Fluidd card, next to CFS DIAGNOSTICS" width="100%" /></td>
+    <td></td>
   </tr>
 </table>
 
